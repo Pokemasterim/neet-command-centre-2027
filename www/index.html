@@ -1388,9 +1388,84 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 .friend-req-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line)}
 .friend-req-row:last-child{border-bottom:0}
 
+
+/* App Startup Loading Screen with Animated 720 Logo */
+#appLoadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  background: radial-gradient(circle at 50% 35%, rgba(97, 217, 245, .14), transparent 55%), var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  transition: opacity .32s ease, visibility .32s ease;
+}
+#appLoadingScreen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+}
+.loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(97, 217, 245, .16);
+  border-top-color: var(--cyan);
+  border-right-color: var(--lime);
+  animation: spinLoader 1.1s linear infinite;
+}
+@keyframes spinLoader { to { transform: rotate(360deg); } }
+.loader-badge {
+  width: 66px;
+  height: 58px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font: 900 20px 'Space Grotesk', sans-serif;
+  color: #06111e;
+  background: linear-gradient(135deg, var(--cyan), var(--lime));
+  box-shadow: 0 0 28px rgba(97, 217, 245, .38);
+}
+.loader-bar-track {
+  width: 180px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(160, 190, 230, .16);
+  overflow: hidden;
+}
+.loader-bar-fill {
+  width: 45%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--lime));
+  animation: slideLoader 1.2s ease-in-out infinite alternate;
+}
+@keyframes slideLoader { from { transform: translateX(-20%); } to { transform: translateX(140%); } }
 </style>
 </head>
 <body>
+
+<!-- APP STARTUP LOADING SCREEN WITH LOGO -->
+<div id="appLoadingScreen" aria-label="Loading NEET Command Centre">
+  <div class="loader-logo-wrap">
+    <div class="loader-ring"></div>
+    <div class="loader-badge">720</div>
+  </div>
+  <div style="text-align:center">
+    <div style="font:700 17px 'Space Grotesk',sans-serif;letter-spacing:.8px">NEET COMMAND CENTRE</div>
+    <div class="small muted" style="font-family:'DM Mono',monospace;margin-top:3px">2027 EDITION · LOADING WORKSPACE</div>
+  </div>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+</div>
 
 <!-- LOGIN SCREEN OVERLAY (SEPARATED LOG IN / SIGN UP TABS + FORGOT PASSWORD) -->
 <div id="loginScreen">
@@ -1623,7 +1698,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <div class="grid grid-4" data-overview-id="stat_boxes">
         <div class="panel"><div class="stat-label">STUDY TIME TODAY</div><div class="stat-value stat-accent" id="todayHours">0m</div><div class="stat-foot">Tracked sessions</div></div>
         <div class="panel"><div class="stat-label">CURRENT STREAK</div><div class="stat-value" id="streakValue">0 days</div><div class="stat-foot">Consecutive active days</div></div>
-        <div class="panel"><div class="stat-label">CHAPTERS COMPLETED</div><div class="stat-value" id="chapterValue">0</div><div class="stat-foot" id="chapterSub">Out of 79 chapters</div></div>
+        <div class="panel"><div class="stat-label">CHAPTERS COMPLETED</div><div class="stat-value" id="chapterValue">0</div><div class="stat-foot" id="chapterSub">Out of 78 chapters</div></div>
         <div class="panel"><div class="stat-label">AVERAGE MOCK SCORE</div><div class="stat-value" id="averageScore">--</div><div class="stat-foot">Out of 720 marks</div></div>
       </div>
 
@@ -1805,6 +1880,9 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
                 <button type="button" class="preset-chip" onclick="setTimerPreset(90)">90m</button>
                 <button type="button" class="preset-chip" onclick="setTimerPreset(180)">180m</button>
               </div>
+              <div id="pendingTimerApplyWrap" style="display:none;margin-top:8px">
+                <button type="button" class="btn btn-small btn-primary" id="applyNewTimerBtn" onclick="applyPendingTimerAndStart()">▶ Start New 50m Session</button>
+              </div>
             </div>
             <div>
               <label class="field-label" for="timerSubject">SUBJECT</label>
@@ -1834,6 +1912,8 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
                 <label class="field-label" style="margin-top:4px">SOUNDSCAPE</label>
                 <select class="field" id="studyAmbientPreset" onchange="changeAmbientPreset(this.value)">
                   <option value="lofi">Soft Lo-Fi Warm Pad</option>
+                  <option value="gentle_piano">Gentle Piano Chords (Solo)</option>
+                  <option value="night_piano">Late-Night Ambient Piano & Pad</option>
                   <option value="rain_piano">Gentle Rain & Piano Chords</option>
                   <option value="brown_hum">Deep Brown Focus Hum</option>
                 </select>
@@ -1990,7 +2070,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           <div class="ring-wrap">
             <div class="ring" id="chapterRing" style="--angle:0deg"><div class="ring-inner"><strong id="chapterRingNum">0%</strong><small>COMPLETE</small></div></div>
             <div>
-              <div class="stat-value" id="chapterDoneCount">0 / 79</div>
+              <div class="stat-value" id="chapterDoneCount">0 / 78</div>
               <div class="small muted"><span id="chapterPyqCount" style="color:var(--orange)">0 PYQ done</span> · <span id="chapterTotalRevised" style="color:var(--cyan)">0× Rev</span> · <span id="chapterTotalSolved" style="color:var(--lime)">0× Sol</span></div>
             </div>
           </div>
@@ -2013,7 +2093,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
       <div class="panel section-gap">
         <div class="panel-head">
-          <div class="panel-title">NCERT Chapter Library (79 Chapters)</div>
+          <div class="panel-title">NCERT Chapter Library (78 Chapters)</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <select class="field" id="chapterFilter" style="width:auto" onchange="renderChapters()"><option value="All">All Subjects</option><option>Biology</option><option>Physics</option><option>Chemistry</option></select>
             <select class="field" id="chapterStatusFilter" style="width:auto" onchange="renderChapters()"><option value="All">All Statuses</option><option>Not started</option><option>Theory Done</option><option>Questions Done</option><option>PYQ done</option><option>Completed</option></select>
@@ -2381,6 +2461,8 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
                 <label class="field-label" style="margin-top:4px">SOUNDSCAPE</label>
                 <select class="field" id="settingsAmbientPreset" onchange="changeAmbientPreset(this.value)">
                   <option value="lofi">Soft Lo-Fi Warm Pad</option>
+                  <option value="gentle_piano">Gentle Piano Chords (Solo)</option>
+                  <option value="night_piano">Late-Night Ambient Piano & Pad</option>
                   <option value="rain_piano">Gentle Rain & Piano Chords</option>
                   <option value="brown_hum">Deep Brown Focus Hum</option>
                 </select>
@@ -3502,24 +3584,56 @@ function playChord(ctx, dest, freqs, dur, type, peak) {
     osc.start(now); osc.stop(now + dur + 0.05);
   });
 }
+function playPianoChord(ctx, dest, freqs, dur, peak = 0.05) {
+  const now = ctx.currentTime;
+  freqs.forEach((f, idx) => {
+    const delay = idx * 0.055; // gentle rolled piano chord feel
+    const t0 = now + delay;
+    const osc1 = ctx.createOscillator(), osc2 = ctx.createOscillator(), g = ctx.createGain();
+    osc1.type = "triangle";
+    osc1.frequency.setValueAtTime(f, t0);
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(f * 2, t0); // soft harmonic warmth
+    const g2 = ctx.createGain();
+    g2.gain.setValueAtTime(0.22, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(peak, t0 + 0.04);
+    g.gain.exponentialRampToValueAtTime(peak * 0.45, t0 + 1.1);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc1.connect(g);
+    osc2.connect(g2); g2.connect(g);
+    g.connect(dest);
+    osc1.start(t0); osc2.start(t0);
+    osc1.stop(t0 + dur + 0.05); osc2.stop(t0 + dur + 0.05);
+  });
+}
 function buildSoundscape(preset) {
   const ctx = ensureAmbientCtx();
   if (!ctx) return;
   clearAmbientNodes();
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(preset === "brown_hum" ? 260 : preset === "rain_piano" ? 1100 : 750, ctx.currentTime);
+  filter.frequency.setValueAtTime(
+    preset === "brown_hum" ? 260 :
+    preset === "gentle_piano" ? 1450 :
+    preset === "night_piano" ? 1150 :
+    preset === "rain_piano" ? 1100 : 750,
+    ctx.currentTime
+  );
   filter.connect(ambientEngine.masterGain);
   ambientEngine.nodes.push(filter);
 
-  const noise = ctx.createBufferSource();
-  noise.buffer = makeNoiseBuffer(ctx, preset === "rain_piano" ? "rain" : "brown");
-  noise.loop = true;
-  const ng = ctx.createGain();
-  ng.gain.setValueAtTime(preset === "brown_hum" ? 0.42 : preset === "rain_piano" ? 0.22 : 0.14, ctx.currentTime);
-  noise.connect(ng); ng.connect(filter);
-  noise.start();
-  ambientEngine.nodes.push(noise, ng);
+  if (preset !== "gentle_piano") {
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, preset === "rain_piano" ? "rain" : "brown");
+    noise.loop = true;
+    const ng = ctx.createGain();
+    const nGain = preset === "brown_hum" ? 0.42 : preset === "rain_piano" ? 0.22 : preset === "night_piano" ? 0.06 : 0.14;
+    ng.gain.setValueAtTime(nGain, ctx.currentTime);
+    noise.connect(ng); ng.connect(filter);
+    noise.start();
+    ambientEngine.nodes.push(noise, ng);
+  }
 
   if (preset === "brown_hum") {
     [110, 164.81].forEach((f, i) => {
@@ -3529,6 +3643,36 @@ function buildSoundscape(preset) {
       osc.connect(g); g.connect(filter); osc.start();
       ambientEngine.nodes.push(osc, g);
     });
+  } else if (preset === "gentle_piano") {
+    const chords = [
+      [261.63, 329.63, 392.00, 493.88], // Cmaj7
+      [220.00, 261.63, 329.63, 392.00], // Am7
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7
+      [196.00, 246.94, 293.66, 392.00]  // G6
+    ];
+    ambientEngine.step = 0;
+    playPianoChord(ctx, filter, chords[0], 4.6, 0.052);
+    ambientEngine.chordTimer = setInterval(() => {
+      if (!ambientEngine.playing) return;
+      ambientEngine.step = (ambientEngine.step + 1) % chords.length;
+      playPianoChord(ctx, filter, chords[ambientEngine.step], 4.6, 0.052);
+    }, 4200);
+  } else if (preset === "night_piano") {
+    const chords = [
+      [146.83, 220.00, 261.63, 329.63], // Dm9
+      [196.00, 246.94, 293.66, 349.23], // G7
+      [130.81, 196.00, 246.94, 293.66], // Cmaj9
+      [110.00, 164.81, 196.00, 261.63]  // Am7
+    ];
+    ambientEngine.step = 0;
+    playChord(ctx, filter, [130.81, 196.00], 5.6, "sine", 0.024);
+    playPianoChord(ctx, filter, chords[0], 5.4, 0.045);
+    ambientEngine.chordTimer = setInterval(() => {
+      if (!ambientEngine.playing) return;
+      ambientEngine.step = (ambientEngine.step + 1) % chords.length;
+      playChord(ctx, filter, [chords[ambientEngine.step][0], chords[ambientEngine.step][1]], 5.6, "sine", 0.022);
+      playPianoChord(ctx, filter, chords[ambientEngine.step], 5.4, 0.045);
+    }, 5200);
   } else {
     const chords = preset === "rain_piano"
       ? [[174.61,220,261.63,329.63],[164.81,196,246.94,293.66],[146.83,174.61,220,261.63],[130.81,164.81,196,246.94]]
@@ -3755,7 +3899,7 @@ window.getPublicProgressSnapshot = () => {
   const td = today();
   const ms = getMissions(td);
   const doneM = ms.filter(m => m.done).length;
-  const chTotal = (data.chapters || []).length || 79;
+  const chTotal = (data.chapters || []).length || 78;
   const chDone = (data.chapters || []).filter(isChapterCompleted).length;
   const fullMocks = (data.mocks || []).filter(isFullMock);
   const avgMock = fullMocks.length ? Math.round(fullMocks.reduce((a, m) => a + (Number(m.total) || 0), 0) / fullMocks.length) : null;
@@ -4087,6 +4231,7 @@ function tickTimer() {
     if (window.setGlobalSession) window.setGlobalSession(false);
     completeSession(timerTotal / 60);
     document.getElementById("timerStatus").textContent = "COMPLETED";
+    const pWrap = document.getElementById("pendingTimerApplyWrap"); if (pWrap) pWrap.style.display = "none";
     triggerAppAlert("Focus Session Complete!", `Great work! ${Math.round(timerTotal / 60)} minutes logged to your study record.`, "🎉");
   }
 }
@@ -4294,24 +4439,46 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) sync
 window.addEventListener("focus", syncTimersOnWake);
 window.addEventListener("pageshow", syncTimersOnWake);
 
+function handleTimerDurationEdit(m) {
+  const n = Math.max(1, Math.min(300, Number(m) || 50));
+  document.getElementById("timerMinutes").value = n;
+  document.getElementById("timerMinutesSlider").value = Math.min(180, n);
+  document.getElementById("timerMinutesBadge").textContent = n + "m";
+  const wrap = document.getElementById("pendingTimerApplyWrap");
+  const btn = document.getElementById("applyNewTimerBtn");
+  if (timerRunning) {
+    if (wrap) wrap.style.display = "block";
+    if (btn) btn.textContent = `▶ Start New ${n}m Session`;
+    return;
+  }
+  if (wrap) wrap.style.display = "none";
+  resetTimer();
+}
+window.applyPendingTimerAndStart = () => {
+  const wrap = document.getElementById("pendingTimerApplyWrap");
+  if (wrap) wrap.style.display = "none";
+  resetTimer();
+  startTimer();
+};
 window.syncSliderToInput = (sId, iId, isTimer, suffix = "") => {
   const v = document.getElementById(sId).value;
   document.getElementById(iId).value = v;
   const b = document.getElementById(iId + "Badge"); if (b) b.textContent = v + suffix;
-  if (isTimer) resetTimer();
+  if (isTimer) handleTimerDurationEdit(v);
 };
 window.setTimerPreset = (m) => {
-  document.getElementById("timerMinutes").value = m;
-  document.getElementById("timerMinutesSlider").value = Math.min(180, m);
-  document.getElementById("timerMinutesBadge").textContent = m + "m";
-  resetTimer();
+  handleTimerDurationEdit(m);
 };
 window.openFocus = () => document.getElementById("focusOverlay").classList.add("open");
 window.closeFocus = () => document.getElementById("focusOverlay").classList.remove("open");
 document.getElementById("startTimer").onclick = startTimer;
-document.getElementById("resetTimer").onclick = resetTimer;
+document.getElementById("resetTimer").onclick = () => {
+  const wrap = document.getElementById("pendingTimerApplyWrap");
+  if (wrap) wrap.style.display = "none";
+  resetTimer();
+};
 document.getElementById("openFocus").onclick = openFocus;
-document.getElementById("timerMinutes").onchange = resetTimer;
+document.getElementById("timerMinutes").onchange = () => handleTimerDurationEdit(document.getElementById("timerMinutes").value);
 
 /* Daily Reading Target Setup & Circular Progress (Overview, Missions, Study Timer) */
 function renderDailyTargetProgress() {
@@ -5553,30 +5720,83 @@ window.openShareParentModal = () => {
 };
 window.closeShareParentModal = () => document.getElementById("shareParentModal").classList.remove("open");
 window.copyParentReportText = () => copyTextSafe(document.getElementById("parentReportText").value, "Report text copied!");
-window.downloadParentReportPNG = () => {
+function canvasToPngBlob(canvas) {
+  return new Promise(resolve => {
+    if (canvas && typeof canvas.toBlob === "function") {
+      canvas.toBlob(blob => resolve(blob), "image/png");
+    } else {
+      resolve(null);
+    }
+  });
+}
+window.downloadParentReportPNG = async () => {
   const c = document.getElementById("parentReportCanvas");
-  const a = document.createElement("a");
-  a.href = c.toDataURL("image/png");
-  a.download = `neet-daily-report-${today()}.png`;
-  a.click();
-  notify("PNG report downloaded!");
+  if (!c) return notify("Report image not ready.");
+  try {
+    const blob = await canvasToPngBlob(c);
+    if (!blob) throw new Error("Blob failed");
+    const filename = `neet-daily-report-${today()}.png`;
+    // On Capacitor Android WebView, <a download> is often blocked; use Web Share sheet if available
+    if (window.Capacitor && navigator.share) {
+      try {
+        const file = new File([blob], filename, { type: "image/png" });
+        if (!navigator.canShare || navigator.canShare({ files: [file] })) {
+          await navigator.share({ title: "NEET Daily Study Report", files: [file] });
+          return;
+        }
+      } catch (e) {
+        if (e && e.name === "AbortError") return;
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 2000);
+    notify("PNG report downloaded!");
+  } catch (e) {
+    try {
+      const dataUrl = c.toDataURL("image/png");
+      const w = window.open("");
+      if (w) { w.document.write(`<img src="${dataUrl}" style="max-width:100%;height:auto" alt="NEET Report">`); }
+      notify("Long-press the opened image to save.");
+    } catch (err) {
+      notify("Could not save PNG on this device.");
+    }
+  }
 };
 window.shareParentReportNative = async () => {
   const text = document.getElementById("parentReportText").value;
   const c = document.getElementById("parentReportCanvas");
-  try {
-    if (navigator.share) {
-      const blob = await new Promise(res => c.toBlob(res, "image/png"));
-      const file = blob ? new File([blob], `neet-report-${today()}.png`, { type: "image/png" }) : null;
-      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ title: "Daily Study Report", text, files: [file] });
-        return;
+  const blob = await canvasToPngBlob(c);
+  const file = blob ? new File([blob], `neet-report-${today()}.png`, { type: "image/png" }) : null;
+  if (navigator.share) {
+    if (file) {
+      try {
+        if (!navigator.canShare || navigator.canShare({ files: [file] })) {
+          await navigator.share({ title: "NEET Daily Study Report", text, files: [file] });
+          return;
+        }
+      } catch (e) {
+        if (e && e.name === "AbortError") return;
       }
-      await navigator.share({ title: "Daily Study Report", text });
-      return;
     }
-  } catch (e) {}
-  window.copyParentReportText();
+    try {
+      await navigator.share({ title: "NEET Daily Study Report", text });
+      return;
+    } catch (e) {
+      if (e && e.name === "AbortError") return;
+    }
+  }
+  copyTextSafe(text, "Share not supported here — report text copied & PNG downloading!");
+  window.downloadParentReportPNG();
 };
 
 /* Dashboard & Chart */
@@ -6076,7 +6296,7 @@ window.openFriendProgressModal = (uid) => {
   const tgt = Number(p.dailyTargetMinutes) || 360;
   const tPct = Math.min(999, Math.round((tMins / Math.max(1, tgt)) * 100));
   const chDone = Number(p.chaptersCompleted) || 0;
-  const chTot = Number(p.chaptersTotal) || 79;
+  const chTot = Number(p.chaptersTotal) || 78;
   const chPct = Math.round((chDone / Math.max(1, chTot)) * 100);
   const mDone = Number(p.missionsDoneToday) || 0;
   const mTot = Number(p.missionsTotalToday) || 0;
@@ -6139,6 +6359,11 @@ window.addEventListener("resize", () => { if (document.getElementById("dashboard
 updateNetworkBadge();
 startReminderWorker();
 initCapacitorNotifications().then(ok => { if (ok) syncCapacitorDailyAlarms(); });
+window.hideAppLoadingScreen = () => {
+  const el = document.getElementById("appLoadingScreen");
+  if (el) el.classList.add("hidden");
+};
+setTimeout(() => { window.hideAppLoadingScreen(); }, 3500);
 setTimeout(() => {
   checkScheduledReminders();
 }, 2200);
@@ -6342,7 +6567,7 @@ function extractSafeProgress(fd, todayStr) {
       dailyTargetMinutes: Number(p.dailyTargetMinutes) || 360,
       streak: Number(p.streak) || 0,
       chaptersCompleted: Number(p.chaptersCompleted) || 0,
-      chaptersTotal: Number(p.chaptersTotal) || 79,
+      chaptersTotal: Number(p.chaptersTotal) || 78,
       avgMockScore: p.avgMockScore ?? null,
       missionsDoneToday: isToday ? (Number(p.missionsDoneToday) || 0) : 0,
       missionsTotalToday: isToday ? (Number(p.missionsTotalToday) || 0) : 0
@@ -6361,7 +6586,7 @@ function extractSafeProgress(fd, todayStr) {
     dailyTargetMinutes: Number(ad.settings?.dailyTargetMinutes) || 360,
     streak: 0,
     chaptersCompleted: chDone,
-    chaptersTotal: chs.length || 79,
+    chaptersTotal: chs.length || 78,
     avgMockScore: avgM,
     missionsDoneToday: mDone,
     missionsTotalToday: ms.length
@@ -6519,7 +6744,7 @@ window.refreshFriendsLeaderboard = async () => {
     const p = r.progress;
     const chips = p ? `<div class="friend-prog-chips">
       <span class="friend-chip hi">🔥 ${p.streak || 0}d</span>
-      <span class="friend-chip cy">▤ ${p.chaptersCompleted || 0}/${p.chaptersTotal || 79} ch</span>
+      <span class="friend-chip cy">▤ ${p.chaptersCompleted || 0}/${p.chaptersTotal || 78} ch</span>
       <span class="friend-chip">◈ ${p.missionsDoneToday || 0}/${p.missionsTotalToday || 0} tasks</span>
       ${p.avgMockScore !== null && p.avgMockScore !== undefined ? `<span class="friend-chip">▥ ${p.avgMockScore}/720</span>` : ""}
     </div>` : "";
@@ -6582,6 +6807,7 @@ window.refreshWeeklyLeaderboard = async () => {
 };
 
 onAuthStateChanged(auth, async (user) => {
+  if (window.hideAppLoadingScreen) window.hideAppLoadingScreen();
   const loginScreen = document.getElementById("loginScreen");
   currentUser = user || null;
   if (user) {
