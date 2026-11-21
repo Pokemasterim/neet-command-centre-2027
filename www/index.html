@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#080e1b">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.2</title>
+<title>NEET COMMAND CENTRE 2027 — v2.3</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -1564,7 +1564,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.2</div>
+        <div class="brand-sub">NEET 2027 / v2.3</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -2427,7 +2427,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
                   <span>Parent report reminder at night</span>
                 </label>
                 <div style="display:flex;align-items:center;gap:8px">
-                  <input type="time" class="field" id="remNightReportTime" value="21:30" style="width:110px;padding:5px 8px;font-size:12px" onchange="saveReminderSettings()">
+                  <input type="time" class="field" id="remNightReportTime" value="22:30" style="width:110px;padding:5px 8px;font-size:12px" onchange="saveReminderSettings()">
                   <input type="checkbox" class="switch-input" id="remNightReport" checked onchange="saveReminderSettings()">
                 </div>
               </div>
@@ -2511,7 +2511,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
           <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong>Version 2.2</strong></div>
+          <div class="metric-line"><span>Version</span><strong>Version 2.3</strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
         </div>
       </div>
@@ -2530,7 +2530,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.2 · Built for personal study tracking. Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.3 · Built for personal study tracking. Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -3131,7 +3131,7 @@ function defaultDataObject() {
         smartRevision: true,
         consistency: true,
         nightReport: true,
-        nightReportTime: "21:30"
+        nightReportTime: "22:30"
       },
       reminderLog: {
         targetDoneDate: "",
@@ -3179,7 +3179,7 @@ function normalizeData(raw) {
     smartRevision: true,
     consistency: true,
     nightReport: true,
-    nightReportTime: "21:30",
+    nightReportTime: "22:30",
     ...(d.settings.reminders || {})
   };
   d.settings.reminderLog = {
@@ -3437,7 +3437,7 @@ async function syncCapacitorDailyAlarms() {
   const rem = data.settings.reminders || {};
   await capCancelNotifications([CAP_NOTIF_IDS.NIGHT_REPORT, CAP_NOTIF_IDS.CONSISTENCY]);
   if (rem.nightReport !== false) {
-    const [hh, mm] = (rem.nightReportTime || "21:30").split(":").map(Number);
+    const [hh, mm] = (rem.nightReportTime || "22:30").split(":").map(Number);
     await capScheduleNotification({
       id: CAP_NOTIF_IDS.NIGHT_REPORT,
       title: "Time for Night Parent Report 📤",
@@ -5729,25 +5729,58 @@ function canvasToPngBlob(canvas) {
     }
   });
 }
+function getCapFilesystem() {
+  try { return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem ? window.Capacitor.Plugins.Filesystem : null; }
+  catch (e) { return null; }
+}
+function getCapShare() {
+  try { return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share ? window.Capacitor.Plugins.Share : null; }
+  catch (e) { return null; }
+}
 window.downloadParentReportPNG = async () => {
   const c = document.getElementById("parentReportCanvas");
   if (!c) return notify("Report image not ready.");
+  const filename = `neet-daily-report-${today()}.png`;
+  const dataUrl = c.toDataURL("image/png");
+  const base64Data = dataUrl.split(",")[1];
+
+  // 1. Native Android APK path via @capacitor/filesystem
+  const fs = getCapFilesystem();
+  if (fs) {
+    try {
+      await fs.writeFile({
+        path: `NEET-Command-Centre/${filename}`,
+        data: base64Data,
+        directory: "DOCUMENTS",
+        recursive: true
+      });
+      notify(`Saved to Documents/NEET-Command-Centre/${filename}`);
+      return;
+    } catch (e1) {
+      try {
+        const cached = await fs.writeFile({
+          path: filename,
+          data: base64Data,
+          directory: "CACHE",
+          recursive: true
+        });
+        const capShare = getCapShare();
+        if (capShare && cached && cached.uri) {
+          await capShare.share({
+            title: "Save NEET Daily Report PNG",
+            files: [cached.uri],
+            dialogTitle: "Save or Share PNG Report"
+          });
+          return;
+        }
+      } catch (e2) {}
+    }
+  }
+
+  // 2. Web Browser path via Blob download
   try {
     const blob = await canvasToPngBlob(c);
     if (!blob) throw new Error("Blob failed");
-    const filename = `neet-daily-report-${today()}.png`;
-    // On Capacitor Android WebView, <a download> is often blocked; use Web Share sheet if available
-    if (window.Capacitor && navigator.share) {
-      try {
-        const file = new File([blob], filename, { type: "image/png" });
-        if (!navigator.canShare || navigator.canShare({ files: [file] })) {
-          await navigator.share({ title: "NEET Daily Study Report", files: [file] });
-          return;
-        }
-      } catch (e) {
-        if (e && e.name === "AbortError") return;
-      }
-    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -5763,7 +5796,6 @@ window.downloadParentReportPNG = async () => {
     notify("PNG report downloaded!");
   } catch (e) {
     try {
-      const dataUrl = c.toDataURL("image/png");
       const w = window.open("");
       if (w) { w.document.write(`<img src="${dataUrl}" style="max-width:100%;height:auto" alt="NEET Report">`); }
       notify("Long-press the opened image to save.");
@@ -5775,8 +5807,42 @@ window.downloadParentReportPNG = async () => {
 window.shareParentReportNative = async () => {
   const text = document.getElementById("parentReportText").value;
   const c = document.getElementById("parentReportCanvas");
+  const filename = `neet-daily-report-${today()}.png`;
+
+  // 1. Native Android APK Share Sheet (Image + Text together via @capacitor/filesystem + @capacitor/share)
+  const fs = getCapFilesystem();
+  const capShare = getCapShare();
+  if (fs && capShare && c) {
+    try {
+      const base64Data = c.toDataURL("image/png").split(",")[1];
+      const written = await fs.writeFile({
+        path: filename,
+        data: base64Data,
+        directory: "CACHE",
+        recursive: true
+      });
+      await capShare.share({
+        title: "NEET Daily Study Report",
+        text,
+        files: written && written.uri ? [written.uri] : undefined,
+        dialogTitle: "Share Report to Parent"
+      });
+      return;
+    } catch (e) {
+      if (e && /cancel|abort/i.test(String(e.message || e.name || ""))) return;
+    }
+  } else if (capShare) {
+    try {
+      await capShare.share({ title: "NEET Daily Study Report", text, dialogTitle: "Share Report to Parent" });
+      return;
+    } catch (e) {
+      if (e && /cancel|abort/i.test(String(e.message || e.name || ""))) return;
+    }
+  }
+
+  // 2. Web Share API (Mobile Browsers)
   const blob = await canvasToPngBlob(c);
-  const file = blob ? new File([blob], `neet-report-${today()}.png`, { type: "image/png" }) : null;
+  const file = blob ? new File([blob], filename, { type: "image/png" }) : null;
   if (navigator.share) {
     if (file) {
       try {
@@ -6163,7 +6229,7 @@ function checkScheduledReminders() {
   }
 
   // 4. Night Parent Report reminder
-  const reportTime = (rem.nightReportTime || "21:30").slice(0, 5);
+  const reportTime = (rem.nightReportTime || "22:30").slice(0, 5);
   const hasClosedToday = (data.dailyReviews || []).some(r => r.date === t);
   if (rem.nightReport !== false && log.nightReportDate !== t && !hasClosedToday && hhmm >= reportTime) {
     log.nightReportDate = t;
@@ -6177,7 +6243,7 @@ window.saveReminderSettings = () => {
     smartRevision: document.getElementById("remSmartRevision")?.checked !== false,
     consistency: document.getElementById("remConsistency")?.checked !== false,
     nightReport: document.getElementById("remNightReport")?.checked !== false,
-    nightReportTime: document.getElementById("remNightReportTime")?.value || "21:30"
+    nightReportTime: document.getElementById("remNightReportTime")?.value || "22:30"
   };
   save();
   syncCapacitorDailyAlarms();
@@ -6191,10 +6257,10 @@ function syncReminderSettingsUI() {
   setChk("remConsistency", r.consistency);
   setChk("remNightReport", r.nightReport);
   const tEl = document.getElementById("remNightReportTime");
-  if (tEl) tEl.value = r.nightReportTime || "21:30";
+  if (tEl) tEl.value = r.nightReportTime || "22:30";
 }
 window.downloadDailyReminderICS = () => {
-  const tStr = (data.settings.reminders?.nightReportTime || "21:30").replace(":", "") + "00";
+  const tStr = (data.settings.reminders?.nightReportTime || "22:30").replace(":", "") + "00";
   const dStr = today().replace(/-/g, "");
   const ics = [
     "BEGIN:VCALENDAR",
