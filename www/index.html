@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#080e1b">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.4</title>
+<title>NEET COMMAND CENTRE 2027 — v2.4.1</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -62,7 +62,7 @@ canvas, svg, img { max-width: 100%; }
 .sidebar {
   width: 258px;
   position: fixed;
-  inset: 0 auto 0 0;
+  top: 0; bottom: 0; left: 0;
   max-height: 100vh;
   max-height: 100dvh;
   overflow-y: auto;
@@ -84,7 +84,7 @@ canvas, svg, img { max-width: 100%; }
 .sidebar-backdrop {
   display: none;
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   background: rgba(4, 9, 18, .72);
   backdrop-filter: blur(4px);
   z-index: 35;
@@ -331,7 +331,7 @@ select option { background: #101a2c; color: #edf4ff; }
 /* Login Screen & Auth Tabs (Never clips vertically or horizontally) */
 #loginScreen {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   width: 100%;
   height: 100%;
   height: 100dvh;
@@ -728,7 +728,7 @@ select option { background: #101a2c; color: #edf4ff; }
   position: relative;
   flex-shrink: 0;
 }
-.ring:before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--panel); }
+.ring:before { content: ""; position: absolute; top: 9px; right: 9px; bottom: 9px; left: 9px; border-radius: 50%; background: var(--panel); }
 .ring-inner { position: relative; text-align: center; }
 .ring-inner strong { font: 700 22px 'Space Grotesk', sans-serif; display: block; }
 .ring-inner small { font-size: 9px; color: var(--muted); }
@@ -815,7 +815,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 /* Overlays, Modals, Alerts, Toast (Never clip on mobile or keyboard open) */
 .focus-overlay {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   width: 100%;
   height: 100%;
   height: 100dvh;
@@ -844,7 +844,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   width: 100%;
   height: 100%;
   height: 100dvh;
@@ -1018,7 +1018,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 }
 .target-ring-center {
   position: absolute;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1296,7 +1296,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
   .undo-btn { padding: 6px 8px; font-size: 10.5px; }
   .icon-btn { padding: 8px 10px; }
   #themeText { display: none; }
-  #topbarAmbientBtn, #quickTimer, #quickSettings { display: none; }
+  #quickTimer, #quickSettings { display: none; }
   .top-right { justify-content: flex-end; }
   .countdown { gap: 6px; }
   .time-unit { min-width: 0; padding: 10px 4px; }
@@ -1398,7 +1398,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 /* App Startup Loading Screen with Animated 720 Logo */
 #appLoadingScreen {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   z-index: 10050;
   background: radial-gradient(circle at 50% 35%, rgba(97, 217, 245, .14), transparent 55%), var(--bg);
   display: flex;
@@ -1422,7 +1422,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 }
 .loader-ring {
   position: absolute;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   border-radius: 50%;
   border: 3px solid rgba(97, 217, 245, .16);
   border-top-color: var(--cyan);
@@ -1468,7 +1468,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
   </div>
   <div style="text-align:center">
     <div style="font:700 17px 'Space Grotesk',sans-serif;letter-spacing:.8px">NEET COMMAND CENTRE</div>
-    <div class="small muted" style="font-family:'DM Mono',monospace;margin-top:3px">2027 EDITION · LOADING WORKSPACE</div>
+    <div class="small muted" style="font-family:\'DM Mono\',monospace;margin-top:3px">2027 EDITION · LOADING WORKSPACE</div>
   </div>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
 </div>
@@ -1575,7 +1575,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.4</div>
+        <div class="brand-sub">NEET 2027 / v2.4.1</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -1619,10 +1619,11 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
       <div class="top-right">
         <span class="net-pill online" id="netStatusBadge" title="Connection status">● Online</span>
-        <div class="live" title="Virtual Library: Aspirants focusing right now">
+        <button type="button" class="live" id="focusingNowBtn" onclick="openFocusingNowModal()" title="View Aspirants Focusing Now" style="cursor:pointer">
+          <span aria-hidden="true">👥</span>
           <span class="dot"></span>
           <span id="virtualLibraryCounter">0 focusing now</span>
-        </div>
+        </button>
         <button type="button" class="ambient-pill" id="topbarAmbientBtn" onclick="toggleAmbientMusic()" title="Play / Pause Soft Ambient Study Music">
           <span>🎵</span>
           <span id="topbarAmbientLabel">Ambient: Off</span>
@@ -2201,7 +2202,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
               <div><label class="field-label">BOTANY / 180</label><input class="field" type="number" id="mockBot" min="0" max="180" value="0" oninput="updateLiveFullMockPreview()"></div>
               <div><label class="field-label">ZOOLOGY / 180</label><input class="field" type="number" id="mockZoo" min="0" max="180" value="0" oninput="updateLiveFullMockPreview()"></div>
             </div>
-            <div class="small muted" id="liveFullMockTotal" style="margin-top:10px;color:var(--cyan);font-family:'DM Mono',monospace;">LIVE TOTAL: 0 / 720</div>
+            <div class="small muted" id="liveFullMockTotal" style="margin-top:10px;color:var(--cyan);font-family:\'DM Mono\',monospace;">LIVE TOTAL: 0 / 720</div>
           </div>
 
           <div id="singleMockFields" style="display:none">
@@ -2218,7 +2219,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
             <div><label class="field-label" for="mockAttempted">QUESTIONS ATTEMPTED</label><input class="field" type="number" id="mockAttempted" min="0" max="200" placeholder="e.g. 165" oninput="updateLiveMockAccuracy()"></div>
             <div><label class="field-label" for="mockCorrect">CORRECT ANSWERS</label><input class="field" type="number" id="mockCorrect" min="0" max="200" placeholder="e.g. 145" oninput="updateLiveMockAccuracy()"></div>
           </div>
-          <div class="small muted" id="liveMockAccuracy" style="margin-top:6px;color:var(--lime);font-family:'DM Mono',monospace;">ACCURACY: -- (enter attempted & correct)</div>
+          <div class="small muted" id="liveMockAccuracy" style="margin-top:6px;color:var(--lime);font-family:\'DM Mono\',monospace;">ACCURACY: -- (enter attempted & correct)</div>
           <label class="field-label" for="mockTopics">CHAPTERS / TOPICS TESTED (MULTI-SELECT OR TYPE)</label>
           <div class="syllabus-row">
             <input class="field" id="mockTopics" placeholder="e.g. Human Reproduction, Electrostatics" oninput="renderSyllabusChips('mockTopics', 'mockTopicsChips')">
@@ -2247,7 +2248,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
               <div class="small muted">Configurable target score line</div>
             </div>
             <div class="target-inline-box">
-              <label class="small muted" for="mockTargetScoreInput" style="font-family:'DM Mono',monospace">TARGET:</label>
+              <label class="small muted" for="mockTargetScoreInput" style="font-family:\'DM Mono\',monospace">TARGET:</label>
               <input class="field target-inline-input" type="number" id="mockTargetScoreInput" min="100" max="720" value="600">
               <button type="button" class="btn btn-small btn-lime" onclick="saveMockTargetScore()">Set</button>
             </div>
@@ -2344,11 +2345,17 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           <div class="panel-head">
             <div>
               <div class="eyebrow">GLOBAL RANKINGS</div>
-              <div class="panel-title" style="margin-top:3px">Top 20 Weekly Leaderboard</div>
+              <div class="panel-title global-lb-title" style="margin-top:3px">Top 20 Daily Leaderboard</div>
             </div>
-            <button type="button" class="btn btn-small" onclick="refreshWeeklyLeaderboard()">↻ Refresh</button>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <div class="seg-toggle">
+                <button type="button" class="seg-btn global-mode-btn active" data-mode="daily" onclick="setGlobalLbMode('daily')">Today</button>
+                <button type="button" class="seg-btn global-mode-btn" data-mode="weekly" onclick="setGlobalLbMode('weekly')">This Week</button>
+              </div>
+              <button type="button" class="btn btn-small" onclick="refreshWeeklyLeaderboard()">↻ Refresh</button>
+            </div>
           </div>
-          <div id="weeklyLeaderboardList"><div class="empty">Loading weekly rankings...</div></div>
+          <div id="weeklyLeaderboardList"><div class="empty">Loading daily rankings...</div></div>
         </div>
 
         <!-- Study Friends Card (Leaderboard) -->
@@ -2490,7 +2497,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           <div class="panel-title">Account, Cloud Sync & Backup</div>
           <label class="field-label">YOUR UID (SHARE WITH STUDY FRIENDS)</label>
           <div style="display:flex;gap:8px">
-            <input type="text" class="field" id="settingsUidField" readonly value="Sign in to view UID" style="font-family:'DM Mono',monospace;font-size:11px">
+            <input type="text" class="field" id="settingsUidField" readonly value="Sign in to view UID" style="font-family:\'DM Mono\',monospace;font-size:11px">
             <button type="button" class="btn btn-primary btn-small" onclick="copyUserUid()">Copy</button>
           </div>
           <div class="small muted" id="cloudSyncStatus" style="margin-top:8px">Cloud status: Connecting...</div>
@@ -2522,7 +2529,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
           <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.4 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.4.1 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
         </div>
       </div>
@@ -2541,7 +2548,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.4 · Built for personal study tracking. Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.4.1 · Built for personal study tracking. Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -2608,6 +2615,26 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
   </div>
 </div>
 
+<div class="modal-overlay" id="focusingNowModal" role="dialog" aria-modal="true" onclick="if(event.target===this)closeFocusingNowModal()">
+  <div class="modal-card" style="max-width:520px;width:92%">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+      <div>
+        <div class="eyebrow">VIRTUAL LIBRARY</div>
+        <h3 class="modal-title" style="margin:2px 0 0">👥 Focusing Right Now</h3>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button type="button" class="btn btn-small" onclick="openFocusingNowModal()">↻ Refresh</button>
+        <button type="button" class="icon-btn btn-small" onclick="closeFocusingNowModal()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <p class="small muted" id="focusingNowSubtitle" style="margin:0 0 12px">Checking active study sessions...</p>
+    <div id="focusingNowList" style="max-height:58vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
+    <div class="modal-actions" style="margin-top:14px">
+      <button type="button" class="btn btn-primary" onclick="closeFocusingNowModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Close My Day Modal -->
 <div class="modal-overlay" id="closeDayModal" role="dialog" aria-modal="true">
   <div class="modal-card">
@@ -2656,7 +2683,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
     </div>
     <canvas id="parentReportCanvas" width="760" height="440" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block;margin-bottom:12px;"></canvas>
     <label class="field-label">PLAIN-TEXT SUMMARY</label>
-    <textarea class="field" id="parentReportText" rows="6" readonly style="font-family:'DM Mono',monospace;font-size:11px;line-height:1.5;"></textarea>
+    <textarea class="field" id="parentReportText" rows="6" readonly style="font-family:\'DM Mono\',monospace;font-size:11px;line-height:1.5;"></textarea>
     <div class="modal-actions" style="justify-content:space-between">
       <button type="button" class="btn btn-danger" onclick="closeShareParentModal()">✕ Close</button>
       <div style="display:flex;gap:7px;flex-wrap:wrap">
@@ -2807,7 +2834,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <button type="button" class="btn btn-small btn-primary" onclick="openSyllabusPicker('editMockTopics', 'editMockTopicsChips')">+ Pick Chapters</button>
     </div>
     <div class="syllabus-chips" id="editMockTopicsChips"></div>
-    <div class="small muted" id="editMockLivePreview" style="margin-top:8px;color:var(--cyan);font-family:'DM Mono',monospace;"></div>
+    <div class="small muted" id="editMockLivePreview" style="margin-top:8px;color:var(--cyan);font-family:\'DM Mono\',monospace;"></div>
     <div class="modal-actions">
       <button type="button" class="btn" onclick="closeEditMockModal()">Cancel</button>
       <button type="button" class="btn btn-primary" onclick="saveEditedMock()">Save Changes</button>
@@ -2833,7 +2860,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <button type="button" class="btn btn-small" data-subj="Chemistry" onclick="setSyllabusPickerSubject('Chemistry')">Chemistry</button>
     </div>
     <input class="field" id="syllabusPickerSearch" placeholder="Search chapter name..." oninput="renderSyllabusPickerList()">
-    <div class="small muted" id="syllabusSelectedCount" style="margin:8px 0;font-family:'DM Mono',monospace;color:var(--cyan)">0 chapters selected</div>
+    <div class="small muted" id="syllabusSelectedCount" style="margin:8px 0;font-family:\'DM Mono\',monospace;color:var(--cyan)">0 chapters selected</div>
     <div class="syllabus-list" id="syllabusPickerList"></div>
     <div class="modal-actions" style="justify-content:space-between">
       <button type="button" class="btn btn-small" onclick="clearSyllabusSelection()">Clear All</button>
@@ -3048,7 +3075,7 @@ function formatDoctorName(raw) {
   return /^dr\.?\s+/i.test(t) ? "Dr. " + t.replace(/^dr\.?\s+/i, "") : "Dr. " + t;
 }
 function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  return String(s != null ? s : "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 function formatStudyTime(mins) {
   const n = Math.max(0, Math.round(Number(mins) || 0));
@@ -3154,8 +3181,8 @@ function normalizeData(raw) {
     ...(d.settings.reminderLog || {})
   };
   d.settings.ncertFacts = {
-    subjects: { bio: true, chem: true, phy: true, ...(d.settings.ncertFacts?.subjects || {}) },
-    perSubject: { bio: 1, chem: 1, phy: 1, ...(typeof d.settings.ncertFacts?.perSubject === "object" ? d.settings.ncertFacts.perSubject : {}) }
+    subjects: { bio: true, chem: true, phy: true, ...((d.settings.ncertFacts && d.settings.ncertFacts.subjects) || {}) },
+    perSubject: { bio: 1, chem: 1, phy: 1, ...(d.settings.ncertFacts && typeof d.settings.ncertFacts.perSubject === "object" ? d.settings.ncertFacts.perSubject : {}) }
   };
   d.missions = d.missions && typeof d.missions === "object" ? d.missions : {};
   d.sessions = Array.isArray(d.sessions) ? d.sessions : [];
@@ -3245,11 +3272,11 @@ window.mergeAppData = (localRaw, cloudRaw) => {
 
   // Merge taskEvents by key
   const teMap = new Map();
-  (secondary.studyHistory?.taskEvents || []).forEach(e => { if (e && e.key) teMap.set(e.key, e); });
-  (primary.studyHistory?.taskEvents || []).forEach(e => { if (e && e.key) teMap.set(e.key, e); });
+  ((secondary.studyHistory && secondary.studyHistory.taskEvents) || []).forEach(e => { if (e && e.key) teMap.set(e.key, e); });
+  ((primary.studyHistory && primary.studyHistory.taskEvents) || []).forEach(e => { if (e && e.key) teMap.set(e.key, e); });
 
   const mergedSettings = { ...secondary.settings, ...primary.settings };
-  if ((!mergedSettings.name || mergedSettings.name === "Dr. Xyz") && secondary.settings?.name && secondary.settings.name !== "Dr. Xyz") {
+  if ((!mergedSettings.name || mergedSettings.name === "Dr. Xyz") && (secondary.settings && secondary.settings.name) && secondary.settings.name !== "Dr. Xyz") {
     mergedSettings.name = secondary.settings.name;
   }
 
@@ -3268,7 +3295,7 @@ window.mergeAppData = (localRaw, cloudRaw) => {
     chapters: Array.from(chMap.values()),
     studyHistory: {
       taskEvents: Array.from(teMap.values()),
-      chapterEvents: mergeById(primary.studyHistory?.chapterEvents, secondary.studyHistory?.chapterEvents)
+      chapterEvents: mergeById((primary.studyHistory && primary.studyHistory.chapterEvents), (secondary.studyHistory && secondary.studyHistory.chapterEvents))
     },
     updatedAt: Math.max(Number(loc.updatedAt) || 0, Number(cld.updatedAt) || 0, Date.now())
   });
@@ -3398,7 +3425,7 @@ window.switchAuthView = (mode = "login") => {
   }
 
   if (mode === "forgot") {
-    const loginEmail = (document.getElementById("authEmail")?.value || "").trim();
+    const loginEmail = ((document.getElementById("authEmail") && document.getElementById("authEmail").value) || "").trim();
     const resetInp = document.getElementById("resetEmail");
     if (resetInp && loginEmail && !resetInp.value.trim()) resetInp.value = loginEmail;
   }
@@ -3432,9 +3459,9 @@ window.openSignInFromGuest = () => {
 };
 
 /* Enter-key shortcuts on auth forms */
-document.getElementById("authPassword")?.addEventListener("keydown", e => { if (e.key === "Enter" && window.handleEmailLogin) window.handleEmailLogin(); });
-document.getElementById("signupConfirmPassword")?.addEventListener("keydown", e => { if (e.key === "Enter" && window.handleEmailSignup) window.handleEmailSignup(); });
-document.getElementById("resetEmail")?.addEventListener("keydown", e => { if (e.key === "Enter" && window.handlePasswordReset) window.handlePasswordReset(); });
+if (document.getElementById("authPassword")) document.getElementById("authPassword").addEventListener("keydown", e => { if (e.key === "Enter" && window.handleEmailLogin) window.handleEmailLogin(); });
+if (document.getElementById("signupConfirmPassword")) document.getElementById("signupConfirmPassword").addEventListener("keydown", e => { if (e.key === "Enter" && window.handleEmailSignup) window.handleEmailSignup(); });
+if (document.getElementById("resetEmail")) document.getElementById("resetEmail").addEventListener("keydown", e => { if (e.key === "Enter" && window.handlePasswordReset) window.handlePasswordReset(); });
 
 /* Essential APK-Safe Alerts (Notification API + Chime + Vibrate + Banner) */
 function playAlertChime() {
@@ -3455,7 +3482,7 @@ function playAlertChime() {
     });
   } catch (e) {}
 }
-window.dismissAlertBanner = () => document.getElementById("alertBanner")?.classList.remove("show");
+window.dismissAlertBanner = () => (document.getElementById("alertBanner") && document.getElementById("alertBanner").classList.remove("show"));
 
 /* === Capacitor Native Local Notifications Bridge (Offline & Locked-Screen Alarms for Android APK) === */
 const CAP_NOTIF_IDS = { TIMER: 1001, BREAK: 1002, NIGHT_REPORT: 1003, CONSISTENCY: 1004 };
@@ -3778,9 +3805,9 @@ function buildSoundscape(preset) {
 }
 function updateAmbientUI() {
   const on = ambientEngine.playing;
-  const vol = Math.max(0, Math.min(100, Number(data.settings.ambientVolume ?? 35)));
+  const vol = Math.max(0, Math.min(100, Number((data.settings.ambientVolume != null ? data.settings.ambientVolume : 35))));
   const preset = data.settings.ambientPreset || "lofi";
-  document.getElementById("topbarAmbientBtn")?.classList.toggle("playing", on);
+  if (document.getElementById("topbarAmbientBtn")) document.getElementById("topbarAmbientBtn").classList.toggle("playing", on);
   const tl = document.getElementById("topbarAmbientLabel"); if (tl) tl.textContent = on ? "Ambient: On" : "Ambient: Off";
   const sb = document.getElementById("studyAmbientBtn"); if (sb) sb.textContent = on ? "⏸ Pause Music" : "▶ Play Music";
   const stb = document.getElementById("settingsAmbientBtn"); if (stb) stb.textContent = on ? "⏸ Pause" : "▶ Play";
@@ -3790,7 +3817,7 @@ function updateAmbientUI() {
   ["studyAmbientVolVal","settingsAmbientVolVal"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = vol + "%"; });
 }
 window.startAmbientMusic = () => {
-  const vol = Math.max(0, Math.min(100, Number(data.settings.ambientVolume ?? 35)));
+  const vol = Math.max(0, Math.min(100, Number((data.settings.ambientVolume != null ? data.settings.ambientVolume : 35))));
   if (vol === 0) { window.stopAmbientMusic(); return notify("Volume is 0%. Increase volume to play music."); }
   const ctx = ensureAmbientCtx();
   if (!ctx) return notify("Audio not supported on this device.");
@@ -3850,12 +3877,12 @@ const titles = {
   leaderboard: "Leaderboard", settings: "Settings & Backup"
 };
 function setSidebarOpen(open) {
-  document.getElementById("sidebar")?.classList.toggle("open", open);
-  document.getElementById("sidebarBackdrop")?.classList.toggle("open", open);
+  if (document.getElementById("sidebar")) document.getElementById("sidebar").classList.toggle("open", open);
+  if (document.getElementById("sidebarBackdrop")) document.getElementById("sidebarBackdrop").classList.toggle("open", open);
 }
 window.navigate = (page) => {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  document.getElementById(page)?.classList.add("active");
+  if (document.getElementById(page)) document.getElementById(page).classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.page === page));
   document.querySelectorAll(".mob-nav-item").forEach(b => b.classList.toggle("active", b.dataset.page === page));
   document.getElementById("pageTitle").textContent = titles[page] || "Overview";
@@ -4243,7 +4270,7 @@ function renderMissionHistory() {
       </div>
       <div class="mission-hist-bar"><div class="mission-hist-fill" style="width:${pct}%"></div></div>
       <span class="tag ${tagCls}">${pct}%</span>
-      <button type="button" class="btn btn-small" onclick="setMissionBoardDate('${dStr}');document.getElementById('missionList')?.scrollIntoView({behavior:'smooth',block:'center'})">Manage</button>
+      <button type="button" class="btn btn-small" onclick="setMissionBoardDate('${dStr}');if(document.getElementById('missionList'))document.getElementById('missionList').scrollIntoView({behavior:'smooth',block:'center'})">Manage</button>
     </div>`;
   }).join("");
 }
@@ -4251,7 +4278,7 @@ function renderMissions() {
   const di = document.getElementById("missionDate");
   const bd = document.getElementById("missionBoardDate");
   if (di && !di.value) di.value = today();
-  selectedMissionDate = di?.value || today();
+  selectedMissionDate = (di && di.value) || today();
   if (bd && bd.value !== selectedMissionDate) bd.value = selectedMissionDate;
   const arr = getMissions(selectedMissionDate), done = arr.filter(x => x.done).length;
   const pct = arr.length ? Math.round(done / arr.length * 100) : 0;
@@ -4264,7 +4291,7 @@ function renderMissions() {
   renderMissionHistory();
   renderDailyTargetProgress();
 }
-document.getElementById("missionDate")?.addEventListener("change", () => renderMissions());
+if (document.getElementById("missionDate")) document.getElementById("missionDate").addEventListener("change", () => renderMissions());
 
 /* Study Timer & Break Stopwatch (Background-Safe Worker + WakeLock + Exact Deadline) */
 let timerRemaining = 3000, timerTotal = 3000, timerInterval = null, timerTimeout = null, timerRunning = false;
@@ -4511,7 +4538,7 @@ function recordBreakToHistory() {
     createdAt: new Date(now).toISOString()
   });
   save();
-  if (document.getElementById("history")?.classList.contains("active")) renderStudyHistory();
+  if ((document.getElementById("history") && document.getElementById("history").classList.contains("active"))) renderStudyHistory();
 }
 window.deleteBreakRecord = (id) => {
   data.breaks = (data.breaks || []).filter(b => String(b.id) !== String(id));
@@ -4554,7 +4581,7 @@ document.addEventListener("keydown", e => {
     closeEditSessionModal();
     closeEditMissionModal();
     closeEditMockModal();
-    document.getElementById("appModal")?.classList.remove("open");
+    if (document.getElementById("appModal")) document.getElementById("appModal").classList.remove("open");
   }
 });
 document.addEventListener("visibilitychange", () => { if (!document.hidden) syncTimersOnWake(); });
@@ -4825,9 +4852,9 @@ window.openChapterDetailModal = (id) => {
   document.getElementById("chDetailRevHistory").innerHTML = hist.length
     ? `<div class="field-label">RECENT REVISION DATES</div><div class="ch-meta-pills">${hist.map(d => `<span class="tag cyan">${esc(d)}</span>`).join("")}</div>`
     : `<div class="small muted">No revision dates logged yet.</div>`;
-  document.getElementById("chapterDetailModal")?.classList.add("open");
+  if (document.getElementById("chapterDetailModal")) document.getElementById("chapterDetailModal").classList.add("open");
 };
-window.closeChapterDetailModal = () => document.getElementById("chapterDetailModal")?.classList.remove("open");
+window.closeChapterDetailModal = () => (document.getElementById("chapterDetailModal") && document.getElementById("chapterDetailModal").classList.remove("open"));
 window.saveChapterDetail = () => {
   const id = Number(document.getElementById("chDetailId").value);
   const c = data.chapters.find(x => x.id === id); if (!c) return closeChapterDetailModal();
@@ -4872,11 +4899,11 @@ window.removeChapter = (id) => {
 function renderChapters() {
   const dl = document.getElementById("chapterSuggestions");
   if (dl) dl.innerHTML = data.chapters.map(c => `<option value="${esc(c.name)}">`).join("");
-  const subj = document.getElementById("chapterFilter")?.value || "All";
-  const stF = document.getElementById("chapterStatusFilter")?.value || "All";
-  const prioF = document.getElementById("chapterPriorityFilter")?.value || "All";
-  const q = (document.getElementById("chapterSearch")?.value || "").trim().toLowerCase();
-  const sort = document.getElementById("chapterSort")?.value || "default";
+  const subj = (document.getElementById("chapterFilter") && document.getElementById("chapterFilter").value) || "All";
+  const stF = (document.getElementById("chapterStatusFilter") && document.getElementById("chapterStatusFilter").value) || "All";
+  const prioF = (document.getElementById("chapterPriorityFilter") && document.getElementById("chapterPriorityFilter").value) || "All";
+  const q = ((document.getElementById("chapterSearch") && document.getElementById("chapterSearch").value) || "").trim().toLowerCase();
+  const sort = (document.getElementById("chapterSort") && document.getElementById("chapterSort").value) || "default";
   const prioRank = { High: 3, Medium: 2, Low: 1, None: 0 };
 
   let list = data.chapters.filter(c =>
@@ -4888,7 +4915,7 @@ function renderChapters() {
   if (sort === "prio_desc") list.sort((a, b) => (prioRank[b.priority || "None"] || 0) - (prioRank[a.priority || "None"] || 0));
   if (sort === "rev_desc") list.sort((a, b) => (b.revisionCount || 0) - (a.revisionCount || 0));
   if (sort === "sol_desc") list.sort((a, b) => (b.solvedCount || 0) - (a.solvedCount || 0));
-  if (sort === "acc_asc") list.sort((a, b) => (chapterAccuracy(a) ?? 999) - (chapterAccuracy(b) ?? 999));
+  if (sort === "acc_asc") list.sort((a, b) => ((chapterAccuracy(a) != null ? chapterAccuracy(a) : 999)) - ((chapterAccuracy(b) != null ? chapterAccuracy(b) : 999)));
 
   const done = data.chapters.filter(isChapterCompleted).length;
   const pyq = data.chapters.filter(isChapterPyqDone).length;
@@ -4980,8 +5007,8 @@ window.addRevision = () => {
   const date = document.getElementById("revisionDate").value;
   if (!topic || !date) return notify("Enter topic and date.");
   const subj = document.getElementById("revisionSubject").value;
-  const conf = document.getElementById("revisionConfidence")?.value || "Medium";
-  const notes = (document.getElementById("revisionNotes")?.value || "").trim();
+  const conf = (document.getElementById("revisionConfidence") && document.getElementById("revisionConfidence").value) || "Medium";
+  const notes = ((document.getElementById("revisionNotes") && document.getElementById("revisionNotes").value) || "").trim();
   const prevCount = data.revisions.filter(x => x.topic.toLowerCase() === topic.toLowerCase()).length;
   const revId = Date.now();
   data.revisions.push({ id: revId, topic, subject: subj, date, done: false, confidence: conf, notes, stage: prevCount + 1 });
@@ -5098,8 +5125,8 @@ function renderRevisions() {
 
   const smart = data.chapters.filter(c => c.attempted > 0 || (c.revisionCount || 0) > 0 || c.confidence === "Weak")
     .sort((a, b) => {
-      const aScore = (chapterAccuracy(a) ?? 55) - (a.confidence === "Weak" ? 20 : 0);
-      const bScore = (chapterAccuracy(b) ?? 55) - (b.confidence === "Weak" ? 20 : 0);
+      const aScore = ((chapterAccuracy(a) != null ? chapterAccuracy(a) : 55)) - (a.confidence === "Weak" ? 20 : 0);
+      const bScore = ((chapterAccuracy(b) != null ? chapterAccuracy(b) : 55)) - (b.confidence === "Weak" ? 20 : 0);
       return aScore - bScore;
     }).slice(0, 8);
   document.getElementById("smartRevisionList").innerHTML = smart.length ? smart.map(c => {
@@ -5127,13 +5154,13 @@ window.updateMockForm = () => {
   document.getElementById("singleMockFields").style.display = full ? "none" : "block";
 };
 window.updateLiveFullMockPreview = () => {
-  const tot = ["mockPhy","mockChem","mockBot","mockZoo"].reduce((a, id) => a + (Number(document.getElementById(id)?.value) || 0), 0);
+  const tot = ["mockPhy","mockChem","mockBot","mockZoo"].reduce((a, id) => a + (Number((document.getElementById(id) && document.getElementById(id).value)) || 0), 0);
   const el = document.getElementById("liveFullMockTotal");
   if (el) el.textContent = `LIVE TOTAL: ${tot} / 720 (${Math.round(tot / 7.2)}%)`;
 };
 window.updateLiveMockAccuracy = () => {
-  const att = Number(document.getElementById("mockAttempted")?.value) || 0;
-  const cor = Number(document.getElementById("mockCorrect")?.value) || 0;
+  const att = Number((document.getElementById("mockAttempted") && document.getElementById("mockAttempted").value)) || 0;
+  const cor = Number((document.getElementById("mockCorrect") && document.getElementById("mockCorrect").value)) || 0;
   const el = document.getElementById("liveMockAccuracy");
   if (!el) return;
   if (att <= 0) { el.textContent = "ACCURACY: -- (enter attempted & correct)"; el.style.color = "var(--muted)"; return; }
@@ -5143,7 +5170,7 @@ window.updateLiveMockAccuracy = () => {
   el.style.color = Number(acc) >= 85 ? "var(--lime)" : Number(acc) >= 70 ? "var(--cyan)" : "var(--orange)";
 };
 window.saveMockTargetScore = () => {
-  const val = Math.max(100, Math.min(720, Math.round(Number(document.getElementById("mockTargetScoreInput")?.value) || 600)));
+  const val = Math.max(100, Math.min(720, Math.round(Number((document.getElementById("mockTargetScoreInput") && document.getElementById("mockTargetScoreInput").value)) || 600)));
   data.settings.mockTargetScore = val;
   save(); renderMocks(); renderIntelligence(); notify(`Mock target score set to ${val} / 720!`);
 };
@@ -5151,11 +5178,11 @@ window.addMock = () => {
   const type = document.getElementById("mockType").value;
   const name = document.getElementById("mockName").value.trim() || (type === "full" ? "Full Mock" : "Part Test");
   const date = document.getElementById("mockDate").value || today();
-  const attempted = Number(document.getElementById("mockAttempted")?.value) || 0;
-  const correct = Number(document.getElementById("mockCorrect")?.value) || 0;
+  const attempted = Number((document.getElementById("mockAttempted") && document.getElementById("mockAttempted").value)) || 0;
+  const correct = Number((document.getElementById("mockCorrect") && document.getElementById("mockCorrect").value)) || 0;
   if (attempted > 0 && (correct < 0 || correct > attempted)) return notify("Correct answers cannot exceed attempted questions.");
   const accuracy = calcMockAccuracy(attempted, correct);
-  const topics = (document.getElementById("mockTopics")?.value || "").trim();
+  const topics = ((document.getElementById("mockTopics") && document.getElementById("mockTopics").value) || "").trim();
 
   if (type === "full") {
     const phy = Number(document.getElementById("mockPhy").value) || 0;
@@ -5206,11 +5233,11 @@ window.closeEditMockModal = () => document.getElementById("editMockModal").class
 window.updateEditMockPreview = () => {
   const full = document.getElementById("editMockType").value === "full";
   const tot = full
-    ? ["editMockPhy","editMockChem","editMockBot","editMockZoo"].reduce((a, id) => a + (Number(document.getElementById(id)?.value) || 0), 0)
-    : (Number(document.getElementById("editMockScore")?.value) || 0);
-  const maxM = full ? 720 : Math.max(1, Number(document.getElementById("editMockMax")?.value) || 180);
-  const att = Number(document.getElementById("editMockAttempted")?.value) || 0;
-  const cor = Number(document.getElementById("editMockCorrect")?.value) || 0;
+    ? ["editMockPhy","editMockChem","editMockBot","editMockZoo"].reduce((a, id) => a + (Number((document.getElementById(id) && document.getElementById(id).value)) || 0), 0)
+    : (Number((document.getElementById("editMockScore") && document.getElementById("editMockScore").value)) || 0);
+  const maxM = full ? 720 : Math.max(1, Number((document.getElementById("editMockMax") && document.getElementById("editMockMax").value)) || 180);
+  const att = Number((document.getElementById("editMockAttempted") && document.getElementById("editMockAttempted").value)) || 0;
+  const cor = Number((document.getElementById("editMockCorrect") && document.getElementById("editMockCorrect").value)) || 0;
   const acc = calcMockAccuracy(att, cor);
   const el = document.getElementById("editMockLivePreview");
   if (el) el.textContent = `TOTAL: ${tot}/${maxM} · ACCURACY: ${acc !== null ? acc + "%" : "--"}`;
@@ -5354,14 +5381,14 @@ function renderMocks() {
       else { chMap[c.name].practiceAcc = pAcc; chMap[c.name].subject = c.subject; chMap[c.name].attempted = c.attempted; }
     });
     const rows = Object.values(chMap).sort((a, b) => {
-      const aMetric = a.tests ? a.scoreSum / a.tests : (a.practiceAcc ?? 100);
-      const bMetric = b.tests ? b.scoreSum / b.tests : (b.practiceAcc ?? 100);
+      const aMetric = a.tests ? a.scoreSum / a.tests : ((a.practiceAcc != null ? a.practiceAcc : 100));
+      const bMetric = b.tests ? b.scoreSum / b.tests : ((b.practiceAcc != null ? b.practiceAcc : 100));
       return aMetric - bMetric;
     });
     chHost.innerHTML = rows.length ? rows.slice(0, 14).map(r => {
       const mockAvgPct = r.tests ? Math.round(r.scoreSum / r.tests) : null;
       const mockAcc = r.accList.length ? (r.accList.reduce((x, y) => x + y, 0) / r.accList.length).toFixed(1) + "%" : null;
-      const primaryPct = mockAvgPct !== null ? mockAvgPct : (r.practiceAcc ?? 0);
+      const primaryPct = mockAvgPct !== null ? mockAvgPct : ((r.practiceAcc != null ? r.practiceAcc : 0));
       const cls = primaryPct >= 80 ? "lime" : primaryPct >= 60 ? "cyan" : "pink";
       const meta = [
         r.subject ? r.subject : null,
@@ -5481,10 +5508,10 @@ function renderConsistency() {
 
 /* Study History (Permanent Breaks, Detailed Session Editing & Enhanced Weekly/Monthly Reports) */
 function renderStudyHistory() {
-  const mode = document.getElementById("historyMode")?.value || "daily";
-  const dSel = document.getElementById("historyDate")?.value || today();
-  const subj = document.getElementById("historySubject")?.value || "All";
-  const q = (document.getElementById("historySearch")?.value || "").trim().toLowerCase();
+  const mode = (document.getElementById("historyMode") && document.getElementById("historyMode").value) || "daily";
+  const dSel = (document.getElementById("historyDate") && document.getElementById("historyDate").value) || today();
+  const subj = (document.getElementById("historySubject") && document.getElementById("historySubject").value) || "All";
+  const q = ((document.getElementById("historySearch") && document.getElementById("historySearch").value) || "").trim().toLowerCase();
 
   let start = dSel, end = dSel;
   if (mode === "weekly") { start = getWeekKey(new Date(dSel + "T12:00:00")); const e = new Date(start + "T12:00:00"); e.setDate(e.getDate() + 6); end = dateKey(e); }
@@ -5496,7 +5523,7 @@ function renderStudyHistory() {
 
   document.getElementById("histTotalTime").textContent = formatStudyTime(data.sessions.reduce((a, x) => a + (Number(x.minutes) || 0), 0));
   document.getElementById("histActiveDays").textContent = new Set(data.sessions.map(x => x.date)).size;
-  document.getElementById("histTasksDone").textContent = (data.studyHistory?.taskEvents || []).filter(e => e.status === "completed").length;
+  document.getElementById("histTasksDone").textContent = ((data.studyHistory && data.studyHistory.taskEvents) || []).filter(e => e.status === "completed").length;
   document.getElementById("histTopics").textContent = new Set(data.sessions.map(x => x.topic)).size;
   document.getElementById("historyRangeLabel").textContent = mode.toUpperCase();
 
@@ -5608,7 +5635,7 @@ window.exportHistoryCSV = () => {
   const rows = [["Date","Type","Subject","Topic","Minutes","Notes"]]
     .concat(data.sessions.map(s => [s.date, "Study", s.subject, s.topic, s.minutes, s.notes || ""]))
     .concat((data.breaks || []).map(b => [b.date, "Break", "Rest", "Break Stopwatch", Number(((b.seconds || 0) / 60).toFixed(1)), b.time || ""]));
-  const csv = rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+  const csv = rows.map(r => r.map(v => `"${String(v != null ? v : "").replace(/"/g, '""')}"`).join(",")).join("\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv" }));
   a.download = `neet-history-${today()}.csv`; a.click();
@@ -6089,8 +6116,8 @@ window.saveSettings = () => {
   data.settings.examDate = document.getElementById("examDate").value || "2027-05-02";
   data.settings.examTime = document.getElementById("examTime").value || "14:00";
   data.settings.name = formatDoctorName(document.getElementById("displayName").value);
-  const sth = Math.max(0, Math.min(24, Number(document.getElementById("settingsTargetHours")?.value) || 0));
-  const stm = Math.max(0, Math.min(59, Number(document.getElementById("settingsTargetMins")?.value) || 0));
+  const sth = Math.max(0, Math.min(24, Number((document.getElementById("settingsTargetHours") && document.getElementById("settingsTargetHours").value)) || 0));
+  const stm = Math.max(0, Math.min(59, Number((document.getElementById("settingsTargetMins") && document.getElementById("settingsTargetMins").value)) || 0));
   if (sth > 0 || stm >= 15) data.settings.dailyTargetMinutes = Math.max(15, Math.min(1440, sth * 60 + stm));
   save(); updateCountdown(); updateDoctorDisplay(); renderDailyTargetProgress(); notify("Settings saved!");
 };
@@ -6165,7 +6192,7 @@ function refreshAllViews() {
 
 /* === Custom Searchable Timer Topic Dropdown (Subject-Filtered, Mobile/WebView Safe) === */
 function getTimerTopicCandidates(queryStr = "") {
-  const subj = document.getElementById("timerSubject")?.value || "Biology";
+  const subj = (document.getElementById("timerSubject") && document.getElementById("timerSubject").value) || "Biology";
   const q = (queryStr || "").trim().toLowerCase();
   const list = (data.chapters || []).filter(c => {
     const subjMatch = subj === "Revision" ? true : c.subject === subj;
@@ -6198,7 +6225,7 @@ window.openTimerTopicDropdown = () => {
   dd.classList.add("open");
 };
 window.closeTimerTopicDropdown = () => {
-  document.getElementById("timerTopicDropdown")?.classList.remove("open");
+  if (document.getElementById("timerTopicDropdown")) document.getElementById("timerTopicDropdown").classList.remove("open");
 };
 window.toggleTimerTopicDropdown = () => {
   const dd = document.getElementById("timerTopicDropdown");
@@ -6214,10 +6241,10 @@ window.selectTimerTopic = (name) => {
   if (ft) ft.textContent = name;
   closeTimerTopicDropdown();
 };
-document.getElementById("timerSubject")?.addEventListener("change", () => {
+if (document.getElementById("timerSubject")) document.getElementById("timerSubject").addEventListener("change", () => {
   const dd = document.getElementById("timerTopicDropdown");
   if (dd && dd.classList.contains("open")) {
-    renderTimerTopicDropdown(document.getElementById("timerTopic")?.value || "");
+    renderTimerTopicDropdown((document.getElementById("timerTopic") && document.getElementById("timerTopic").value) || "");
   }
 });
 document.addEventListener("click", (e) => {
@@ -6259,10 +6286,10 @@ window.openSyllabusPicker = (inputId, chipsId) => {
   const searchEl = document.getElementById("syllabusPickerSearch");
   if (searchEl) searchEl.value = "";
   setSyllabusPickerSubject("All");
-  document.getElementById("syllabusPickerModal")?.classList.add("open");
+  if (document.getElementById("syllabusPickerModal")) document.getElementById("syllabusPickerModal").classList.add("open");
 };
 window.closeSyllabusPicker = () => {
-  document.getElementById("syllabusPickerModal")?.classList.remove("open");
+  if (document.getElementById("syllabusPickerModal")) document.getElementById("syllabusPickerModal").classList.remove("open");
 };
 window.setSyllabusPickerSubject = (subj) => {
   _syllabusFilterSubject = subj;
@@ -6286,7 +6313,7 @@ window.renderSyllabusPickerList = () => {
   const cnt = document.getElementById("syllabusSelectedCount");
   if (!host) return;
   if (cnt) cnt.textContent = `${_syllabusSelectedSet.size} chapter${_syllabusSelectedSet.size === 1 ? "" : "s"} selected`;
-  const q = (document.getElementById("syllabusPickerSearch")?.value || "").trim().toLowerCase();
+  const q = ((document.getElementById("syllabusPickerSearch") && document.getElementById("syllabusPickerSearch").value) || "").trim().toLowerCase();
   const list = (data.chapters || []).filter(c => {
     const sOk = _syllabusFilterSubject === "All" || c.subject === _syllabusFilterSubject;
     const qOk = !q || c.name.toLowerCase().includes(q) || c.subject.toLowerCase().includes(q);
@@ -6326,7 +6353,7 @@ function startReminderWorker() {
   }
 }
 window.closeGoalCompleteModal = () => {
-  document.getElementById("goalCompleteModal")?.classList.remove("open");
+  if (document.getElementById("goalCompleteModal")) document.getElementById("goalCompleteModal").classList.remove("open");
 };
 function openGoalCompletePopup(studied, target) {
   const pct = Math.min(999, Math.round((studied / Math.max(1, target)) * 100));
@@ -6334,7 +6361,7 @@ function openGoalCompletePopup(studied, target) {
   const desc = document.getElementById("goalCompleteDesc");
   if (stat) stat.textContent = `${pct}% (${formatStudyTime(studied)})`;
   if (desc) desc.textContent = `You completed ${formatStudyTime(studied)} against your ${formatStudyTime(target)} daily reading target!`;
-  document.getElementById("goalCompleteModal")?.classList.add("open");
+  if (document.getElementById("goalCompleteModal")) document.getElementById("goalCompleteModal").classList.add("open");
 }
 function checkDailyGoalCompletion() {
   const rem = data.settings.reminders || {};
@@ -6355,7 +6382,7 @@ function checkDailyGoalCompletion() {
   }
 }
 function checkScheduledReminders() {
-  if (document.getElementById("loginScreen")?.style.display === "flex") return;
+  if ((document.getElementById("loginScreen") && document.getElementById("loginScreen").style.display) === "flex") return;
   const rem = data.settings.reminders || {};
   const log = data.settings.reminderLog || (data.settings.reminderLog = {});
   const t = today();
@@ -6397,11 +6424,11 @@ function checkScheduledReminders() {
 }
 window.saveReminderSettings = () => {
   data.settings.reminders = {
-    targetDone: document.getElementById("remTargetDone")?.checked !== false,
-    smartRevision: document.getElementById("remSmartRevision")?.checked !== false,
-    consistency: document.getElementById("remConsistency")?.checked !== false,
-    nightReport: document.getElementById("remNightReport")?.checked !== false,
-    nightReportTime: document.getElementById("remNightReportTime")?.value || "22:30"
+    targetDone: (!document.getElementById("remTargetDone") || document.getElementById("remTargetDone").checked !== false),
+    smartRevision: (!document.getElementById("remSmartRevision") || document.getElementById("remSmartRevision").checked !== false),
+    consistency: (!document.getElementById("remConsistency") || document.getElementById("remConsistency").checked !== false),
+    nightReport: (!document.getElementById("remNightReport") || document.getElementById("remNightReport").checked !== false),
+    nightReportTime: (document.getElementById("remNightReportTime") && document.getElementById("remNightReportTime").value) || "22:30"
   };
   save();
   syncCapacitorDailyAlarms();
@@ -6418,7 +6445,7 @@ function syncReminderSettingsUI() {
   if (tEl) tEl.value = r.nightReportTime || "22:30";
 }
 window.downloadDailyReminderICS = () => {
-  const tStr = (data.settings.reminders?.nightReportTime || "22:30").replace(":", "") + "00";
+  const tStr = ((data.settings.reminders && data.settings.reminders.nightReportTime) || "22:30").replace(":", "") + "00";
   const dStr = today().replace(/-/g, "");
   const ics = [
     "BEGIN:VCALENDAR",
@@ -6536,9 +6563,9 @@ window.openFriendProgressModal = (uid) => {
     <div class="progress-track"><div class="progress-fill" style="width:${chPct}%"></div></div>
     <div class="progress-line" style="margin-top:12px"><span>Today's Missions Completed</span><strong>${mDone} / ${mTot} (${mPct}%)</strong></div>
     <div class="progress-track"><div class="progress-fill" style="width:${mPct}%"></div></div>`;
-  document.getElementById("friendProgressModal")?.classList.add("open");
+  if (document.getElementById("friendProgressModal")) document.getElementById("friendProgressModal").classList.add("open");
 };
-window.closeFriendProgressModal = () => document.getElementById("friendProgressModal")?.classList.remove("open");
+window.closeFriendProgressModal = () => (document.getElementById("friendProgressModal") && document.getElementById("friendProgressModal").classList.remove("open"));
 
 /* Initial Boot */
 document.getElementById("manualDate").value = today();
@@ -6623,7 +6650,7 @@ function setAuthSuccess(msg) {
   }
 }
 function friendlyAuthError(err) {
-  const code = err?.code || "";
+  const code = (err && err.code) || "";
   if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
     return "Incorrect email or password. Need an account? Tap the Sign Up tab, or use Forgot Password.";
   }
@@ -6639,7 +6666,7 @@ function friendlyAuthError(err) {
   if (code === "auth/too-many-requests") {
     return "Too many attempts. Please wait a minute and try again.";
   }
-  return err?.message || "Authentication failed. Please try again.";
+  return (err && err.message) || "Authentication failed. Please try again.";
 }
 function setCloudStatus(msg) {
   const el = document.getElementById("cloudSyncStatus");
@@ -6682,10 +6709,10 @@ function setCloudStatus(msg) {
   const db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
 
   window.handleEmailSignup = async () => {
-    const rawName = (document.getElementById("signupName")?.value || "").trim();
-    const email = (document.getElementById("signupEmail")?.value || "").trim();
-    const password = document.getElementById("signupPassword")?.value || "";
-    const confirmPwd = document.getElementById("signupConfirmPassword")?.value || "";
+    const rawName = ((document.getElementById("signupName") && document.getElementById("signupName").value) || "").trim();
+    const email = ((document.getElementById("signupEmail") && document.getElementById("signupEmail").value) || "").trim();
+    const password = (document.getElementById("signupPassword") && document.getElementById("signupPassword").value) || "";
+    const confirmPwd = (document.getElementById("signupConfirmPassword") && document.getElementById("signupConfirmPassword").value) || "";
 
     if (!email) return setAuthError("Please enter your email address.");
     if (password.length < 6) return setAuthError("Password must be at least 6 characters.");
@@ -6708,8 +6735,8 @@ function setCloudStatus(msg) {
   };
 
   window.handleEmailLogin = async () => {
-    const email = (document.getElementById("authEmail")?.value || "").trim();
-    const password = document.getElementById("authPassword")?.value || "";
+    const email = ((document.getElementById("authEmail") && document.getElementById("authEmail").value) || "").trim();
+    const password = (document.getElementById("authPassword") && document.getElementById("authPassword").value) || "";
     if (!email || !password) return setAuthError("Please enter both email and password.");
     setAuthError("Signing in...");
     try {
@@ -6721,7 +6748,7 @@ function setCloudStatus(msg) {
   };
 
   window.handlePasswordReset = async () => {
-    const email = (document.getElementById("resetEmail")?.value || "").trim();
+    const email = ((document.getElementById("resetEmail") && document.getElementById("resetEmail").value) || "").trim();
     if (!email) return setAuthError("Please enter your registered email address.");
     setAuthError("Sending password reset link...");
     try {
@@ -6766,8 +6793,8 @@ function setCloudStatus(msg) {
         weekKey,
         todayMinutes: window.getValidatedTodayMinutes ? window.getValidatedTodayMinutes() : 0,
         weeklyMinutes: window.getValidatedWeeklyMinutes ? window.getValidatedWeeklyMinutes() : 0,
-        manualHeavy: Boolean(pubSnap?.manualHeavy),
-        manualPct: Number(pubSnap?.manualPct) || 0,
+        manualHeavy: Boolean((pubSnap && pubSnap.manualHeavy)),
+        manualPct: Number((pubSnap && pubSnap.manualPct)) || 0,
         publicProgress: pubSnap,
         updatedAt: nowTs
       }, { merge: true });
@@ -6784,13 +6811,158 @@ function setCloudStatus(msg) {
     try {
       const now = Date.now();
       const ttlMs = Math.max(60, Math.min(18000, Number(remainingSec) || 3000)) * 1000;
+      const d = window.appDataRef ? window.appDataRef() : null;
+      const dispName = (d && d.settings && d.settings.name && d.settings.name.trim()) ? d.settings.name.trim() : (currentUser.displayName || "NEET Aspirant");
+      const subjEl = document.getElementById("timerSubject");
+      const topicEl = document.getElementById("timerTopic");
+      const subj = subjEl ? subjEl.value : "";
+      const topic = topicEl ? (topicEl.value || "").trim() : "";
+      const tStr = window.today ? window.today() : new Date().toISOString().slice(0, 10);
+      const todayMins = d ? ((d.studyLogs || []).filter(l => l.date === tStr).reduce((a, b) => a + (Number(b.minutes) || 0), 0)) : 0;
       await setDoc(doc(db, "global_sessions", currentUser.uid), {
         uid: currentUser.uid,
+        displayName: dispName,
+        subject: running ? subj : "",
+        topic: running ? topic : "",
+        todayMinutes: todayMins,
+        todayDate: tStr,
         running: !!running,
         expiresAt: running ? (now + ttlMs) : 0,
         updatedAt: now
       }, { merge: true });
     } catch (e) {}
+  };
+
+  window.closeFocusingNowModal = () => {
+    var m = document.getElementById("focusingNowModal");
+    if (m) m.classList.remove("open");
+  };
+
+  window.openFocusingNowModal = async () => {
+    var m = document.getElementById("focusingNowModal");
+    var listEl = document.getElementById("focusingNowList");
+    var subEl = document.getElementById("focusingNowSubtitle");
+    if (!m || !listEl) return;
+    m.classList.add("open");
+    var now = Date.now();
+    var activeDocs = _lastGlobalDocs.filter(function(d) {
+      if (!d || !d.running) return false;
+      if (typeof d.expiresAt === "number" && d.expiresAt > 0) return d.expiresAt > now;
+      return (Number(d.updatedAt) || 0) > (now - 4 * 3600 * 1000);
+    });
+    var appD = window.appDataRef ? window.appDataRef() : null;
+    var friendSet = {};
+    if (appD && Array.isArray(appD.friends)) {
+      appD.friends.forEach(function(fid) { friendSet[fid] = true; });
+    }
+    var activeFriends = activeDocs.filter(function(d) { return friendSet[d.uid]; });
+
+    if (subEl) {
+      var friendNote = activeFriends.length
+        ? " (" + activeFriends.length + " friend" + (activeFriends.length === 1 ? "" : "s") + " focusing)"
+        : "";
+      subEl.textContent = activeDocs.length
+        ? activeDocs.length + " aspirant" + (activeDocs.length === 1 ? "" : "s") + " actively focusing right now" + friendNote + "."
+        : "No one is running a live focus timer right now. Showing Today's Top 20 Study Hours below.";
+    }
+    listEl.innerHTML = '<div class="empty">Loading live focus sessions...</div>';
+
+    var todayStr = window.today ? window.today() : new Date().toISOString().slice(0, 10);
+    var profileMap = {};
+    var topDaily = [];
+
+    if (currentUser) {
+      try {
+        var qDaily;
+        var dailyDocs = [];
+        try {
+          qDaily = query(collection(db, "public_profiles"), where("todayDate", "==", todayStr), orderBy("todayMinutes", "desc"), limit(20));
+          var snapD = await getDocs(qDaily);
+          dailyDocs = snapD.docs;
+        } catch (idxErr) {
+          var qDailyFb = query(collection(db, "public_profiles"), where("todayDate", "==", todayStr));
+          var snapFb = await getDocs(qDailyFb);
+          dailyDocs = snapFb.docs;
+        }
+        dailyDocs.forEach(function(ds) {
+          var u = ds.data() || {};
+          profileMap[ds.id] = u;
+          topDaily.push({
+            id: ds.id,
+            name: u.displayName || "NEET Aspirant",
+            minutes: Number(u.todayMinutes) || 0
+          });
+        });
+        topDaily.sort(function(a, b) { return b.minutes - a.minutes; });
+        topDaily = topDaily.slice(0, 20);
+      } catch (e) {}
+
+      // Fetch missing profiles for active users not in topDaily
+      var missingUids = activeDocs
+        .map(function(d) { return d.uid; })
+        .filter(function(uid) { return uid && !profileMap[uid]; })
+        .slice(0, 20);
+      await Promise.all(missingUids.map(async function(uid) {
+        try {
+          var ps = await getDoc(doc(db, "public_profiles", uid));
+          if (ps.exists()) profileMap[uid] = ps.data() || {};
+        } catch (e) {}
+      }));
+    }
+
+    function renderActiveRow(d) {
+      var p = profileMap[d.uid] || {};
+      var name = d.displayName || p.displayName || "NEET Aspirant";
+      var isMe = currentUser && d.uid === currentUser.uid;
+      var isFr = Boolean(friendSet[d.uid]);
+      var minsToday = (d.todayDate === todayStr && typeof d.todayMinutes === "number")
+        ? d.todayMinutes
+        : (p.todayDate === todayStr ? (Number(p.todayMinutes) || 0) : 0);
+      var metaParts = [];
+      if (d.subject) metaParts.push(d.subject + (d.topic ? " · " + d.topic : ""));
+      if (minsToday > 0) metaParts.push("Today: " + formatStudyTime(minsToday));
+      return '<div class="friend-row" style="flex-wrap:wrap">'
+        + '<span class="tag lime">● Focusing</span>'
+        + '<div class="item-main"><strong>' + esc(name) + (isMe ? " (You)" : "") + (isFr ? ' <span class="tag cyan" style="margin-left:4px;font-size:10px">Friend</span>' : '') + '</strong>'
+        + (metaParts.length ? '<small class="muted">' + esc(metaParts.join(" · ")) + '</small>' : '')
+        + '</div>'
+        + '<strong style="color:var(--lime);font-family:\'DM Mono\',monospace">' + formatStudyTime(minsToday) + '</strong>'
+        + '</div>';
+    }
+
+    var chunks = [];
+    if (appD && Array.isArray(appD.friends) && appD.friends.length) {
+      chunks.push('<div class="eyebrow" style="margin:2px 0 4px">FRIENDS FOCUSING NOW (' + activeFriends.length + ')</div>');
+      if (activeFriends.length) {
+        activeFriends.forEach(function(d) { chunks.push(renderActiveRow(d)); });
+      } else {
+        chunks.push('<div class="small muted" style="padding:6px 2px 8px">None of your Study Friends are focusing right now.</div>');
+      }
+    }
+
+    if (activeDocs.length) {
+      chunks.push('<div class="eyebrow" style="margin:' + (chunks.length ? '8px' : '2px') + ' 0 4px">ALL ASPIRANTS LIVE NOW (' + activeDocs.length + ')</div>');
+      activeDocs.forEach(function(d) { chunks.push(renderActiveRow(d)); });
+    }
+
+    if (topDaily.length) {
+      chunks.push('<div class="eyebrow" style="margin:' + (activeDocs.length ? '10px' : '2px') + ' 0 4px">TOP 20 STUDY HOURS TODAY</div>');
+      topDaily.forEach(function(u, i) {
+        var isMe = currentUser && u.id === currentUser.uid;
+        var isFocusing = activeDocs.some(function(ad) { return ad.uid === u.id; });
+        chunks.push('<div class="friend-row" style="flex-wrap:wrap">'
+          + '<span class="tag ' + (i < 3 ? 'lime' : 'cyan') + '">#' + (i + 1) + '</span>'
+          + '<div class="item-main"><strong>' + esc(u.name) + (isMe ? " (You)" : "") + (isFocusing ? ' <span style="color:var(--lime);font-size:11px">● Live</span>' : '') + '</strong></div>'
+          + '<strong style="color:var(--cyan);font-family:\'DM Mono\',monospace">' + formatStudyTime(u.minutes) + '</strong>'
+          + '</div>');
+      });
+    }
+
+    if (!chunks.length) {
+      listEl.innerHTML = '<div class="empty">' + (currentUser ? 'No active focus sessions or daily study logs found yet today.' : 'Sign in to see who is focusing right now and today\'s Top 20 study hours.') + '</div>';
+    } else {
+      listEl.innerHTML = chunks.join("");
+    }
   };
 
   function updateVirtualLibraryCount() {
@@ -6820,7 +6992,7 @@ function setCloudStatus(msg) {
 
   window.addStudyFriend = async (inputId) => {
     const inp = document.getElementById(inputId);
-    const uid = (inp?.value || "").trim();
+    const uid = ((inp && inp.value) || "").trim();
     if (!uid) return window.notify ? notify("Paste a Friend's UID first.") : null;
     if (currentUser && uid === currentUser.uid) return notify("That is your own UID.");
     const d = window.appDataRef();
@@ -6845,20 +7017,20 @@ function setCloudStatus(msg) {
 
   function extractSafeProgress(fd, todayStr, weekKey) {
     const p = (fd && fd.publicProgress && typeof fd.publicProgress === "object") ? fd.publicProgress : {};
-    const isToday = (p.todayDate || fd?.todayDate) === todayStr;
-    const isThisWeek = !fd?.weekKey || fd.weekKey === weekKey;
+    const isToday = (p.todayDate || (fd && fd.todayDate)) === todayStr;
+    const isThisWeek = !(fd && fd.weekKey) || fd.weekKey === weekKey;
     return {
-      todayMinutes: isToday ? (Number(p.todayMinutes ?? fd?.todayMinutes) || 0) : 0,
-      weeklyMinutes: isThisWeek ? (Number(p.weeklyMinutes ?? fd?.weeklyMinutes) || 0) : 0,
-      manualHeavy: isThisWeek ? Boolean(p.manualHeavy ?? fd?.manualHeavy) : false,
-      manualPct: isThisWeek ? (Number(p.manualPct ?? fd?.manualPct) || 0) : 0,
+      todayMinutes: isToday ? (Number((p.todayMinutes != null ? p.todayMinutes : (fd && fd.todayMinutes))) || 0) : 0,
+      weeklyMinutes: isThisWeek ? (Number((p.weeklyMinutes != null ? p.weeklyMinutes : (fd && fd.weeklyMinutes))) || 0) : 0,
+      manualHeavy: isThisWeek ? Boolean((p.manualHeavy != null ? p.manualHeavy : (fd && fd.manualHeavy))) : false,
+      manualPct: isThisWeek ? (Number((p.manualPct != null ? p.manualPct : (fd && fd.manualPct))) || 0) : 0,
       manualHeavyToday: isToday ? Boolean(p.manualHeavyToday) : false,
       manualPctToday: isToday ? (Number(p.manualPctToday) || 0) : 0,
       dailyTargetMinutes: Number(p.dailyTargetMinutes) || 360,
       streak: Number(p.streak) || 0,
       chaptersCompleted: Number(p.chaptersCompleted) || 0,
       chaptersTotal: Number(p.chaptersTotal) || 81,
-      avgMockScore: p.avgMockScore ?? null,
+      avgMockScore: (p.avgMockScore != null ? p.avgMockScore : null),
       missionsDoneToday: isToday ? (Number(p.missionsDoneToday) || 0) : 0,
       missionsTotalToday: isToday ? (Number(p.missionsTotalToday) || 0) : 0
     };
@@ -6975,7 +7147,7 @@ function setCloudStatus(msg) {
     const mode = window._friendsLbMode === "weekly" ? "weekly" : "daily";
     const myProg = window.getPublicProgressSnapshot ? window.getPublicProgressSnapshot() : {};
     const myMins = mode === "weekly" ? (myProg.weeklyMinutes || 0) : (myProg.todayMinutes || 0);
-    const myUid = currentUser?.uid || "me";
+    const myUid = (currentUser && currentUser.uid) || "me";
     window._friendProgressCache[myUid] = { name: `${d.settings.name} (You)`, progress: myProg };
 
     const rows = [{
@@ -7022,15 +7194,32 @@ function setCloudStatus(msg) {
     } else if (d.friends.length) {
       d.friends.forEach(fUid => rows.push({ uid: fUid, name: "Friend (" + fUid.slice(0, 6) + ")", minutes: 0, progress: null, isMe: false }));
     }
+    const nowMs = Date.now();
+    const activeByUid = {};
+    _lastGlobalDocs.forEach(gd => {
+      if (!gd || !gd.uid || !gd.running) return;
+      const alive = (typeof gd.expiresAt === "number" && gd.expiresAt > 0)
+        ? gd.expiresAt > nowMs
+        : (Number(gd.updatedAt) || 0) > (nowMs - 4 * 3600 * 1000);
+      if (alive) activeByUid[gd.uid] = gd;
+    });
     rows.sort((a, b) => b.minutes - a.minutes);
     const html = rows.map((r, i) => {
       const p = r.progress;
-      const chips = p ? `<div class="friend-prog-chips">
-        <span class="friend-chip hi">🔥 ${p.streak || 0}d</span>
+      const liveSession = activeByUid[r.uid];
+      const liveText = liveSession
+        ? ("● Focusing" + (liveSession.subject ? " · " + liveSession.subject : ""))
+        : "";
+      const liveBadge = liveSession
+        ? `<span class="friend-chip" style="color:var(--lime);border-color:rgba(196,243,107,.5);background:rgba(196,243,107,.1)">${esc(liveText)}</span>`
+        : "";
+      const chips = (p || liveBadge) ? `<div class="friend-prog-chips">
+        ${liveBadge}
+        ${p ? `<span class="friend-chip hi">🔥 ${p.streak || 0}d</span>
         <span class="friend-chip cy">▤ ${p.chaptersCompleted || 0}/${p.chaptersTotal || 81} ch</span>
         <span class="friend-chip">◈ ${p.missionsDoneToday || 0}/${p.missionsTotalToday || 0} tasks</span>
         ${p.avgMockScore !== null && p.avgMockScore !== undefined ? `<span class="friend-chip">▥ ${p.avgMockScore}/720</span>` : ""}
-        ${r.manualHeavy ? `<span class="friend-chip" style="color:var(--orange);border-color:rgba(255,189,105,.4)">⚠ Manual-heavy (${r.manualPct}%)</span>` : ""}
+        ${r.manualHeavy ? `<span class="friend-chip" style="color:var(--orange);border-color:rgba(255,189,105,.4)">⚠ Manual-heavy (${r.manualPct}%)</span>` : ""}` : ""}
       </div>` : "";
       return `
       <div class="friend-row" style="flex-wrap:wrap">
@@ -7040,7 +7229,7 @@ function setCloudStatus(msg) {
           ${chips}
         </div>
         <div style="display:flex;align-items:center;gap:6px">
-          <strong style="color:var(--cyan);font-family:'DM Mono',monospace">${mode === "weekly" ? formatStudyTime(r.minutes) : r.minutes + "m"}</strong>
+          <strong style="color:var(--cyan);font-family:\'DM Mono\',monospace">${mode === "weekly" ? formatStudyTime(r.minutes) : r.minutes + "m"}</strong>
           ${p ? `<button type="button" class="btn btn-small" onclick="openFriendProgressModal('${esc(r.uid)}')" title="View detailed progress">👁</button>` : ""}
           ${r.isMe ? "" : `<button type="button" class="icon-btn btn-small" onclick="removeStudyFriend('${esc(r.uid)}')" title="Remove friend">×</button>`}
         </div>
@@ -7049,35 +7238,58 @@ function setCloudStatus(msg) {
     containers.forEach(c => c.innerHTML = html);
   };
 
+  window._globalLbMode = "daily";
+  window.setGlobalLbMode = (mode) => {
+    window._globalLbMode = mode === "weekly" ? "weekly" : "daily";
+    document.querySelectorAll(".global-mode-btn").forEach(function(b) {
+      b.classList.toggle("active", b.dataset.mode === window._globalLbMode);
+    });
+    document.querySelectorAll(".global-lb-title").forEach(function(el) {
+      el.textContent = window._globalLbMode === "weekly"
+        ? "Top 20 Weekly Leaderboard"
+        : "Top 20 Daily Leaderboard";
+    });
+    if (typeof window.refreshWeeklyLeaderboard === "function") {
+      window.refreshWeeklyLeaderboard();
+    }
+  };
+
   window.refreshWeeklyLeaderboard = async () => {
     const host = document.getElementById("weeklyLeaderboardList");
     if (!host) return;
-    if (!currentUser) { host.innerHTML = '<div class="empty">Sign in to view the Weekly Leaderboard.</div>'; return; }
+    const isDaily = (window._globalLbMode || "daily") === "daily";
+    if (!currentUser) { host.innerHTML = '<div class="empty">Sign in to view the ' + (isDaily ? 'Daily' : 'Weekly') + ' Leaderboard.</div>'; return; }
     try {
       const d = window.appDataRef();
-      const weekKey = window.getWeekKey ? window.getWeekKey() : new Date().toISOString().slice(0, 10);
+      const todayStr = window.today ? window.today() : new Date().toISOString().slice(0, 10);
+      const weekKey = window.getWeekKey ? window.getWeekKey() : todayStr;
+      const filterField = isDaily ? "todayDate" : "weekKey";
+      const filterVal = isDaily ? todayStr : weekKey;
+      const orderField = isDaily ? "todayMinutes" : "weeklyMinutes";
+      const capMins = isDaily ? 1080 : 7560;
       let docsList = [];
       try {
-        const q = query(collection(db, "public_profiles"), where("weekKey", "==", weekKey), orderBy("weeklyMinutes", "desc"), limit(20));
+        const q = query(collection(db, "public_profiles"), where(filterField, "==", filterVal), orderBy(orderField, "desc"), limit(20));
         const snap = await getDocs(q);
         docsList = snap.docs;
       } catch (idxErr) {
-        // Fallback if composite index (weekKey + weeklyMinutes) is still building
-        const qFallback = query(collection(db, "public_profiles"), where("weekKey", "==", weekKey));
+        const qFallback = query(collection(db, "public_profiles"), where(filterField, "==", filterVal));
         const snap = await getDocs(qFallback);
         docsList = snap.docs;
       }
-      if (!docsList.length) { host.innerHTML = '<div class="empty">No weekly study records yet for this week.</div>'; return; }
+      if (!docsList.length) { host.innerHTML = '<div class="empty">' + (isDaily ? 'No daily study records yet for today.' : 'No weekly study records yet for this week.') + '</div>'; return; }
       const validatedDocs = docsList.map(docSnap => {
         const u = docSnap.data();
-        const v = window.validateIncomingLbMinutes ? window.validateIncomingLbMinutes(u.weeklyMinutes || 0, 7560) : { minutes: Number(u.weeklyMinutes) || 0, flagged: false };
+        const rawMins = isDaily ? (u.todayMinutes || 0) : (u.weeklyMinutes || 0);
+        const v = window.validateIncomingLbMinutes ? window.validateIncomingLbMinutes(rawMins, capMins) : { minutes: Number(rawMins) || 0, flagged: false };
+        const pubProg = u.publicProgress || null;
         return {
           id: docSnap.id,
           name: u.displayName || "NEET Aspirant",
           minutes: v.minutes,
           flagged: v.flagged,
-          manualHeavy: Boolean(u.manualHeavy || u.publicProgress?.manualHeavy),
-          manualPct: Number(u.manualPct ?? u.publicProgress?.manualPct) || 0
+          manualHeavy: Boolean(u.manualHeavy || (pubProg && pubProg.manualHeavy)),
+          manualPct: Number(u.manualPct != null ? u.manualPct : (pubProg && pubProg.manualPct != null ? pubProg.manualPct : 0)) || 0
         };
       }).sort((a, b) => b.minutes - a.minutes).slice(0, 20);
 
@@ -7102,7 +7314,7 @@ function setCloudStatus(msg) {
           <div class="item-main"><strong>${esc(u.name)}${isMe ? " (You)" : ""}</strong>${notes.length ? `<small style="color:var(--orange)">${esc(notes.join(" · "))}</small>` : ""}</div>
           <div style="display:flex;align-items:center;gap:6px">
             ${actionBtn}
-            <strong style="color:var(--cyan);font-family:'DM Mono',monospace">${formatStudyTime(u.minutes)}</strong>
+            <strong style="color:var(--cyan);font-family:\'DM Mono\',monospace">${formatStudyTime(u.minutes)}</strong>
           </div>
         </div>`;
       }).join("");
@@ -7185,13 +7397,22 @@ function setCloudStatus(msg) {
     <div class="panel-head" style="margin-bottom:10px">
       <div>
         <div class="eyebrow">RELEASE NOTES</div>
-        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.4</h2>
+        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.4.1</h2>
       </div>
       <button type="button" class="icon-btn" onclick="closeChangelogModal()">✕</button>
     </div>
     <div id="changelogModalBody" style="max-height:60vh;overflow-y:auto;line-height:1.55;font-size:13.5px">
+      <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.08);border:1px solid var(--line)">
+        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.4.1</strong>
+        <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
+          <li><strong>Daily Study Hour Leaderboard:</strong> Added a <em>Today / This Week</em> toggle on the Global Leaderboard so you can check the Top 20 daily study hours alongside weekly rankings.</li>
+          <li><strong>Clickable "Focusing Now" Live Popup:</strong> Tap the <em>Focusing Now</em> pill on the top bar to see which Study Friends and aspirants are actively focusing right now (plus live badges on your Friends list and Today's Top 20 study hours).</li>
+          <li><strong>Music On/Off on Mobile Top Bar:</strong> Restored the Ambient Music toggle button on narrow phone screens for quick one-tap access.</li>
+          <li><strong>Older Android Phone Compatibility:</strong> Improved compatibility for older Android System WebView versions so all buttons and screens work smoothly without affecting newer phones.</li>
+        </ul>
+      </div>
       <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(97,217,245,.08);border:1px solid var(--line)">
-        <strong style="color:var(--cyan);display:block;margin-bottom:6px">✨ New in Version 2.4</strong>
+        <strong style="color:var(--cyan);display:block;margin-bottom:6px">Version 2.4</strong>
         <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
           <li><strong>8,000 NCERT Rapid-Revision Facts:</strong> Expanded the daily facts bank from 43 to all 8,000 high-yield NCERT facts across Biology (4,000), Chemistry (2,000), and Physics (2,000).</li>
           <li><strong>Complete 81-Chapter NEET Syllabus:</strong> Added missing chapters — <em>Structural Organisation in Animals</em>, <em>p-Block Elements</em>, and <em>Principles Related to Practical Chemistry</em> — automatically synced for existing users without losing progress.</li>
@@ -7217,16 +7438,16 @@ function setCloudStatus(msg) {
   </div>
   <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button>
   <a id="appUpdateLink" href="https://github.com/Pokemasterim/neet-command-centre-2027/releases/latest/download/NEET-Command-Centre-2027.apk" target="_blank" rel="noopener" class="btn btn-small btn-lime">Update</a>
-  <button type="button" class="btn btn-small" onclick="document.getElementById('appUpdateBanner')?.classList.remove('show')">✕</button>
+  <button type="button" class="btn btn-small" onclick="document.getElementById('appUpdateBanner').classList.remove('show')">✕</button>
 </div>
 <script>
 window.openChangelogModal = () => {
-  document.getElementById("changelogModal")?.classList.add("open");
+  if (document.getElementById("changelogModal")) document.getElementById("changelogModal").classList.add("open");
 };
 window.closeChangelogModal = () => {
-  document.getElementById("changelogModal")?.classList.remove("open");
+  if (document.getElementById("changelogModal")) document.getElementById("changelogModal").classList.remove("open");
 };
-const APP_VERSION = "2.4";
+const APP_VERSION = "2.4.1";
 const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
 function parseVerParts(v) {
   return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
@@ -7254,13 +7475,13 @@ window.checkAppUpdate = async (manual = false) => {
       return;
     }
     const rel = await res.json();
-    const latestTag = rel?.tag_name || "";
+    const latestTag = (rel && rel.tag_name) || "";
     if (latestTag && isNewerVersion(latestTag, APP_VERSION)) {
       const title = document.getElementById("appUpdateTitle");
       const msg = document.getElementById("appUpdateMsg");
       if (title) title.textContent = `Update Available (${latestTag})`;
       if (msg) msg.textContent = `You are on v${APP_VERSION}. Tap Update to download ${latestTag}.`;
-      document.getElementById("appUpdateBanner")?.classList.add("show");
+      if (document.getElementById("appUpdateBanner")) document.getElementById("appUpdateBanner").classList.add("show");
     } else if (manual) {
       notify(`You're on the latest version (v${APP_VERSION})!`);
     }
