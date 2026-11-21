@@ -1,7 +1,7 @@
 {
   "name": "neet-command-centre-2027",
-  "version": "2.2.0",
-  "description": "NEET Command Centre 2027 \u2014 Android APK built with Capacitor & Native Local Notifications",
+  "version": "2.3.0",
+  "description": "NEET Command Centre 2027 \u2014 Android APK built with Capacitor, Native Alarms & Native Share/Save",
   "private": true,
   "scripts": {
     "sync": "npx cap sync android"
@@ -9,7 +9,9 @@
   "dependencies": {
     "@capacitor/android": "^6.1.2",
     "@capacitor/core": "^6.1.2",
-    "@capacitor/local-notifications": "^6.1.1"
+    "@capacitor/filesystem": "^6.0.1",
+    "@capacitor/local-notifications": "^6.1.1",
+    "@capacitor/share": "^6.0.2"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.1.2"
