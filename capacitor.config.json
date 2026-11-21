@@ -1,0 +1,15 @@
+{
+  "appId": "com.neet2027.commandcentre",
+  "appName": "NEET Command Centre 2027",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#61D9F5"
+    }
+  }
+}
