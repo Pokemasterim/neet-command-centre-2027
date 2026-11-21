@@ -2511,7 +2511,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
           <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong>Version 2.3</strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.3 <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
         </div>
       </div>
@@ -6914,6 +6914,62 @@ onAuthStateChanged(auth, async (user) => {
     setCloudStatus("Signed out");
   }
 });
+</script>
+
+<!-- IN-APP UPDATE BANNER -->
+<div class="alert-banner" id="appUpdateBanner" style="border-color:var(--lime);z-index:205" role="status">
+  <span style="font-size:20px">🚀</span>
+  <div style="flex:1;min-width:0">
+    <strong id="appUpdateTitle" style="display:block;font-size:13px">New Update Available!</strong>
+    <span id="appUpdateMsg" class="small muted">Tap Download to install the latest version.</span>
+  </div>
+  <a id="appUpdateLink" href="https://github.com/Pokemasterim/neet-command-centre-2027/releases/latest/download/NEET-Command-Centre-2027.apk" target="_blank" rel="noopener" class="btn btn-small btn-lime">Update</a>
+  <button type="button" class="btn btn-small" onclick="document.getElementById('appUpdateBanner')?.classList.remove('show')">✕</button>
+</div>
+<script>
+const APP_VERSION = "2.3";
+const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
+function parseVerParts(v) {
+  return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
+}
+function isNewerVersion(latest, current) {
+  const a = parseVerParts(latest), b = parseVerParts(current);
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    if ((a[i] || 0) > (b[i] || 0)) return true;
+    if ((a[i] || 0) < (b[i] || 0)) return false;
+  }
+  return false;
+}
+window.checkAppUpdate = async (manual = false) => {
+  if (!navigator.onLine) {
+    if (manual) notify("Connect to the internet to check for updates.");
+    return;
+  }
+  try {
+    const lastCheck = Number(localStorage.getItem("neet_last_upd_check") || 0);
+    if (!manual && Date.now() - lastCheck < 12 * 3600 * 1000) return;
+    localStorage.setItem("neet_last_upd_check", String(Date.now()));
+    const res = await fetch(`https://api.github.com/repos/${APP_GITHUB_REPO}/releases/latest`);
+    if (!res.ok) {
+      if (manual) notify("Could not check updates right now.");
+      return;
+    }
+    const rel = await res.json();
+    const latestTag = rel?.tag_name || "";
+    if (latestTag && isNewerVersion(latestTag, APP_VERSION)) {
+      const title = document.getElementById("appUpdateTitle");
+      const msg = document.getElementById("appUpdateMsg");
+      if (title) title.textContent = `Update Available (${latestTag})`;
+      if (msg) msg.textContent = `You are on v${APP_VERSION}. Tap Update to download ${latestTag}.`;
+      document.getElementById("appUpdateBanner")?.classList.add("show");
+    } else if (manual) {
+      notify(`You're on the latest version (v${APP_VERSION})!`);
+    }
+  } catch (e) {
+    if (manual) notify("Could not check updates right now.");
+  }
+};
+setTimeout(() => { window.checkAppUpdate(false); }, 4500);
 </script>
 </body>
 </html>
