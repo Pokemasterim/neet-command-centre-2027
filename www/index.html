@@ -3937,15 +3937,20 @@ window.testEssentialAlert = () => {
 };
 
 /* Built-in Offline Web Audio Ambient Study Music Engine */
-const ambientEngine = { ctx: null, masterGain: null, nodes: [], chordTimer: null, playing: false, step: 0 };
+const ambientEngine = { ctx: null, masterGain: null, nodes: [], chordTimer: null, playing: false, step: 0, nextChordAt: 0 };
 function ensureAmbientCtx() {
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) return null;
   if (!ambientEngine.ctx) {
-    ambientEngine.ctx = new AC();
+    ambientEngine.ctx = new AC({ latencyHint: "playback" });
     ambientEngine.masterGain = ambientEngine.ctx.createGain();
     ambientEngine.masterGain.gain.setValueAtTime(0.0001, ambientEngine.ctx.currentTime);
     ambientEngine.masterGain.connect(ambientEngine.ctx.destination);
+    ambientEngine.ctx.onstatechange = () => {
+      if (ambientEngine.playing && ambientEngine.ctx && ambientEngine.ctx.state === "suspended") {
+        ambientEngine.ctx.resume().catch(() => {});
+      }
+    };
   }
   if (ambientEngine.ctx.state === "suspended") ambientEngine.ctx.resume().catch(() => {});
   return ambientEngine.ctx;
@@ -3953,6 +3958,7 @@ function ensureAmbientCtx() {
 function clearAmbientNodes() {
   clearInterval(ambientEngine.chordTimer);
   ambientEngine.chordTimer = null;
+  ambientEngine.nextChordAt = 0;
   ambientEngine.nodes.forEach(n => {
     try { if (n.stop) n.stop(); } catch (e) {}
     try { if (n.disconnect) n.disconnect(); } catch (e) {}
@@ -3960,17 +3966,29 @@ function clearAmbientNodes() {
   ambientEngine.nodes = [];
 }
 function makeNoiseBuffer(ctx, mode) {
-  const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), out = buf.getChannelData(0);
+  const fade = Math.floor(ctx.sampleRate * 0.35);
+  const len = ctx.sampleRate * 4;
+  const rawLen = len + fade;
+  const raw = new Float32Array(rawLen);
   let last = 0;
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < rawLen; i++) {
     const w = Math.random() * 2 - 1;
     last = mode === "brown" ? (last + 0.02 * w) / 1.02 : (last + 0.08 * w) / 1.08;
-    out[i] = last * (mode === "brown" ? 2.6 : 1.5);
+    raw[i] = last * (mode === "brown" ? 2.6 : 1.5);
+  }
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate), out = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) {
+    if (i < fade) {
+      const k = i / fade;
+      out[i] = raw[i] * k + raw[len + i] * (1 - k);
+    } else {
+      out[i] = raw[i];
+    }
   }
   return buf;
 }
-function playChord(ctx, dest, freqs, dur, type, peak) {
-  const now = ctx.currentTime;
+function playChord(ctx, dest, freqs, dur, type, peak, startAt) {
+  const now = startAt != null ? startAt : ctx.currentTime;
   freqs.forEach((f, idx) => {
     const osc = ctx.createOscillator(), g = ctx.createGain();
     osc.type = type;
@@ -3983,8 +4001,8 @@ function playChord(ctx, dest, freqs, dur, type, peak) {
     osc.start(now); osc.stop(now + dur + 0.05);
   });
 }
-function playPianoChord(ctx, dest, freqs, dur, peak = 0.05) {
-  const now = ctx.currentTime;
+function playPianoChord(ctx, dest, freqs, dur, peak = 0.05, startAt) {
+  const now = startAt != null ? startAt : ctx.currentTime;
   freqs.forEach((f, idx) => {
     const delay = idx * 0.055; // gentle rolled piano chord feel
     const t0 = now + delay;
@@ -4005,6 +4023,26 @@ function playPianoChord(ctx, dest, freqs, dur, peak = 0.05) {
     osc1.start(t0); osc2.start(t0);
     osc1.stop(t0 + dur + 0.05); osc2.stop(t0 + dur + 0.05);
   });
+}
+function startChordLookahead(ctx, intervalSec, scheduleStepFn) {
+  ambientEngine.nextChordAt = ctx.currentTime + 0.05;
+  const pump = () => {
+    if (!ambientEngine.playing || !ambientEngine.ctx) return;
+    if (ambientEngine.ctx.state === "suspended") ambientEngine.ctx.resume().catch(() => {});
+    const now = ctx.currentTime;
+    // If background throttling delayed JS past the scheduled window, jump cleanly without stacking bursts
+    if (ambientEngine.nextChordAt < now - 0.5) {
+      ambientEngine.nextChordAt = now + 0.05;
+    }
+    const horizon = now + intervalSec * 1.5;
+    while (ambientEngine.nextChordAt <= horizon) {
+      scheduleStepFn(ambientEngine.step, ambientEngine.nextChordAt);
+      ambientEngine.step++;
+      ambientEngine.nextChordAt += intervalSec;
+    }
+  };
+  pump();
+  ambientEngine.chordTimer = setInterval(pump, 1500);
 }
 function buildSoundscape(preset) {
   const ctx = ensureAmbientCtx();
@@ -4050,12 +4088,9 @@ function buildSoundscape(preset) {
       [196.00, 246.94, 293.66, 392.00]  // G6
     ];
     ambientEngine.step = 0;
-    playPianoChord(ctx, filter, chords[0], 4.6, 0.052);
-    ambientEngine.chordTimer = setInterval(() => {
-      if (!ambientEngine.playing) return;
-      ambientEngine.step = (ambientEngine.step + 1) % chords.length;
-      playPianoChord(ctx, filter, chords[ambientEngine.step], 4.6, 0.052);
-    }, 4200);
+    startChordLookahead(ctx, 4.2, (step, at) => {
+      playPianoChord(ctx, filter, chords[step % chords.length], 4.6, 0.052, at);
+    });
   } else if (preset === "night_piano") {
     const chords = [
       [146.83, 220.00, 261.63, 329.63], // Dm9
@@ -4064,27 +4099,22 @@ function buildSoundscape(preset) {
       [110.00, 164.81, 196.00, 261.63]  // Am7
     ];
     ambientEngine.step = 0;
-    playChord(ctx, filter, [130.81, 196.00], 5.6, "sine", 0.024);
-    playPianoChord(ctx, filter, chords[0], 5.4, 0.045);
-    ambientEngine.chordTimer = setInterval(() => {
-      if (!ambientEngine.playing) return;
-      ambientEngine.step = (ambientEngine.step + 1) % chords.length;
-      playChord(ctx, filter, [chords[ambientEngine.step][0], chords[ambientEngine.step][1]], 5.6, "sine", 0.022);
-      playPianoChord(ctx, filter, chords[ambientEngine.step], 5.4, 0.045);
-    }, 5200);
+    startChordLookahead(ctx, 5.2, (step, at) => {
+      const ch = chords[step % chords.length];
+      playChord(ctx, filter, [ch[0], ch[1]], 5.6, "sine", 0.022, at);
+      playPianoChord(ctx, filter, ch, 5.4, 0.045, at);
+    });
   } else {
     const chords = preset === "rain_piano"
       ? [[174.61,220,261.63,329.63],[164.81,196,246.94,293.66],[146.83,174.61,220,261.63],[130.81,164.81,196,246.94]]
       : [[130.81,196,246.94,293.66],[110,164.81,196,246.94],[87.31,130.81,174.61,220],[98,146.83,196,246.94]];
     const wave = preset === "rain_piano" ? "triangle" : "sine";
     const dur = preset === "rain_piano" ? 4.8 : 5.6;
+    const intervalSec = preset === "rain_piano" ? 4.5 : 5.2;
     ambientEngine.step = 0;
-    playChord(ctx, filter, chords[0], dur, wave, 0.045);
-    ambientEngine.chordTimer = setInterval(() => {
-      if (!ambientEngine.playing) return;
-      ambientEngine.step = (ambientEngine.step + 1) % chords.length;
-      playChord(ctx, filter, chords[ambientEngine.step], dur, wave, 0.045);
-    }, preset === "rain_piano" ? 4500 : 5200);
+    startChordLookahead(ctx, intervalSec, (step, at) => {
+      playChord(ctx, filter, chords[step % chords.length], dur, wave, 0.045, at);
+    });
   }
 }
 function updateAmbientUI() {
@@ -4960,6 +4990,9 @@ function syncTimersOnWake() {
   if (breakStartAt) {
     renderBreakClock();
     checkBreak15Alert();
+  }
+  if (ambientEngine && ambientEngine.playing && ambientEngine.ctx && ambientEngine.ctx.state === "suspended") {
+    ambientEngine.ctx.resume().catch(() => {});
   }
   checkScheduledReminders();
 }
