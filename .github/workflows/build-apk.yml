@@ -8,7 +8,7 @@ on:
       release_tag:
         description: 'Release version tag (e.g. v2.2, v2.3)'
         required: true
-        default: 'v2.3'
+        default: 'v2.2'
 
 permissions:
   contents: write
@@ -32,18 +32,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Restore fixed Android signing keystore
-        env:
-          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        run: |
-          if [ -n "$KEYSTORE_B64" ]; then
-            mkdir -p "$HOME/.android"
-            printf '%s' "$KEYSTORE_B64" | tr -d '\r\n ' | base64 --decode > "$HOME/.android/debug.keystore"
-            echo "Restored fixed signing keystore."
-          else
-            echo "No ANDROID_KEYSTORE_BASE64 secret set; using default debug keystore."
-          fi
-
       - name: Install Capacitor dependencies
         run: npm install
 
@@ -54,13 +42,16 @@ jobs:
           fi
           npx cap sync android
 
-      - name: Add Android Notification Permissions & Auto VersionCode
-        env:
-          RUN_NUM: ${{ github.run_number }}
+      - name: Generate Android app icon from assets/icon.png
+        run: |
+          if [ -f "assets/icon.png" ]; then
+            npx --yes @capacitor/assets generate --android
+          fi
+
+      - name: Add Android Notification & Exact Alarm permissions
         run: |
           python3 -c '
-          import os, pathlib, re
-
+          import pathlib
           mf = pathlib.Path("android/app/src/main/AndroidManifest.xml")
           txt = mf.read_text(encoding="utf-8")
           perms = [
@@ -73,13 +64,7 @@ jobs:
               if p not in txt:
                   txt = txt.replace("<application", "    " + p + "\n    <application", 1)
           mf.write_text(txt, encoding="utf-8")
-
-          bg = pathlib.Path("android/app/build.gradle")
-          gtxt = bg.read_text(encoding="utf-8")
-          run_num = int(os.environ.get("RUN_NUM", "1"))
-          gtxt = re.sub(r"versionCode\s+\d+", f"versionCode {run_num}", gtxt, count=1)
-          bg.write_text(gtxt, encoding="utf-8")
-          print(f"Updated AndroidManifest.xml and set versionCode={run_num}.")
+          print("Updated AndroidManifest.xml with native alarm permissions.")
           '
 
       - name: Build Android APK
@@ -100,7 +85,7 @@ jobs:
         run: |
           TAG="${{ github.event.inputs.release_tag }}"
           if [ -z "$TAG" ]; then
-            TAG="v2.3"
+            TAG="v2.2"
           fi
           echo "value=$TAG" >> $GITHUB_OUTPUT
 
