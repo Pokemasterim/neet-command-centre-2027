@@ -8142,6 +8142,245 @@ function renderCompareSection(all) {
 }
 
 /* 8. NEET Score Predictor */
+/* ============================================================================
+   v2.6 FINAL FEATURES: PURE FULLSCREEN TIMER, RE-NEET 2026 RANK PREDICTOR,
+   FREE WEB APP NOTIFICATIONS (SERVICE WORKER + WEB SCHEDULER)
+   ============================================================================ */
+
+/* 1. Pure Fullscreen Timer Mode (Zero Distractions: Only Timer + Close) */
+window.openPureFullscreenTimer = () => {
+  const ov = document.getElementById("pureFullscreenTimer");
+  const disp = document.getElementById("pureFsTimerDisplay");
+  if (!ov) return;
+  if (disp) {
+    const curTxt = (document.getElementById("timerDisplay") && document.getElementById("timerDisplay").textContent) || "50:00";
+    disp.textContent = curTxt;
+  }
+  ov.classList.add("open");
+  try {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  } catch (e) {}
+};
+window.closePureFullscreenTimer = () => {
+  const ov = document.getElementById("pureFullscreenTimer");
+  if (ov) ov.classList.remove("open");
+  try {
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+  } catch (e) {}
+};
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const ov = document.getElementById("pureFullscreenTimer");
+    if (ov && ov.classList.contains("open")) window.closePureFullscreenTimer();
+  }
+});
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement) {
+    const ov = document.getElementById("pureFullscreenTimer");
+    if (ov && ov.classList.contains("open")) ov.classList.remove("open");
+  }
+});
+
+/* 2. Re-NEET 2026 Official Result Rank Predictor (NTA Declared 16 July 2026) */
+const RENEET_2026_TOTAL_APPEARED = 1999895;
+const RENEET_2026_ANCHORS = [
+  // [marks, official/calibrated cumulative AIR]
+  [720, 1],
+  [715, 1],        // Official NTA: Joint AIR 1 at 715 (Aryan Gupta & Panshul Bansal; no 720)
+  [700, 19],       // Official NTA: 19 candidates > 700
+  [690, 138],      // Official NTA: 138 candidates >= 690
+  [650, 1492],     // Official NTA: 1,492 candidates >= 650
+  [600, 10160],    // Official NTA: 10,160 candidates >= 600
+  [557, 31719],    // Verified AACCC R1 counselling data point
+  [550, 37183],    // Verified counselling data point
+  [500, 90780],    // Official NTA: 90,780 candidates >= 500
+  [450, 180000],
+  [400, 320000],
+  [350, 490000],
+  [300, 680000],
+  [250, 890000],
+  [213, 996935],   // Official NTA: UR/EWS 50th %ile qualifying cutoff (715-213 band)
+  [177, 1078046],  // Official NTA: OBC/SC/ST 40th %ile qualifying cutoff (+81,111 in 212-177)
+  [100, 1550000],
+  [0,   1999895]
+];
+const RENEET_2026_CAT_META = {
+  UR:   { label: "General (UR)", cutoff: 213, pct: "50th %ile", ratio: () => 1.0 },
+  OBC:  { label: "OBC-NCL",      cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.34 : s >= 600 ? 0.37 : s >= 550 ? 0.42 : 0.47 },
+  EWS:  { label: "Gen-EWS",      cutoff: 213, pct: "50th %ile", ratio: (s) => s >= 650 ? 0.075 : s >= 600 ? 0.082 : s >= 550 ? 0.092 : 0.105 },
+  SC:   { label: "SC",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.098 : s >= 600 ? 0.108 : s >= 550 ? 0.122 : 0.138 },
+  ST:   { label: "ST",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.044 : s >= 600 ? 0.048 : s >= 550 ? 0.055 : 0.062 },
+  PWBD: { label: "UR-PwBD",      cutoff: 194, pct: "45th %ile", ratio: () => 0.008 }
+};
+function predictReNeet2026Air(score) {
+  const s = Math.max(0, Math.min(720, Math.round(Number(score) || 0)));
+  if (s >= 715) return 1;
+  for (let i = 0; i < RENEET_2026_ANCHORS.length - 1; i++) {
+    const [mHi, rHi] = RENEET_2026_ANCHORS[i];
+    const [mLo, rLo] = RENEET_2026_ANCHORS[i + 1];
+    if (s <= mHi && s >= mLo) {
+      if (mHi === mLo) return rHi;
+      const t = (mHi - s) / (mHi - mLo);
+      // Log-linear interpolation matches exponential rank density accurately
+      const logR = Math.log(Math.max(1, rHi)) * (1 - t) + Math.log(Math.max(1, rLo)) * t;
+      return Math.max(1, Math.min(RENEET_2026_TOTAL_APPEARED, Math.round(Math.exp(logR))));
+    }
+  }
+  return RENEET_2026_TOTAL_APPEARED;
+}
+function fmtIndianNum(n) {
+  return Math.round(n).toLocaleString("en-IN");
+}
+function getReNeet2026Outlook(score, air, cat) {
+  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
+  if (score < meta.cutoff) {
+    return { badge: "Below Qualifying Cutoff", color: "var(--rose)", text: `Below the Re-NEET 2026 ${meta.label} qualifying cutoff (${meta.cutoff} marks / ${meta.pct}). Focus on NCERT Biology (360 marks) + high-weightage Chemistry first to cross 450+ quickly.` };
+  }
+  if (air <= 150) return { badge: "AIIMS Delhi / Top National Tier", color: "var(--lime)", text: "Elite Top-150 zone in Re-NEET 2026 (only 138 candidates crossed 690). Strong contender for AIIMS New Delhi, MAMC, VMMC, and JIPMER." };
+  if (air <= 2000) return { badge: "Top AIIMS & Premier Govt MBBS", color: "var(--lime)", text: "Top-0.1% zone (only 1,492 scored 650+ in Re-NEET 2026). Opens AIIMS Jodhpur/Bhubaneswar/Rishikesh, IMS-BHU, and top state medical colleges." };
+  if (air <= 12000) return { badge: "Strong AIQ & Top State Govt MBBS", color: "var(--cyan)", text: "Very strong All India Quota (15%) & State Quota (85%) Government MBBS zone. Only 10,160 candidates crossed 600 in Re-NEET 2026." };
+  if (air <= 32000) return { badge: "Govt MBBS (AIQ / State Quota)", color: "var(--cyan)", text: "Competitive Government MBBS range (AIQ closing ~30,000 for UR; stronger chances via 85% State Quota & category benefits)." };
+  if (air <= 95000) return { badge: "State Quota / Govt BDS / Private MBBS", color: "var(--orange)", text: "In the 500–550 crowded band (90,780 scored 500+). Good chances for Govt BDS, AYUSH, Deemed/Private MBBS, or Govt MBBS for reserved categories. +30 marks here jumps tens of thousands of ranks!" };
+  return { badge: "Qualified — Target Score Boost", color: "var(--orange)", text: `Qualified for counselling (above ${meta.cutoff} cutoff), ideal for Private/Deemed MBBS, BDS, or AYUSH depending on state & category. Improving accuracy by 25–30 questions creates a massive rank leap.` };
+}
+let _rpLastScore = null;
+let _rpLastCat = "UR";
+window.updateReNeetRankPredictor = (scoreVal, catVal) => {
+  const sInput = document.getElementById("rpScoreInput");
+  const sRange = document.getElementById("rpScoreSlider");
+  const cSel = document.getElementById("rpCatSelect");
+  let s = scoreVal !== undefined ? Number(scoreVal) : Number((sInput && sInput.value) || 650);
+  if (isNaN(s)) s = 650;
+  s = Math.max(0, Math.min(720, Math.round(s)));
+  const cat = catVal || (cSel && cSel.value) || _rpLastCat || "UR";
+  _rpLastScore = s; _rpLastCat = cat;
+  if (sInput && Number(sInput.value) !== s) sInput.value = s;
+  if (sRange && Number(sRange.value) !== s) sRange.value = s;
+  if (cSel && cSel.value !== cat) cSel.value = cat;
+
+  const air = predictReNeet2026Air(s);
+  const spread = s >= 705 ? 3 : s >= 680 ? Math.max(10, Math.round(air * 0.12)) : Math.max(50, Math.round(air * 0.08));
+  const airLo = Math.max(1, air - spread);
+  const airHi = Math.min(RENEET_2026_TOTAL_APPEARED, air + spread);
+  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
+  const catRank = Math.max(1, Math.round(air * meta.ratio(s)));
+  const pct = Math.max(0, Math.min(99.9999, ((RENEET_2026_TOTAL_APPEARED - air) / RENEET_2026_TOTAL_APPEARED) * 100));
+  const outlook = getReNeet2026Outlook(s, air, cat);
+
+  const airBoost = predictReNeet2026Air(Math.min(720, s + 20));
+  const rankSaved = Math.max(0, air - airBoost);
+
+  const outEl = document.getElementById("rpOutputHost");
+  if (!outEl) return;
+  outEl.innerHTML = `
+    <div class="rp-result-grid">
+      <div class="mi-stat-card" style="border-color:var(--lime)">
+        <div class="stat-label">EXPECTED AIR (RE-NEET 2026)</div>
+        <div class="mi-stat-val" style="color:var(--lime);font-size:20px">${s >= 715 ? "AIR 1" : fmtIndianNum(airLo) + " – " + fmtIndianNum(airHi)}</div>
+        <div class="mi-stat-sub">Midpoint: ~AIR ${fmtIndianNum(air)}</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">${esc(meta.label.toUpperCase())} RANK</div>
+        <div class="mi-stat-val" style="color:var(--cyan);font-size:20px">~${fmtIndianNum(catRank)}</div>
+        <div class="mi-stat-sub">Cutoff: ${meta.cutoff} (${meta.pct})</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">ESTIMATED PERCENTILE</div>
+        <div class="mi-stat-val" style="font-size:20px">${pct.toFixed(2)}%</div>
+        <div class="mi-stat-sub">Out of 19.99 Lakh appeared</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">+20 MARKS IMPACT (${Math.min(720, s + 20)}/720)</div>
+        <div class="mi-stat-val" style="color:var(--orange);font-size:19px">${rankSaved > 0 ? "↑ " + fmtIndianNum(rankSaved) : "Top Tier"}</div>
+        <div class="mi-stat-sub">${rankSaved > 0 ? "Ranks gained (~AIR " + fmtIndianNum(airBoost) + ")" : "Already at AIR 1 zone"}</div>
+      </div>
+    </div>
+    <div class="rp-outlook-box">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+        <strong style="color:${outlook.color}">🎯 ${esc(outlook.badge)}</strong>
+        <span class="tag ${s >= meta.cutoff ? 'lime' : 'pink'}">${s >= meta.cutoff ? 'Qualified' : 'Not Qualified'}</span>
+      </div>
+      <div class="muted">${esc(outlook.text)}</div>
+    </div>
+  `;
+};
+function renderRankPredictorWidget(host, defaultScore) {
+  if (!host) return;
+  const initScore = _rpLastScore !== null ? _rpLastScore : Math.max(0, Math.min(720, Math.round(Number(defaultScore) || 650)));
+  const wrap = document.createElement("div");
+  wrap.className = "rp-card";
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <div>
+        <div class="eyebrow">BASED ON OFFICIAL NTA RE-NEET 2026 RESULT (16 JULY 2026)</div>
+        <h3 style="margin:3px 0 0;font-size:17px">🏆 Re-NEET 2026 Rank Predictor</h3>
+      </div>
+      <span class="tag cyan">Topper: 715/720 · 19.99L Appeared</span>
+    </div>
+    <div class="rp-controls">
+      <div>
+        <label class="field-label" for="rpScoreInput">YOUR EXPECTED / MOCK SCORE (OUT OF 720)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="field" type="number" id="rpScoreInput" min="0" max="720" value="${initScore}" style="max-width:110px;font-weight:700" oninput="updateReNeetRankPredictor(this.value)">
+          <input type="range" class="range-slider" id="rpScoreSlider" min="0" max="720" step="1" value="${initScore}" style="flex:1" oninput="updateReNeetRankPredictor(this.value)">
+        </div>
+      </div>
+      <div>
+        <label class="field-label" for="rpCatSelect">CATEGORY</label>
+        <select class="field" id="rpCatSelect" onchange="updateReNeetRankPredictor(undefined, this.value)">
+          <option value="UR" ${_rpLastCat === "UR" ? "selected" : ""}>General (UR)</option>
+          <option value="OBC" ${_rpLastCat === "OBC" ? "selected" : ""}>OBC-NCL</option>
+          <option value="EWS" ${_rpLastCat === "EWS" ? "selected" : ""}>Gen-EWS</option>
+          <option value="SC" ${_rpLastCat === "SC" ? "selected" : ""}>SC</option>
+          <option value="ST" ${_rpLastCat === "ST" ? "selected" : ""}>ST</option>
+          <option value="PWBD" ${_rpLastCat === "PWBD" ? "selected" : ""}>UR-PwBD</option>
+        </select>
+      </div>
+    </div>
+    <div id="rpOutputHost"></div>
+    <details style="margin-top:12px">
+      <summary class="small" style="cursor:pointer;color:var(--cyan);font-weight:600">📊 View Official Re-NEET 2026 NTA Anchor Data</summary>
+      <table class="rp-table">
+        <thead><tr><th>Score (/720)</th><th>Re-NEET 2026 AIR</th><th>Official NTA Fact</th></tr></thead>
+        <tbody>
+          <tr><td><strong>715</strong></td><td>AIR 1</td><td>Highest score (2 joint toppers, no 720)</td></tr>
+          <tr><td><strong>700+</strong></td><td>Top 19</td><td>Only 19 candidates crossed 700</td></tr>
+          <tr><td><strong>690+</strong></td><td>Top 138</td><td>138 candidates scored 690 or above</td></tr>
+          <tr><td><strong>650+</strong></td><td>~1,492</td><td>1,492 candidates scored 650+</td></tr>
+          <tr><td><strong>600+</strong></td><td>~10,160</td><td>10,160 candidates scored 600+</td></tr>
+          <tr><td><strong>550</strong></td><td>~30k – 37k</td><td>Crowded AIQ / State Govt MBBS border</td></tr>
+          <tr><td><strong>500+</strong></td><td>~90,780</td><td>90,780 candidates scored 500+</td></tr>
+          <tr><td><strong>213</strong></td><td>~9.97 Lakh</td><td>UR / EWS 50th %ile Qualifying Cutoff</td></tr>
+          <tr><td><strong>177</strong></td><td>~10.78 Lakh</td><td>OBC / SC / ST 40th %ile Qualifying Cutoff</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted" style="margin:8px 0 0">Note: Anchors (715, 700, 690, 650, 600, 500, 213, 177) use official NTA Re-NEET 2026 counts; intermediate scores use log-linear curve interpolation. Actual NEET 2027 ranks will vary with paper difficulty.</p>
+    </details>
+  `;
+  host.appendChild(wrap);
+  updateReNeetRankPredictor(initScore, _rpLastCat);
+}
+
+/* 3. Free Web App Notifications: Service Worker Registration & Status Sync */
+(function initFreeWebNotifications() {
+  try {
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+    const statusEl = document.getElementById("alertPermStatus");
+    if (statusEl && !getCapLocalNotif() && "Notification" in window) {
+      if (Notification.permission === "granted") {
+        statusEl.textContent = "Chrome / Web Notifications + chime + vibration enabled ✓";
+      } else if (Notification.permission === "denied") {
+        statusEl.textContent = "Blocked in browser — allow notifications in Site Settings (lock icon)";
+      }
+    }
+  } catch (e) {}
+})();
+
 function renderMockPredictor(full) {
   const host = document.getElementById("miPredictorContainer");
   const badge = document.getElementById("miPredReliability");
@@ -8150,7 +8389,7 @@ function renderMockPredictor(full) {
   if (!p.sufficient) {
     if (badge) badge.textContent = "INSUFFICIENT DATA";
     host.innerHTML = `<div class="empty">Insufficient full mock data (${p.count} / 2 full mocks logged). Log at least 2 Full NEET Mocks (720 marks) to generate a statistical estimate — meanwhile, use the Re-NEET 2026 Rank Predictor below with any score!</div>`;
-    renderRankPredictorWidget(host, full.length ? full[full.length - 1].total : (data.settings.targetScore || 650));
+    if (typeof renderRankPredictorWidget === "function") renderRankPredictorWidget(host, full.length ? full[full.length - 1].total : (data.settings.targetScore || 650));
     return;
   }
   if (badge) badge.textContent = `${p.reliability.toUpperCase()} · ${p.count} MOCKS`;
@@ -8168,7 +8407,7 @@ function renderMockPredictor(full) {
     </div>
     <p class="small muted section-gap">Statistical estimate based on your last 3 avg (${p.avg3}), last 5 avg (${p.avg5}), and score consistency. This is a diagnostic projection, not a guaranteed NEET exam score.</p>
   `;
-  renderRankPredictorWidget(host, p.current);
+  if (typeof renderRankPredictorWidget === "function") renderRankPredictorWidget(host, p.current);
 }
 
 /* 9. Automatic Improvement Planner (Confirmation-Gated Integrations) */
@@ -11130,250 +11369,6 @@ function setCloudStatus(msg) {
 })();
 </script>
 
-
-<script>
-
-/* ============================================================================
-   v2.6 FINAL FEATURES: PURE FULLSCREEN TIMER, RE-NEET 2026 RANK PREDICTOR,
-   FREE WEB APP NOTIFICATIONS (SERVICE WORKER + WEB SCHEDULER)
-   ============================================================================ */
-
-/* 1. Pure Fullscreen Timer Mode (Zero Distractions: Only Timer + Close) */
-window.openPureFullscreenTimer = () => {
-  const ov = document.getElementById("pureFullscreenTimer");
-  const disp = document.getElementById("pureFsTimerDisplay");
-  if (!ov) return;
-  if (disp) {
-    const curTxt = (document.getElementById("timerDisplay") && document.getElementById("timerDisplay").textContent) || "50:00";
-    disp.textContent = curTxt;
-  }
-  ov.classList.add("open");
-  try {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-  } catch (e) {}
-};
-window.closePureFullscreenTimer = () => {
-  const ov = document.getElementById("pureFullscreenTimer");
-  if (ov) ov.classList.remove("open");
-  try {
-    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
-    else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
-  } catch (e) {}
-};
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    const ov = document.getElementById("pureFullscreenTimer");
-    if (ov && ov.classList.contains("open")) window.closePureFullscreenTimer();
-  }
-});
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
-    const ov = document.getElementById("pureFullscreenTimer");
-    if (ov && ov.classList.contains("open")) ov.classList.remove("open");
-  }
-});
-
-/* 2. Re-NEET 2026 Official Result Rank Predictor (NTA Declared 16 July 2026) */
-const RENEET_2026_TOTAL_APPEARED = 1999895;
-const RENEET_2026_ANCHORS = [
-  // [marks, official/calibrated cumulative AIR]
-  [720, 1],
-  [715, 1],        // Official NTA: Joint AIR 1 at 715 (Aryan Gupta & Panshul Bansal; no 720)
-  [700, 19],       // Official NTA: 19 candidates > 700
-  [690, 138],      // Official NTA: 138 candidates >= 690
-  [650, 1492],     // Official NTA: 1,492 candidates >= 650
-  [600, 10160],    // Official NTA: 10,160 candidates >= 600
-  [557, 31719],    // Verified AACCC R1 counselling data point
-  [550, 37183],    // Verified counselling data point
-  [500, 90780],    // Official NTA: 90,780 candidates >= 500
-  [450, 180000],
-  [400, 320000],
-  [350, 490000],
-  [300, 680000],
-  [250, 890000],
-  [213, 996935],   // Official NTA: UR/EWS 50th %ile qualifying cutoff (715-213 band)
-  [177, 1078046],  // Official NTA: OBC/SC/ST 40th %ile qualifying cutoff (+81,111 in 212-177)
-  [100, 1550000],
-  [0,   1999895]
-];
-const RENEET_2026_CAT_META = {
-  UR:   { label: "General (UR)", cutoff: 213, pct: "50th %ile", ratio: () => 1.0 },
-  OBC:  { label: "OBC-NCL",      cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.34 : s >= 600 ? 0.37 : s >= 550 ? 0.42 : 0.47 },
-  EWS:  { label: "Gen-EWS",      cutoff: 213, pct: "50th %ile", ratio: (s) => s >= 650 ? 0.075 : s >= 600 ? 0.082 : s >= 550 ? 0.092 : 0.105 },
-  SC:   { label: "SC",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.098 : s >= 600 ? 0.108 : s >= 550 ? 0.122 : 0.138 },
-  ST:   { label: "ST",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.044 : s >= 600 ? 0.048 : s >= 550 ? 0.055 : 0.062 },
-  PWBD: { label: "UR-PwBD",      cutoff: 194, pct: "45th %ile", ratio: () => 0.008 }
-};
-function predictReNeet2026Air(score) {
-  const s = Math.max(0, Math.min(720, Math.round(Number(score) || 0)));
-  if (s >= 715) return 1;
-  for (let i = 0; i < RENEET_2026_ANCHORS.length - 1; i++) {
-    const [mHi, rHi] = RENEET_2026_ANCHORS[i];
-    const [mLo, rLo] = RENEET_2026_ANCHORS[i + 1];
-    if (s <= mHi && s >= mLo) {
-      if (mHi === mLo) return rHi;
-      const t = (mHi - s) / (mHi - mLo);
-      // Log-linear interpolation matches exponential rank density accurately
-      const logR = Math.log(Math.max(1, rHi)) * (1 - t) + Math.log(Math.max(1, rLo)) * t;
-      return Math.max(1, Math.min(RENEET_2026_TOTAL_APPEARED, Math.round(Math.exp(logR))));
-    }
-  }
-  return RENEET_2026_TOTAL_APPEARED;
-}
-function fmtIndianNum(n) {
-  return Math.round(n).toLocaleString("en-IN");
-}
-function getReNeet2026Outlook(score, air, cat) {
-  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
-  if (score < meta.cutoff) {
-    return { badge: "Below Qualifying Cutoff", color: "var(--rose)", text: `Below the Re-NEET 2026 ${meta.label} qualifying cutoff (${meta.cutoff} marks / ${meta.pct}). Focus on NCERT Biology (360 marks) + high-weightage Chemistry first to cross 450+ quickly.` };
-  }
-  if (air <= 150) return { badge: "AIIMS Delhi / Top National Tier", color: "var(--lime)", text: "Elite Top-150 zone in Re-NEET 2026 (only 138 candidates crossed 690). Strong contender for AIIMS New Delhi, MAMC, VMMC, and JIPMER." };
-  if (air <= 2000) return { badge: "Top AIIMS & Premier Govt MBBS", color: "var(--lime)", text: "Top-0.1% zone (only 1,492 scored 650+ in Re-NEET 2026). Opens AIIMS Jodhpur/Bhubaneswar/Rishikesh, IMS-BHU, and top state medical colleges." };
-  if (air <= 12000) return { badge: "Strong AIQ & Top State Govt MBBS", color: "var(--cyan)", text: "Very strong All India Quota (15%) & State Quota (85%) Government MBBS zone. Only 10,160 candidates crossed 600 in Re-NEET 2026." };
-  if (air <= 32000) return { badge: "Govt MBBS (AIQ / State Quota)", color: "var(--cyan)", text: "Competitive Government MBBS range (AIQ closing ~30,000 for UR; stronger chances via 85% State Quota & category benefits)." };
-  if (air <= 95000) return { badge: "State Quota / Govt BDS / Private MBBS", color: "var(--orange)", text: "In the 500–550 crowded band (90,780 scored 500+). Good chances for Govt BDS, AYUSH, Deemed/Private MBBS, or Govt MBBS for reserved categories. +30 marks here jumps tens of thousands of ranks!" };
-  return { badge: "Qualified — Target Score Boost", color: "var(--orange)", text: `Qualified for counselling (above ${meta.cutoff} cutoff), ideal for Private/Deemed MBBS, BDS, or AYUSH depending on state & category. Improving accuracy by 25–30 questions creates a massive rank leap.` };
-}
-let _rpLastScore = null;
-let _rpLastCat = "UR";
-window.updateReNeetRankPredictor = (scoreVal, catVal) => {
-  const sInput = document.getElementById("rpScoreInput");
-  const sRange = document.getElementById("rpScoreSlider");
-  const cSel = document.getElementById("rpCatSelect");
-  let s = scoreVal !== undefined ? Number(scoreVal) : Number((sInput && sInput.value) || 650);
-  if (isNaN(s)) s = 650;
-  s = Math.max(0, Math.min(720, Math.round(s)));
-  const cat = catVal || (cSel && cSel.value) || _rpLastCat || "UR";
-  _rpLastScore = s; _rpLastCat = cat;
-  if (sInput && Number(sInput.value) !== s) sInput.value = s;
-  if (sRange && Number(sRange.value) !== s) sRange.value = s;
-  if (cSel && cSel.value !== cat) cSel.value = cat;
-
-  const air = predictReNeet2026Air(s);
-  const spread = s >= 705 ? 3 : s >= 680 ? Math.max(10, Math.round(air * 0.12)) : Math.max(50, Math.round(air * 0.08));
-  const airLo = Math.max(1, air - spread);
-  const airHi = Math.min(RENEET_2026_TOTAL_APPEARED, air + spread);
-  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
-  const catRank = Math.max(1, Math.round(air * meta.ratio(s)));
-  const pct = Math.max(0, Math.min(99.9999, ((RENEET_2026_TOTAL_APPEARED - air) / RENEET_2026_TOTAL_APPEARED) * 100));
-  const outlook = getReNeet2026Outlook(s, air, cat);
-
-  const airBoost = predictReNeet2026Air(Math.min(720, s + 20));
-  const rankSaved = Math.max(0, air - airBoost);
-
-  const outEl = document.getElementById("rpOutputHost");
-  if (!outEl) return;
-  outEl.innerHTML = `
-    <div class="rp-result-grid">
-      <div class="mi-stat-card" style="border-color:var(--lime)">
-        <div class="stat-label">EXPECTED AIR (RE-NEET 2026)</div>
-        <div class="mi-stat-val" style="color:var(--lime);font-size:20px">${s >= 715 ? "AIR 1" : fmtIndianNum(airLo) + " – " + fmtIndianNum(airHi)}</div>
-        <div class="mi-stat-sub">Midpoint: ~AIR ${fmtIndianNum(air)}</div>
-      </div>
-      <div class="mi-stat-card">
-        <div class="stat-label">${esc(meta.label.toUpperCase())} RANK</div>
-        <div class="mi-stat-val" style="color:var(--cyan);font-size:20px">~${fmtIndianNum(catRank)}</div>
-        <div class="mi-stat-sub">Cutoff: ${meta.cutoff} (${meta.pct})</div>
-      </div>
-      <div class="mi-stat-card">
-        <div class="stat-label">ESTIMATED PERCENTILE</div>
-        <div class="mi-stat-val" style="font-size:20px">${pct.toFixed(2)}%</div>
-        <div class="mi-stat-sub">Out of 19.99 Lakh appeared</div>
-      </div>
-      <div class="mi-stat-card">
-        <div class="stat-label">+20 MARKS IMPACT (${Math.min(720, s + 20)}/720)</div>
-        <div class="mi-stat-val" style="color:var(--orange);font-size:19px">${rankSaved > 0 ? "↑ " + fmtIndianNum(rankSaved) : "Top Tier"}</div>
-        <div class="mi-stat-sub">${rankSaved > 0 ? "Ranks gained (~AIR " + fmtIndianNum(airBoost) + ")" : "Already at AIR 1 zone"}</div>
-      </div>
-    </div>
-    <div class="rp-outlook-box">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-        <strong style="color:${outlook.color}">🎯 ${esc(outlook.badge)}</strong>
-        <span class="tag ${s >= meta.cutoff ? 'lime' : 'pink'}">${s >= meta.cutoff ? 'Qualified' : 'Not Qualified'}</span>
-      </div>
-      <div class="muted">${esc(outlook.text)}</div>
-    </div>
-  `;
-};
-function renderRankPredictorWidget(host, defaultScore) {
-  if (!host) return;
-  const initScore = _rpLastScore !== null ? _rpLastScore : Math.max(0, Math.min(720, Math.round(Number(defaultScore) || 650)));
-  const wrap = document.createElement("div");
-  wrap.className = "rp-card";
-  wrap.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-      <div>
-        <div class="eyebrow">BASED ON OFFICIAL NTA RE-NEET 2026 RESULT (16 JULY 2026)</div>
-        <h3 style="margin:3px 0 0;font-size:17px">🏆 Re-NEET 2026 Rank Predictor</h3>
-      </div>
-      <span class="tag cyan">Topper: 715/720 · 19.99L Appeared</span>
-    </div>
-    <div class="rp-controls">
-      <div>
-        <label class="field-label" for="rpScoreInput">YOUR EXPECTED / MOCK SCORE (OUT OF 720)</label>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input class="field" type="number" id="rpScoreInput" min="0" max="720" value="${initScore}" style="max-width:110px;font-weight:700" oninput="updateReNeetRankPredictor(this.value)">
-          <input type="range" class="range-slider" id="rpScoreSlider" min="0" max="720" step="1" value="${initScore}" style="flex:1" oninput="updateReNeetRankPredictor(this.value)">
-        </div>
-      </div>
-      <div>
-        <label class="field-label" for="rpCatSelect">CATEGORY</label>
-        <select class="field" id="rpCatSelect" onchange="updateReNeetRankPredictor(undefined, this.value)">
-          <option value="UR" ${_rpLastCat === "UR" ? "selected" : ""}>General (UR)</option>
-          <option value="OBC" ${_rpLastCat === "OBC" ? "selected" : ""}>OBC-NCL</option>
-          <option value="EWS" ${_rpLastCat === "EWS" ? "selected" : ""}>Gen-EWS</option>
-          <option value="SC" ${_rpLastCat === "SC" ? "selected" : ""}>SC</option>
-          <option value="ST" ${_rpLastCat === "ST" ? "selected" : ""}>ST</option>
-          <option value="PWBD" ${_rpLastCat === "PWBD" ? "selected" : ""}>UR-PwBD</option>
-        </select>
-      </div>
-    </div>
-    <div id="rpOutputHost"></div>
-    <details style="margin-top:12px">
-      <summary class="small" style="cursor:pointer;color:var(--cyan);font-weight:600">📊 View Official Re-NEET 2026 NTA Anchor Data</summary>
-      <table class="rp-table">
-        <thead><tr><th>Score (/720)</th><th>Re-NEET 2026 AIR</th><th>Official NTA Fact</th></tr></thead>
-        <tbody>
-          <tr><td><strong>715</strong></td><td>AIR 1</td><td>Highest score (2 joint toppers, no 720)</td></tr>
-          <tr><td><strong>700+</strong></td><td>Top 19</td><td>Only 19 candidates crossed 700</td></tr>
-          <tr><td><strong>690+</strong></td><td>Top 138</td><td>138 candidates scored 690 or above</td></tr>
-          <tr><td><strong>650+</strong></td><td>~1,492</td><td>1,492 candidates scored 650+</td></tr>
-          <tr><td><strong>600+</strong></td><td>~10,160</td><td>10,160 candidates scored 600+</td></tr>
-          <tr><td><strong>550</strong></td><td>~30k – 37k</td><td>Crowded AIQ / State Govt MBBS border</td></tr>
-          <tr><td><strong>500+</strong></td><td>~90,780</td><td>90,780 candidates scored 500+</td></tr>
-          <tr><td><strong>213</strong></td><td>~9.97 Lakh</td><td>UR / EWS 50th %ile Qualifying Cutoff</td></tr>
-          <tr><td><strong>177</strong></td><td>~10.78 Lakh</td><td>OBC / SC / ST 40th %ile Qualifying Cutoff</td></tr>
-        </tbody>
-      </table>
-      <p class="small muted" style="margin:8px 0 0">Note: Anchors (715, 700, 690, 650, 600, 500, 213, 177) use official NTA Re-NEET 2026 counts; intermediate scores use log-linear curve interpolation. Actual NEET 2027 ranks will vary with paper difficulty.</p>
-    </details>
-  `;
-  host.appendChild(wrap);
-  updateReNeetRankPredictor(initScore, _rpLastCat);
-}
-
-/* 3. Free Web App Notifications: Service Worker Registration & Status Sync */
-(function initFreeWebNotifications() {
-  try {
-    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
-    }
-    const statusEl = document.getElementById("alertPermStatus");
-    if (statusEl && !getCapLocalNotif() && "Notification" in window) {
-      if (Notification.permission === "granted") {
-        statusEl.textContent = "Chrome / Web Notifications + chime + vibration enabled ✓";
-      } else if (Notification.permission === "denied") {
-        statusEl.textContent = "Blocked in browser — allow notifications in Site Settings (lock icon)";
-      }
-    }
-  } catch (e) {}
-})();
-
-</script>
-
 <!-- CHANGELOG MODAL -->
 <div class="modal-overlay" id="changelogModal" role="dialog" aria-modal="true" aria-labelledby="changelogModalTitle" style="z-index:290" onclick="if(event.target===this)closeChangelogModal()">
   <div class="modal-card" style="max-width:560px">
@@ -11516,6 +11511,14 @@ setTimeout(() => { window.checkAppUpdate(false); }, 3500);
 setInterval(() => { window.checkAppUpdate(false); }, 30 * 60 * 1000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) window.checkAppUpdate(false); });
 window.addEventListener("online", () => { window.checkAppUpdate(false); });
+</script>
+<script>
+setTimeout(function(){
+  try {
+    var el = document.getElementById("appLoadingScreen");
+    if (el && !el.classList.contains("hidden")) el.classList.add("hidden");
+  } catch (e) {}
+}, 4500);
 </script>
 </body>
 </html>
