@@ -4,8 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#080e1b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEET 720">
+<meta name="application-name" content="NEET 720">
+<meta name="msapplication-TileColor" content="#080e1b">
+<meta name="msapplication-TileImage" content="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.5</title>
+<title>NEET COMMAND CENTRE 2027 — v2.6</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -1216,6 +1226,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 
 /* Light Theme */
 :root[data-theme="light"] {
+  --border: var(--line);
   --bg: #f2f6fc;
   --panel: #ffffff;
   --panel2: #eaf0f8;
@@ -1467,7 +1478,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
   border: 1px solid var(--border);
   margin-bottom: 12px;
 }
-body.light .timer-mode-bar { background: rgba(15, 23, 42, .04); }
+:root[data-theme="light"] .timer-mode-bar { background: rgba(15, 23, 42, .04); }
 .timer-mode-btn {
   border: 0;
   background: transparent;
@@ -1555,7 +1566,10 @@ body.light .timer-mode-bar { background: rgba(15, 23, 42, .04); }
 }
 .fc-face {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
@@ -1567,7 +1581,7 @@ body.light .timer-mode-bar { background: rgba(15, 23, 42, .04); }
   justify-content: space-between;
   overflow-y: auto;
 }
-body.light .fc-face {
+:root[data-theme="light"] .fc-face {
   background: linear-gradient(160deg, #ffffff, #f3f7fc);
 }
 .fc-face.fc-back {
@@ -1575,7 +1589,7 @@ body.light .fc-face {
   border-color: rgba(163, 255, 118, .4);
   background: linear-gradient(160deg, rgba(163, 255, 118, .08), rgba(79, 240, 255, .05));
 }
-body.light .fc-face.fc-back {
+:root[data-theme="light"] .fc-face.fc-back {
   background: linear-gradient(160deg, #f4fff0, #eef9ff);
 }
 .fc-face-top {
@@ -1610,7 +1624,7 @@ body.light .fc-face.fc-back {
   border-radius: 5px;
   font-weight: 700;
 }
-body.light .fc-cloze-answer {
+:root[data-theme="light"] .fc-cloze-answer {
   background: rgba(22, 163, 74, .16);
   color: #15803d;
 }
@@ -1661,7 +1675,7 @@ body.light .fc-cloze-answer {
   white-space: nowrap;
   transition: all .18s ease;
 }
-body.light .mi-tab-btn { background: rgba(15, 23, 42, .03); }
+:root[data-theme="light"] .mi-tab-btn { background: rgba(15, 23, 42, .03); }
 .mi-tab-btn.active {
   background: linear-gradient(135deg, rgba(97, 217, 245, .2), rgba(196, 243, 107, .18));
   color: var(--text);
@@ -1698,7 +1712,7 @@ body.light .mi-tab-btn { background: rgba(15, 23, 42, .03); }
   padding: 12px 14px;
   min-width: 0;
 }
-body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
+:root[data-theme="light"] .mi-stat-card { background: rgba(15, 23, 42, .025); }
 .mi-stat-val {
   font: 700 22px 'DM Mono', monospace;
   margin-top: 4px;
@@ -1820,6 +1834,211 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
   margin-bottom: 10px;
 }
 
+
+/* === v2.6 Zero-Cost Features & Upgrades === */
+.subj-bal-wrap {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .025);
+}
+.subj-bal-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .08);
+  margin: 6px 0;
+}
+.subj-bal-legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font: 600 10.5px 'DM Mono', monospace;
+  color: var(--muted);
+}
+.bioclock-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(97, 217, 245, .3);
+  background: rgba(97, 217, 245, .06);
+  margin-bottom: 12px;
+}
+.omr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 6px;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+.omr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  font: 600 11px 'DM Mono', monospace;
+}
+.omr-row.warn-slow { border-color: var(--pink); background: rgba(255, 92, 147, .09); }
+.omr-bub {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font: 700 10.5px 'DM Mono', monospace;
+  cursor: pointer;
+  padding: 0;
+}
+.omr-bub.sel {
+  background: var(--cyan);
+  color: #07101f;
+  border-color: var(--cyan);
+}
+.breath-ring-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+}
+.breath-svg circle.b-ring {
+  transition: r 3.9s ease-in-out;
+}
+.parking-lot-box {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .04);
+  text-align: left;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.parking-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.parking-item:last-child { border-bottom: 0; }
+.whatif-box {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(196, 243, 107, .35);
+  background: rgba(196, 243, 107, .07);
+}
+
+
+/* === v2.6 Pure Fullscreen Timer Overlay (Zero Distractions) === */
+.pure-fs-overlay {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 9999;
+  background: #000000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pure-fs-overlay.open { display: flex; }
+.pure-fs-time {
+  font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 500;
+  font-size: clamp(64px, 18vw, 184px);
+  letter-spacing: 0.04em;
+  color: #f4f8ff;
+  line-height: 1;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.pure-fs-close {
+  position: fixed;
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .78);
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.pure-fs-close:hover {
+  background: rgba(255, 255, 255, .18);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, .36);
+}
+/* === v2.6 Re-NEET 2026 Rank Predictor === */
+.rp-card {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(97, 217, 245, .08), rgba(196, 243, 107, .05));
+  border: 1px solid var(--border);
+}
+:root[data-theme="light"] .rp-card {
+  background: linear-gradient(145deg, rgba(14, 165, 233, .08), rgba(101, 163, 13, .06));
+}
+.rp-controls {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+@media (max-width: 640px) { .rp-controls { grid-template-columns: 1fr; } }
+.rp-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.rp-outlook-box {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.5;
+}
+:root[data-theme="light"] .rp-outlook-box {
+  background: rgba(15, 23, 42, .04);
+}
+.rp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-top: 8px;
+}
+.rp-table th, .rp-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.rp-table th { color: var(--muted); font-weight: 600; }
+
 </style>
 </head>
 <body>
@@ -1939,7 +2158,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.5</div>
+        <div class="brand-sub">NEET 2027 / v2.6</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -2029,7 +2248,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
           </div>
           <div style="display:flex;gap:7px;flex-wrap:wrap">
             <span class="tag lime" id="ncertDailyBadge">DAILY DOSE</span>
-            <button type="button" class="btn btn-small btn-primary" onclick="openFlashcardMode('facts')">⚡ Flashcard Mode</button>
+            <button type="button" class="btn btn-small btn-primary" onclick="openFlashcardMode('facts')">⚡ Flashcards</button>
             <button type="button" class="btn btn-small" onclick="refreshAllFacts()">↻ Another facts</button>
             <button type="button" class="btn btn-small" onclick="navigate('settings')">⚙ Fact settings</button>
           </div>
@@ -2167,6 +2386,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <button type="button" class="btn btn-small" onclick="shiftMissionDate(1)" title="Next Day">▶</button>
             <button type="button" class="btn btn-small" onclick="setMissionBoardDate(today())">Today</button>
             <button type="button" class="btn btn-small" onclick="setMissionBoardDate(daysAgoStr(1))">Yesterday</button>
+            <button type="button" class="btn btn-small btn-lime" onclick="rollOverYesterdayMissions()" title="Copy unfinished missions from yesterday to today">↷ Roll Over</button>
           </div>
           <div class="mission-week-strip" id="missionWeekStrip"></div>
           <div class="progress-line"><span>Daily completion</span><strong id="missionPercent">0%</strong></div>
@@ -2237,6 +2457,17 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             </div>
             <span class="tag cyan" id="timerStatus">READY</span>
           </div>
+          <div id="weeklySubjectBalanceHost" class="subj-bal-wrap"></div>
+          <div class="bioclock-strip">
+            <div>
+              <div class="eyebrow">NEET BIO-CLOCK (2:00 – 5:00 PM)</div>
+              <div class="small" id="bioClockStatusText">Readiness: --</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button type="button" class="btn btn-small btn-lime" onclick="startNeetExamSim()">🎯 NEET Exam Sim (180m)</button>
+              <button type="button" class="btn btn-small" onclick="openOmrSprintModal()">📝 OMR Sheet</button>
+            </div>
+          </div>
           <div class="timer-mode-bar" role="tablist" aria-label="Timer Mode">
             <button type="button" class="timer-mode-btn active" id="modeCountdownBtn" onclick="setTimerMode('countdown')">⏱ Countdown</button>
             <button type="button" class="timer-mode-btn" id="modeFlowmodoroBtn" onclick="setTimerMode('flowmodoro')">∞ Flowmodoro (Count-Up)</button>
@@ -2250,6 +2481,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <button type="button" class="btn btn-lime" id="endSaveTimerBtn" onclick="finishFocusSession()">End & Save</button>
             <button type="button" class="btn btn-danger" id="resetTimer">Reset</button>
             <button type="button" class="btn" style="border-color:var(--cyan);color:var(--cyan)" id="openFocus">Focus Mode ↗</button>
+            <button type="button" class="btn" onclick="openPureFullscreenTimer()" title="Pure Fullscreen Timer">⛶ Fullscreen</button>
           </div>
           <div class="form-row" style="margin-top:18px">
             <div id="countdownConfigWrap">
@@ -2326,9 +2558,9 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <button type="button" class="btn btn-green" onclick="resumeFromBreak()">▶ Resume</button>
             <button type="button" class="btn btn-dark-outline" onclick="endBreakStopwatch()">End</button>
           </div>
-          <div class="break-stretch-card">
-            <span style="font-size:20px">☕</span>
-            <span>Stand up and stretch for a minute</span>
+          <div class="break-stretch-card" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <span style="display:inline-flex;align-items:center;gap:8px"><span style="font-size:20px">☕</span><span>Stand up, stretch, or reset your breathing</span></span>
+            <button type="button" class="btn btn-small btn-primary" onclick="openBoxBreathingModal()">🌬 60s Box Breathing</button>
           </div>
         </div>
         </div>
@@ -2467,6 +2699,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <div class="ring" id="chapterRing" style="--angle:0deg"><div class="ring-inner"><strong id="chapterRingNum">0%</strong><small>COMPLETE</small></div></div>
             <div>
               <div class="stat-value" id="chapterDoneCount">0 / 81</div>
+              <div class="small" id="chapterWeightedMarksText" style="color:var(--lime);font-weight:600;margin-top:2px">~0% NEET marks covered</div>
               <div class="small muted"><span id="chapterPyqCount" style="color:var(--orange)">0 PYQ done</span> · <span id="chapterTotalRevised" style="color:var(--cyan)">0× Rev</span> · <span id="chapterTotalSolved" style="color:var(--lime)">0× Sol</span></div>
             </div>
           </div>
@@ -2494,7 +2727,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <select class="field" id="chapterFilter" style="width:auto" onchange="renderChapters()"><option value="All">All Subjects</option><option>Biology</option><option>Physics</option><option>Chemistry</option></select>
             <select class="field" id="chapterStatusFilter" style="width:auto" onchange="renderChapters()"><option value="All">All Statuses</option><option>Not started</option><option>Theory Done</option><option>Questions Done</option><option>PYQ done</option><option>Completed</option></select>
             <select class="field" id="chapterPriorityFilter" style="width:auto" onchange="renderChapters()"><option value="All">All Priorities</option><option value="High">High Priority</option><option value="Medium">Medium Priority</option><option value="Low">Low Priority</option><option value="None">No Priority</option></select>
-            <select class="field" id="chapterSort" style="width:auto" onchange="renderChapters()"><option value="default">NCERT Order</option><option value="prio_desc">Priority (High → Low)</option><option value="rev_desc">Most Revised</option><option value="sol_desc">Most Solved</option><option value="acc_asc">Weakest Accuracy</option></select>
+            <select class="field" id="chapterSort" style="width:auto" onchange="renderChapters()"><option value="default">NCERT Order</option><option value="prio_desc">Priority (High → Low)</option><option value="rev_desc">Most Revised</option><option value="sol_desc">Most Solved</option><option value="weight_unfinished">Highest Weightage Unfinished</option><option value="acc_asc">Weakest Accuracy</option></select>
             <input class="field" id="chapterSearch" style="width:160px" placeholder="Search..." oninput="debouncedChapterSearch()">
           </div>
         </div>
@@ -2567,6 +2800,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           <button type="button" class="btn btn-small" id="miUndoBtn" onclick="undoMockChange()" disabled title="Undo last mock change">↶ Undo</button>
           <button type="button" class="btn btn-small" id="miRedoBtn" onclick="redoMockChange()" disabled title="Redo mock change">↷ Redo</button>
+          <button type="button" class="btn btn-small btn-lime" onclick="switchMockTab('predictor')">🏆 Rank Predictor</button>
           <button type="button" class="btn btn-small btn-primary" onclick="switchMockTab('add')">+ Add Mock</button>
         </div>
       </div>
@@ -2580,7 +2814,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
         <button type="button" class="mi-tab-btn" data-mitab="mistakes" onclick="switchMockTab('mistakes')">5. Mistakes</button>
         <button type="button" class="mi-tab-btn" data-mitab="time" onclick="switchMockTab('time')">6. Time</button>
         <button type="button" class="mi-tab-btn" data-mitab="compare" onclick="switchMockTab('compare')">7. Compare &amp; Graphs</button>
-        <button type="button" class="mi-tab-btn" data-mitab="predictor" onclick="switchMockTab('predictor')">8. Score Predictor</button>
+        <button type="button" class="mi-tab-btn" data-mitab="predictor" onclick="switchMockTab('predictor')">8. Score &amp; Rank Predictor</button>
         <button type="button" class="mi-tab-btn" data-mitab="planner" onclick="switchMockTab('planner')">9. Improvement Plan</button>
         <button type="button" class="mi-tab-btn" data-mitab="history" onclick="switchMockTab('history')">10. History &amp; Reports</button>
       </div>
@@ -2743,7 +2977,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
           <!-- B. Optional Expandable Detailed Entry -->
           <details class="mi-accordion" id="miDetailedEntryBox" style="margin-top:14px">
             <summary>
-              <span>🔬 Detailed Diagnostic Entry <small class="muted">(Optional: Subject Breakdown, Time, Mistakes &amp; Question Logs)</small></span>
+              <span>🔬 Detailed Diagnostic Entry <small class="muted">(Optional: Subject Breakdown, Time, Mistakes &amp; Time)</small></span>
               <span class="tag cyan">EXPAND</span>
             </summary>
             <div class="mi-accordion-body">
@@ -2779,16 +3013,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
               <label class="field-label">MISTAKE / PAPER REFLECTION NOTES</label>
               <input class="field" id="misNotes" placeholder="e.g. Rushed Organic Chemistry in last 20 mins, misread 3 assertion-reason Qs">
 
-              <div class="field-label" style="margin-top:14px">OPTIONAL QUESTION-LEVEL LOGS (LIGHTWEIGHT)</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-                <input class="field" type="number" id="qlNum" style="width:70px" placeholder="Q#" min="1" max="200">
-                <select class="field" id="qlSubj" style="width:auto"><option>Physics</option><option>Chemistry</option><option>Botany</option><option>Zoology</option></select>
-                <input class="field" id="qlChapter" list="chapterSuggestions" style="flex:1;min-width:140px" placeholder="Chapter (optional)">
-                <select class="field" id="qlStatus" style="width:auto"><option value="wrong">Wrong</option><option value="skipped">Skipped</option><option value="correct">Correct</option></select>
-                <select class="field" id="qlReason" style="width:auto"><option value="Conceptual">Conceptual</option><option value="Silly">Silly</option><option value="Time Pressure">Time Pressure</option><option value="Guessing">Guessing</option></select>
-                <button type="button" class="btn btn-small btn-primary" onclick="addDraftQuestionLog()">+ Add Q</button>
-              </div>
-              <div id="draftQuestionLogsList" class="small muted" style="margin-top:8px"></div>
+
             </div>
           </details>
 
@@ -3126,7 +3351,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
               <div>
                 <div style="font:700 12.5px 'Space Grotesk',sans-serif">Smart Reminders & Alerts</div>
-                <div class="small muted" id="alertPermStatus">Background worker + chime + vibration + notification</div>
+                <div class="small muted" id="alertPermStatus">Free Chrome / Desktop / PWA &amp; Android notifications + chime</div>
               </div>
               <div style="display:flex;gap:6px;flex-wrap:wrap">
                 <button type="button" class="btn btn-small btn-primary" onclick="requestAlertPermission(true)">Enable</button>
@@ -3235,7 +3460,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
 
           <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.5 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.6 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
         </div>
       </div>
@@ -3254,7 +3479,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.5 · Built for personal study tracking. Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.6 · Built for personal study tracking. Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -3270,7 +3495,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
 
 <!-- Active Recall Flashcard Modal -->
 <div class="modal-overlay" id="flashcardModal" role="dialog" aria-modal="true" style="z-index:270" onclick="if(event.target===this)closeFlashcardMode()">
-  <div class="modal-box fc-modal-box">
+  <div class="modal-card fc-modal-box">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
       <div>
         <div class="eyebrow">ACTIVE RECALL ENGINE</div>
@@ -3285,6 +3510,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
           <option value="all">All (Notes + NCERT Facts)</option>
           <option value="notes">My Chapter Notes</option>
           <option value="facts">Cleaned NCERT Facts</option>
+          <option value="starred">★ Starred / Tricky Facts</option>
         </select>
         <select class="field" id="fcSubjectFilter" style="width:auto;padding:7px 10px;font-size:12px" onchange="buildFlashcardDeck()">
           <option value="All">All Subjects</option>
@@ -3294,6 +3520,7 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
         </select>
       </div>
       <div style="display:flex;gap:6px">
+        <button type="button" class="btn btn-small" id="fcStarBtn" onclick="toggleStarCurrentFlashcard()" title="Bookmark tricky NCERT fact">☆ Star</button>
         <button type="button" class="btn btn-small" onclick="shuffleFlashcards()" title="Shuffle deck">🔀 Shuffle</button>
       </div>
     </div>
@@ -3338,6 +3565,59 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
   </div>
 </div>
 
+
+<!-- Digital OMR Sprint Sheet Modal (Zero Cloud Storage) -->
+<div class="modal-overlay" id="omrSprintModal" role="dialog" aria-modal="true" style="z-index:280" onclick="if(event.target===this)closeOmrSprintModal()">
+  <div class="modal-card" style="max-width:680px;max-height:90vh;overflow-y:auto">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">ZERO-CLOUD SPRINT SHEET</div>
+        <h3 class="modal-title" style="margin:2px 0 0">📝 Interactive Digital OMR Sheet</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closeOmrSprintModal()" aria-label="Close">✕</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:10px 0">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn btn-small btn-primary" id="omrSize45Btn" onclick="initOmrSheet(45)">45 Qs (Subject)</button>
+        <button type="button" class="btn btn-small" id="omrSize180Btn" onclick="initOmrSheet(180)">180 Qs (Full NEET)</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;font:700 12px 'DM Mono',monospace">
+        <span class="tag cyan" id="omrClockTag">00:00</span>
+        <span class="tag lime" id="omrAttemptedTag">0 / 45 Att</span>
+        <span class="tag pink" id="omrPaceWarnTag" style="display:none">⚠ >90s on Q!</span>
+      </div>
+    </div>
+    <div id="omrGridHost" class="omr-grid"></div>
+    <div class="modal-actions" style="justify-content:space-between;flex-wrap:wrap">
+      <button type="button" class="btn btn-small btn-danger" onclick="resetOmrSheet()">Reset Bubbles</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn btn-lime" onclick="sendOmrToMockAnalytics()">↗ Send to Mock Analytics</button>
+        <button type="button" class="btn" onclick="closeOmrSprintModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 60-Second Box Breathing Reset Modal -->
+<div class="modal-overlay" id="boxBreathingModal" role="dialog" aria-modal="true" style="z-index:285" onclick="if(event.target===this)closeBoxBreathingModal()">
+  <div class="modal-card" style="max-width:400px;text-align:center">
+    <div class="eyebrow">EXAM-ANXIETY RESET</div>
+    <h3 class="modal-title" style="margin:4px 0 2px">60-Second Box Breathing</h3>
+    <div class="small muted" id="breathCountdownLbl">60s remaining · Inhale 4s · Hold 4s · Exhale 4s · Hold 4s</div>
+    <div class="breath-ring-wrap">
+      <svg class="breath-svg" width="180" height="180" viewBox="0 0 180 180">
+        <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(97,217,245,0.2)" stroke-width="4"/>
+        <circle class="b-ring" id="breathSvgCircle" cx="90" cy="90" r="36" fill="rgba(97,217,245,0.22)" stroke="#61d9f5" stroke-width="4"/>
+        <text id="breathPhaseText" x="90" y="95" text-anchor="middle" fill="#edf4ff" font-size="16" font-weight="700" font-family="Space Grotesk,sans-serif">READY</text>
+      </svg>
+    </div>
+    <div class="modal-actions" style="justify-content:center">
+      <button type="button" class="btn btn-primary" id="breathStartBtn" onclick="startBoxBreathing()">▶ Start 60s Reset</button>
+      <button type="button" class="btn" onclick="closeBoxBreathingModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Focus Mode Overlay -->
 <div class="focus-overlay" id="focusOverlay" role="dialog" aria-modal="true">
   <div class="focus-shell">
@@ -3353,7 +3633,17 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
         <button type="button" class="btn" style="border-color:var(--orange);color:var(--orange)" onclick="startBreakStopwatch()">☕ Take a Break</button>
         <button type="button" class="btn" id="focusAmbientBtn" onclick="toggleAmbientMusic()">🎵 Music: Off</button>
         <button type="button" class="btn btn-lime" onclick="finishFocusSession()">End & Save</button>
+        <button type="button" class="btn" style="border-color:var(--cyan);color:var(--cyan)" onclick="openBoxBreathingModal()">🌬 Breathe</button>
+        <button type="button" class="btn" onclick="openPureFullscreenTimer()" title="Pure Fullscreen Timer">⛶ Fullscreen</button>
         <button type="button" class="btn btn-danger" onclick="closeFocus()">Exit Focus</button>
+      </div>
+      <div class="parking-lot-box">
+        <div class="eyebrow" style="margin-bottom:6px">THOUGHT PARKING LOT (DUMP DISTRACTIONS WITHOUT LEAVING FOCUS)</div>
+        <div style="display:flex;gap:6px">
+          <input class="field" id="focusParkingInput" placeholder="e.g. Check NCERT p. 214 Krebs ATP..." onkeydown="if(event.key==='Enter')addParkedThought()">
+          <button type="button" class="btn btn-small btn-primary" onclick="addParkedThought()">+ Park</button>
+        </div>
+        <div id="focusParkingList" style="margin-top:6px"></div>
       </div>
     </div>
     <div id="focusBreakView" style="display:none">
@@ -3372,6 +3662,12 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
       </div>
     </div>
   </div>
+</div>
+
+<!-- Pure Fullscreen Timer Overlay (Nothing except Timer + Close) -->
+<div class="pure-fs-overlay" id="pureFullscreenTimer" role="dialog" aria-modal="true" aria-label="Fullscreen Timer">
+  <button type="button" class="pure-fs-close" onclick="closePureFullscreenTimer()" aria-label="Close Fullscreen">✕</button>
+  <div class="pure-fs-time" id="pureFsTimerDisplay">50:00</div>
 </div>
 
 <!-- Generic Confirm / Practice Modal -->
@@ -3554,6 +3850,10 @@ body.light .mi-stat-card { background: rgba(15, 23, 42, .025); }
         <h3 class="modal-title" style="margin:4px 0 0">Share Report to Parent</h3>
       </div>
       <button type="button" class="modal-close-x" onclick="closeShareParentModal()" aria-label="Close report sharing window" title="Close">✕</button>
+    </div>
+    <div style="display:flex;gap:6px;margin:10px 0">
+      <button type="button" class="btn btn-small btn-primary" id="prModeDailyBtn" onclick="setParentReportMode('daily')">Today (Daily)</button>
+      <button type="button" class="btn btn-small" id="prModeWeeklyBtn" onclick="setParentReportMode('weekly')">This Week (7-Day Chart)</button>
     </div>
     <canvas id="parentReportCanvas" width="760" height="440" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block;margin-bottom:12px;"></canvas>
     <label class="field-label">PLAIN-TEXT SUMMARY</label>
@@ -3880,28 +4180,30 @@ const KEY = "neet_command_centre_2027_v2";
 const CHAPTER_STATUS_OPTIONS = ["Not started", "Theory Done", "Questions Done", "PYQ done", "Completed"];
 
 const DYNAMIC_TIPS = [
-  "Turn off your Wi-Fi during a focus session to avoid distractions.",
-  "You can now track your rest time with the new Break Stopwatch!",
-  "Share your UID from the Settings page so your friends can add you as a Study Friend.",
-  "Check the Weakness Heatmap in the Intelligence Hub to see which chapters need more revision.",
-  "The Virtual Library shows exactly how many NEET aspirants are focusing right now.",
-  "Use the 'Close my day' button to track your most common mistakes and fix them tomorrow.",
-  "Use the 'Export Backup' button to save a hard copy of your data before switching phones.",
-  "The 4-Pillar Predictor uses your mock scores and chapter practice to estimate your NEET score.",
-  "Adding a chapter to the Revision Queue helps you remember when to study it next.",
-  "Use the 'Missions' tab to deploy daily tasks and track your execution rate.",
-  "Check the Leaderboard to see who studied the most this week.",
-  "The Smart Revision Engine prioritizes chapters where your practice accuracy is low.",
-  "Read the daily NCERT facts to keep your biology, chemistry, and physics knowledge fresh.",
-  "You can add past missions to previous dates if you forgot to log them.",
-  "Clicking a chapter's multiselect pills lets you track Theory, Questions, and PYQs independently.",
-  "A solid daily streak on your dashboard is built by recording at least one study session a day.",
-  "Your 'Best Study Hours' chart helps you figure out when your brain is most productive.",
-  "Use the 'Share Report to Parent' button to send your daily summary to your parents.",
-  "Custom part-syllabus tests don't mess up your full mock averages.",
-  "The Backlog Detector warns you if you have overdue revisions or missed missions.",
-  "Customize your Overview page in Settings — toggle any section on or off and reorder the sequence however you like.",
-  "Set your Daily Reading Target from any circular progress card (or Settings) to track your study hours and % goal live."
+  "Use the Re-NEET 2026 Rank Predictor in Mock Analytics to see your expected AIR, category rank, and how +20 marks changes your rank.",
+  "Tap ⛶ Fullscreen inside Study Timer or Focus Mode for a completely clean clock with zero distractions.",
+  "Switch to Flowmodoro (Count-Up) mode when you're in deep focus and don't want a countdown interrupting your flow.",
+  "Train your brain during the real 2:00 – 5:00 PM NEET window with the Bio-Clock Trainer and 180-minute Exam Simulation.",
+  "Practice bubbling speed on the Digital OMR Sprint Sheet — it alerts you whenever you spend over 90 seconds on a single question.",
+  "Use the Thought Parking Lot inside Focus Mode to dump distracting thoughts and check them after your session.",
+  "Feeling anxious before a mock test or Physics set? Try the 60-second Box Breathing reset inside Focus Mode.",
+  "Sort Chapter Tracker by 'Highest Weightage Unfinished' to focus on high-mark NEET chapters first.",
+  "Study late past midnight? Set your Custom Day Reset Time (12 AM – 5 AM) in Settings so late-night hours still count toward today.",
+  "Flip through NCERT Facts and your Chapter Notes as Active Recall Flashcards, and ★ star tricky facts into your own revision deck.",
+  "Use 'Roll Over Yesterday' or pin 🔁 Daily Habits in Missions so recurring study routines appear automatically.",
+  "Enable free Browser Notifications in Settings so Chrome or your installed desktop web app alerts you when timers or breaks end.",
+  "Test the interactive '+4 / -1 What-If' slider in Mock Reports to see how cutting silly mistakes jumps your score.",
+  "Use 'Close My Day' every night and review your Past Reflections in Study History to fix recurring mistakes.",
+  "Check the Weakness Heatmap in Mock Analytics to spot chapters with low practice accuracy before your next test.",
+  "Share your UID from Settings so friends can add you as a Study Friend and appear in Focusing Now.",
+  "Use 'Share Report to Parent' to send a clean Today or 7-Day Weekly chart summary straight to your parents.",
+  "Click a chapter's Theory, Questions, and PYQ pills independently to track true exam readiness.",
+  "Custom part-syllabus tests stay separate so they never skew your full 720-mark mock averages.",
+  "Reorder your Daily Missions anytime using the ↑ / ↓ buttons to tackle your toughest task first.",
+  "Customize your Overview page in Settings — toggle any section on or off and rearrange the order to fit your workflow.",
+  "Export a Backup JSON from Settings before switching phones so your entire study history stays safe.",
+  "Adding a weak chapter to the Revision Queue lets Spaced Repetition automatically schedule your next review date.",
+  "Add this website to your Home Screen (iOS / macOS / Windows) for a native full-screen app experience with the 720 logo."
 ];
 
 const defaultChapters = [
@@ -3947,9 +4249,9 @@ const defaultChapters = [
   ["Chemistry","Class 12","Principles Related to Practical Chemistry"]
 ];
 
-const NCERT_FACTS = {"bio":[["XI Ch 1: The Living World","Ernst Mayr (1904–2004), born on 5 July 1904 in Kempten, Germany, is known as 'The Darwin of the 20th century'."],["XI Ch 1: The Living World","Ernst Mayr pioneered the currently accepted biological concept of species and made the origin of species diversity the central question of evolutionary biology."],["XI Ch 1: The Living World","Ernst Mayr was awarded the 'triple crown of biology': the Balzan Prize (1983), the International Prize for Biology (1994), and the Crafoord Prize (1999)."],["XI Ch 1: The Living World","The number of species that are known and described ranges between 1.7–1.8 million, which refers to biodiversity."],["XI Ch 1: The Living World","ICBN stands for International Code for Botanical Nomenclature, which provides agreed principles and criteria for naming plants."],["XI Ch 1: The Living World","ICZN stands for International Code of Zoological Nomenclature, evolved by animal taxonomists for naming animals."],["XI Ch 1: The Living World","Binomial nomenclature, given by Carolus Linnaeus, is the system of providing a scientific name with two components: Generic name and specific epithet."],["XI Ch 1: The Living World","In Mangifera indica Linn., Mangifera represents the genus, indica is the specific epithet, and Linn. indicates the species was first described by Linnaeus."],["XI Ch 1: The Living World","Biological names are generally in Latin and printed in italics, or separately underlined when handwritten to indicate their Latin origin."],["XI Ch 1: The Living World","The first word denoting the genus starts with a capital letter, while the specific epithet starts with a small letter."]],"chem":[["XI Ch 1: Some Basic Concepts of Chemistry","Matter Classification: Pure substances have fixed composition (elements, compounds); mixtures have variable composition (homogeneous solutions or heterogeneous). ▸ Pure: Fixed ratio; Mixture: Variable ratio"],["XI Ch 1: Some Basic Concepts of Chemistry","SI Base Units in Chemistry: Seven SI base units include metre (m), kilogram (kg), second (s), ampere (A), kelvin (K), mole (mol, 6.022×10^23 entities), and candela (cd). ▸ 1 mol = 6.02214076 × 10^23 elementary entities"],["XI Ch 1: Some Basic Concepts of Chemistry","Mass vs Weight & Volume Conversions: Mass is constant matter content (SI unit kg), while weight W = mg varies with gravity; 1 L = 1 dm^3 = 1000 cm^3 = 10^-3 m^3. ▸ 1 m^3 = 10^3 L = 10^6 cm^3 (mL)"],["XI Ch 1: Some Basic Concepts of Chemistry","Temperature Scale Conversions: Kelvin temperature relates to Celsius as T(K) = t(°C) + 273.15, and Fahrenheit relates to Celsius as °F = (9/5)°C + 32. ▸ °F = 1.8(°C) + 32; −40°C = −40°F"],["XI Ch 1: Some Basic Concepts of Chemistry","Significant Figures Rules: All non-zero digits and captive zeros are significant. ▸ 0.002050 has 4 sig. figs; 2.50 × 10^3 has 3 sig. figs"],["XI Ch 1: Some Basic Concepts of Chemistry","Precision vs Accuracy: Precision reflects closeness among repeated measurements of the same quantity. ▸ Small random spread ⇒ High precision; Zero systematic bias ⇒ High accuracy"],["XI Ch 1: Some Basic Concepts of Chemistry","Rounding Off Rules in Calculations: In multiplication/division, keep as many significant figures as the factor with fewest sig. figs. ▸ Digit 5 rule: Preceding odd digit rounds up (+1), even stays unchanged"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Conservation of Mass (Lavoisier, 1789): In all physical and chemical changes (ignoring nuclear mass defect), the total mass of products equals the total mass of reactants. ▸ ∑ m_reactants = ∑ m_products"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Definite Proportions (Proust, 1799): A given chemical compound always contains the exact same constituent elements combined together in the same fixed proportion. ▸ Pure H2O always has m(H) : m(O) = 1 : 8 by mass"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Multiple Proportions (Dalton, 1803): When two elements combine to form more than one compound. ▸ CO (12:16) vs CO2 (12:32) ⇒ Oxygen ratio = 16 : 32 = 1 : 2"]],"phy":[["XI Ch 1: Units and Measurement","Seven Base SI Units: The seven fundamental SI quantities and units are length (m), mass (kg), time (s), electric current (A), thermodynamic temperature (K), luminous intensity (cd), and amount of substance (mol). Nbase = 7"],["XI Ch 1: Units and Measurement","Plane Angle Radian: Plane angle dθ is the ratio of arc length ds to radius r; it is a dimensionless supplementary SI quantity measured in radians (rad). dθ = ds / r (1 rad = 180° / π ≈ 57.3°)"],["XI Ch 1: Units and Measurement","Solid Angle Steradian: Solid angle dΩ is the ratio of intercepted spherical surface area dA to the square of radius r, measured in steradians (sr). dΩ = dA / r (Ωsphere = 4π sr)"],["XI Ch 1: Units and Measurement","Significant Figures Rules: All non-zero digits and zeros trapped between non-zero digits are significant; leading zeros are never significant, whereas trailing zeros are significant only when a decimal point is present. 0.002308 → 4 sig. figs; 2.30 × 10 → 3 sig. figs"],["XI Ch 1: Units and Measurement","Arithmetic Rounding Rule: In multiplication or division, the final result retains as many significant figures as the input measurement with the fewest significant figures; in addition or subtraction, it retains the fewest decimal places. Rmult/div → min(sig. figs); Radd/sub → min(decimal places)"],["XI Ch 1: Units and Measurement","Rounding Preceding Digit: When dropping a digit equal to 5 followed only by zeros, the preceding digit is raised by 1 if it is odd and left unchanged if it is even. 2.745 → 2.74 (even); 2.735 → 2.74 (odd)"],["XI Ch 1: Units and Measurement","Principle of Homogeneity: Only physical quantities having identical dimensional formulas can be added, subtracted, or equated on opposite sides of a valid physical equation. [A + B] ⇒ [A] = [B]"],["XI Ch 1: Units and Measurement","Trigonometric and Exp Arguments: The arguments of trigonometric, logarithmic, and exponential functions are strictly dimensionless numbers with zero exponents in mass, length, and time. [ωt] = [θ] = [kx] = [MLT]"],["XI Ch 1: Units and Measurement","Force and Energy Dimensions: Force has dimensions of mass times acceleration, while work, torque, and all forms of energy share the same dimensional formula. [F] = [MLT]; [W] = [τ] = [E] = [MLT]"],["XI Ch 1: Units and Measurement","Pressure and Stress Dimensions: Pressure, mechanical stress, Young's modulus, bulk modulus,shear modulus, and energy density all share identical dimensions of force per unit area. [P] = [σ] = [Y] = [B] = [uE] = [MLT]"]]};
+const NCERT_FACTS = {"bio":[["XI Ch 1: The Living World","Ernst Mayr (1904–2004), born on 5 July 1904 in Kempten, Germany, is known as 'The Darwin of the 20th century'."],["XI Ch 1: The Living World","Ernst Mayr pioneered the currently accepted biological concept of species and made the origin of species diversity the central question of evolutionary biology."],["XI Ch 1: The Living World","Ernst Mayr was awarded the 'triple crown of biology': the Balzan Prize (1983), the International Prize for Biology (1994), and the Crafoord Prize (1999)."],["XI Ch 1: The Living World","The number of species that are known and described ranges between 1.7–1.8 million, which refers to biodiversity."],["XI Ch 1: The Living World","ICBN stands for International Code for Botanical Nomenclature, which provides agreed principles and criteria for naming plants."],["XI Ch 1: The Living World","ICZN stands for International Code of Zoological Nomenclature, evolved by animal taxonomists for naming animals."],["XI Ch 1: The Living World","Binomial nomenclature, given by Carolus Linnaeus, is the system of providing a scientific name with two components: Generic name and specific epithet."],["XI Ch 1: The Living World","In Mangifera indica Linn., Mangifera represents the genus, indica is the specific epithet, and Linn. indicates the species was first described by Linnaeus."],["XI Ch 1: The Living World","Biological names are generally in Latin and printed in italics, or separately underlined when handwritten to indicate their Latin origin."],["XI Ch 1: The Living World","The first word denoting the genus starts with a capital letter, while the specific epithet starts with a small letter."]],"chem":[["XI Ch 1: Some Basic Concepts of Chemistry","Matter Classification: Pure substances have fixed composition (elements, compounds); mixtures have variable composition (homogeneous solutions or heterogeneous). ▸ Pure: Fixed ratio; Mixture: Variable ratio"],["XI Ch 1: Some Basic Concepts of Chemistry","SI Base Units in Chemistry: Seven SI base units include metre (m), kilogram (kg), second (s), ampere (A), kelvin (K), mole (mol, 6.022×10^23 entities), and candela (cd). ▸ 1 mol = 6.02214076 × 10^23 elementary entities"],["XI Ch 1: Some Basic Concepts of Chemistry","Mass vs Weight & Volume Conversions: Mass is constant matter content (SI unit kg), while weight W = mg varies with gravity; 1 L = 1 dm^3 = 1000 cm^3 = 10^-3 m^3. ▸ 1 m^3 = 10^3 L = 10^6 cm^3 (mL)"],["XI Ch 1: Some Basic Concepts of Chemistry","Temperature Scale Conversions: Kelvin temperature relates to Celsius as T(K) = t(°C) + 273.15, and Fahrenheit relates to Celsius as °F = (9/5)°C + 32. ▸ °F = 1.8(°C) + 32; −40°C = −40°F"],["XI Ch 1: Some Basic Concepts of Chemistry","Significant Figures Rules: All non-zero digits and captive zeros are significant. ▸ 0.002050 has 4 sig. figs; 2.50 × 10^3 has 3 sig. figs"],["XI Ch 1: Some Basic Concepts of Chemistry","Precision vs Accuracy: Precision reflects closeness among repeated measurements of the same quantity. ▸ Small random spread ⇒ High precision; Zero systematic bias ⇒ High accuracy"],["XI Ch 1: Some Basic Concepts of Chemistry","Rounding Off Rules in Calculations: In multiplication/division, keep as many significant figures as the factor with fewest sig. figs. ▸ Digit 5 rule: Preceding odd digit rounds up (+1), even stays unchanged"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Conservation of Mass (Lavoisier, 1789): In all physical and chemical changes (ignoring nuclear mass defect), the total mass of products equals the total mass of reactants. ▸ ∑ m_reactants = ∑ m_products"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Definite Proportions (Proust, 1799): A given chemical compound always contains the exact same constituent elements combined together in the same fixed proportion. ▸ Pure H2O always has m(H) : m(O) = 1 : 8 by mass"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Multiple Proportions (Dalton, 1803): When two elements combine to form more than one compound. ▸ CO (12:16) vs CO2 (12:32) ⇒ Oxygen ratio = 16 : 32 = 1 : 2"]],"phy":[["XI Ch 1: Units and Measurement","Seven Base SI Units: The seven fundamental SI quantities and units are length (m), mass (kg), time (s), electric current (A), thermodynamic temperature (K), luminous intensity (cd), and amount of substance (mol). Nbase = 7"],["XI Ch 1: Units and Measurement","Plane Angle Radian: Plane angle dθ is the ratio of arc length ds to radius r; it is a dimensionless supplementary SI quantity measured in radians (rad). dθ = ds / r (1 rad = 180° / π ≈ 57.3°)"],["XI Ch 1: Units and Measurement","Solid Angle Steradian: Solid angle dΩ is the ratio of intercepted spherical surface area dA to the square of radius r, measured in steradians (sr). dΩ = dA / r² (Ωsphere = 4π sr)"],["XI Ch 1: Units and Measurement","Significant Figures Rules: All non-zero digits and zeros trapped between non-zero digits are significant; leading zeros are never significant, whereas trailing zeros are significant only when a decimal point is present. 0.002308 → 4 sig. figs; 2.30 × 10⁴ → 3 sig. figs"],["XI Ch 1: Units and Measurement","Arithmetic Rounding Rule: In multiplication or division, the final result retains as many significant figures as the input measurement with the fewest significant figures; in addition or subtraction, it retains the fewest decimal places. Rmult/div → min(sig. figs); Radd/sub → min(decimal places)"],["XI Ch 1: Units and Measurement","Rounding Preceding Digit: When dropping a digit equal to 5 followed only by zeros, the preceding digit is raised by 1 if it is odd and left unchanged if it is even. 2.745 → 2.74 (even); 2.735 → 2.74 (odd)"],["XI Ch 1: Units and Measurement","Principle of Homogeneity: Only physical quantities having identical dimensional formulas can be added, subtracted, or equated on opposite sides of a valid physical equation. [A + B] ⇒ [A] = [B]"],["XI Ch 1: Units and Measurement","Force and Energy Dimensions: Force has dimensions of mass times acceleration, while work, torque, and all forms of energy share the same dimensional formula. [F] = [MLT⁻²]; [W] = [τ] = [E] = [ML²T⁻²]"],["XI Ch 1: Units and Measurement","Pressure and Stress Dimensions: Pressure, mechanical stress, Young's modulus, bulk modulus,shear modulus, and energy density all share identical dimensions of force per unit area. [P] = [σ] = [Y] = [B] = [uE] = [ML⁻¹T⁻²]"],["XI Ch 1: Units and Measurement","Surface Tension and Spring Constant: Surface tension S (force per unit length) and spring force constant k share identical dimensions. [S] = [k] = [F / L] = [MT]"]]};
 (function loadExternalNcertFacts() {
-  const CACHE_KEY = 'neet_ncert_facts_cache_v242';
+  const CACHE_KEY = 'neet_ncert_facts_cache_v26';
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
@@ -3976,14 +4278,11 @@ const NCERT_FACTS = {"bio":[["XI Ch 1: The Living World","Ernst Mayr (1904–200
 function localDateString(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
-const today = () => {
-  const now = new Date();
+function studyNow() {
   const resetHr = (typeof data !== "undefined" && data && data.settings) ? Math.max(0, Math.min(6, Number(data.settings.dayResetHour) || 0)) : 0;
-  if (resetHr > 0 && now.getHours() < resetHr) {
-    now.setDate(now.getDate() - 1);
-  }
-  return localDateString(now);
-};
+  return new Date(Date.now() - resetHr * 3600000);
+}
+const today = () => localDateString(studyNow());
 window.getLocalToday = today;
 
 const OVERVIEW_SECTIONS = [
@@ -4023,7 +4322,7 @@ function normalizeOverviewLayout(rawLayout, showDynamicTips) {
   return out;
 }
 function dateKey(d = new Date()) { return localDateString(d); }
-function getWeekKey(d = new Date()) {
+function getWeekKey(d = studyNow()) {
   const c = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const day = (c.getDay() + 6) % 7;
   c.setDate(c.getDate() - day);
@@ -4308,6 +4607,7 @@ function save(syncCloud = true) {
   } catch (e) {}
   if (syncCloud) {
     scheduleCloudSync();
+  if (typeof syncCapacitorDailyAlarms === 'function') { clearTimeout(window._capAlarmDebounce); window._capAlarmDebounce = setTimeout(() => syncCapacitorDailyAlarms(), 2500); }
   }
 }
 let _cloudSyncTimer = null;
@@ -4467,7 +4767,11 @@ function playAlertChime() {
 window.dismissAlertBanner = () => (document.getElementById("alertBanner") && document.getElementById("alertBanner").classList.remove("show"));
 
 /* === Capacitor Native Local Notifications Bridge (Offline & Locked-Screen Alarms for Android APK) === */
-const CAP_NOTIF_IDS = { TIMER: 1001, BREAK: 1002, NIGHT_REPORT: 1003, CONSISTENCY: 1004 };
+const CAP_NOTIF_IDS = {
+  TIMER: 1001, BREAK: 1002, NIGHT_REPORT: 1003, CONSISTENCY: 1004,
+  BIO_CLOCK: 1005, FIVE_PM: 1006, ALMOST_THERE: 1007, STREAK_RESCUE: 1008,
+  MORNING_BRIEF: 1009, MOCK_CADENCE: 1010, WEEKLY_AUDIT: 1011, MILESTONE: 1012
+};
 function getCapLocalNotif() {
   try {
     return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications
@@ -4528,30 +4832,150 @@ async function capCancelNotifications(ids) {
     await ln.cancel({ notifications: ids.map(id => ({ id: Number(id) })) });
   } catch (e) {}
 }
+let _capInitDone = false;
 async function syncCapacitorDailyAlarms() {
   const ln = getCapLocalNotif();
   if (!ln) return;
-  const rem = data.settings.reminders || {};
-  await capCancelNotifications([CAP_NOTIF_IDS.NIGHT_REPORT, CAP_NOTIF_IDS.CONSISTENCY]);
+  if (!_capInitDone) {
+    _capInitDone = await initCapacitorNotifications();
+  }
+  const rem = (data && data.settings && data.settings.reminders) || {};
+  const allDailyIds = [
+    CAP_NOTIF_IDS.NIGHT_REPORT, CAP_NOTIF_IDS.CONSISTENCY, CAP_NOTIF_IDS.BIO_CLOCK,
+    CAP_NOTIF_IDS.FIVE_PM, CAP_NOTIF_IDS.ALMOST_THERE, CAP_NOTIF_IDS.STREAK_RESCUE,
+    CAP_NOTIF_IDS.MORNING_BRIEF, CAP_NOTIF_IDS.MOCK_CADENCE, CAP_NOTIF_IDS.WEEKLY_AUDIT,
+    CAP_NOTIF_IDS.MILESTONE
+  ];
+  await capCancelNotifications(allDailyIds);
+
+  const toSchedule = [];
+  const targetMins = Math.max(15, Number(data.settings.dailyTargetMinutes) || 360);
+  const loggedToday = typeof minsToday === "function" ? minsToday() : 0;
+  const pctToday = Math.round((loggedToday / targetMins) * 100);
+  const now = new Date();
+
+  const pushAtTodayOrTomorrow = (id, title, body, hour, minute, repeats = true) => {
+    toSchedule.push({
+      id, title, body, channelId: "neet_alerts",
+      schedule: { allowWhileIdle: true, on: { hour, minute }, repeats }
+    });
+  };
+
+  // 1. Night Parent Report
   if (rem.nightReport !== false) {
     const [hh, mm] = (rem.nightReportTime || "22:30").split(":").map(Number);
-    await capScheduleNotification({
-      id: CAP_NOTIF_IDS.NIGHT_REPORT,
-      title: "Time for Night Parent Report 📤",
-      body: "Close your day and share today's NEET study report with your parents.",
-      on: { hour: Number.isFinite(hh) ? hh : 21, minute: Number.isFinite(mm) ? mm : 30 },
-      repeats: true
-    });
+    pushAtTodayOrTomorrow(
+      CAP_NOTIF_IDS.NIGHT_REPORT,
+      "Time for Night Parent Report 📤",
+      "Close your day and share today's NEET study report with your parents.",
+      Number.isFinite(hh) ? hh : 22, Number.isFinite(mm) ? mm : 30, true
+    );
   }
+
+  // 2. 2:00 PM Bio-Clock Kickoff (1:55 PM daily)
+  pushAtTodayOrTomorrow(
+    CAP_NOTIF_IDS.BIO_CLOCK,
+    "NEET Bio-Clock Window in 5 Mins 🎯",
+    "Official NEET window (2:00–5:00 PM) starts at 2:00 PM. Start a deep session or mock to train afternoon focus.",
+    13, 55, true
+  );
+
+  // 3. 5:00 PM Halfway Target Check (if < 50% of daily target done)
+  if (pctToday < 50) {
+    const at5 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
+    if (at5.getTime() > Date.now()) {
+      toSchedule.push({
+        id: CAP_NOTIF_IDS.FIVE_PM,
+        title: "5:00 PM Study Check-In ⚡",
+        body: `You're at ${pctToday}% of your daily study target. Lock in an evening session to cross 50%+!`,
+        channelId: "neet_alerts",
+        schedule: { allowWhileIdle: true, at: at5 }
+      });
+    }
+  }
+
+  // 4. "Almost There" Daily Target Nudge (8:30 PM — only if 70–99% done)
+  if (pctToday >= 70 && pctToday < 100) {
+    const remMins = Math.max(1, targetMins - loggedToday);
+    const at830 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 20, 30, 0);
+    if (at830.getTime() > Date.now()) {
+      toSchedule.push({
+        id: CAP_NOTIF_IDS.ALMOST_THERE,
+        title: "Almost There! 🎯",
+        body: `Only ${remMins} mins left to hit 100% of your ${(targetMins / 60).toFixed(1)}h daily target!`,
+        channelId: "neet_alerts",
+        schedule: { allowWhileIdle: true, at: at830 }
+      });
+    }
+  }
+
+  // 5. Custom dayResetHour Streak Rescue (90 mins before configured reset hour)
   if (rem.consistency !== false) {
-    await capScheduleNotification({
-      id: CAP_NOTIF_IDS.CONSISTENCY,
-      title: "NEET Study Streak Check 🔥",
-      body: "Check your daily study target and keep your streak alive!",
-      on: { hour: 19, minute: 0 },
-      repeats: true
+    const resetHr = Math.max(0, Math.min(6, Number(data.settings.dayResetHour) || 0));
+    const rescueTotalMins = ((resetHr * 60) - 90 + 1440) % 1440;
+    const rH = Math.floor(rescueTotalMins / 60), rM = rescueTotalMins % 60;
+    pushAtTodayOrTomorrow(
+      CAP_NOTIF_IDS.STREAK_RESCUE,
+      "Streak Rescue Alert 🔥",
+      "90 mins before your study day resets — log a quick session to keep your streak alive!",
+      rH, rM, true
+    );
+  }
+
+  // 6. High-Weightage Morning Brief (8:00 AM)
+  const td = typeof today === "function" ? today() : localDateString(now);
+  const dueRevs = (data.revisions || []).filter(r => !r.done && r.date <= td).slice(0, 2);
+  const briefBody = dueRevs.length
+    ? "Morning Brief: " + dueRevs.map(r => {
+        const w = typeof getChapterWeightage === "function" ? getChapterWeightage(r.topic, r.subject) : "";
+        return w ? `${r.topic} (${w})` : r.topic;
+      }).join(" & ") + " due for revision today."
+    : "Morning Brief: Check your top-priority missions & high-weightage chapters for today!";
+  pushAtTodayOrTomorrow(CAP_NOTIF_IDS.MORNING_BRIEF, "NEET Morning Brief ☀️", briefBody, 8, 0, true);
+
+  // 7. Mock Test Cadence Reminder (Saturday 7:00 PM if >14 days since last Full Mock)
+  const fullMocks = (data.mocks || []).filter(m => !m.type || m.type === "full").sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+  const lastMockDate = fullMocks.length ? fullMocks[fullMocks.length - 1].date : null;
+  const daysSinceMock = lastMockDate ? Math.floor((Date.now() - Date.parse(lastMockDate + "T00:00:00")) / 86400000) : 99;
+  if (daysSinceMock > 14) {
+    toSchedule.push({
+      id: CAP_NOTIF_IDS.MOCK_CADENCE,
+      title: "Full Mock Test Due 📝",
+      body: lastMockDate ? `It's been ${daysSinceMock} days since your last Full Mock — block tomorrow 2:00 PM for a 720-mark test.` : "Block 2:00–5:00 PM tomorrow for your first 720-mark NEET Full Mock!",
+      channelId: "neet_alerts",
+      schedule: { allowWhileIdle: true, on: { weekday: 7, hour: 19, minute: 0 }, repeats: true }
     });
   }
+
+  // 8. Sunday Weekly Audit (Sunday 8:00 PM)
+  toSchedule.push({
+    id: CAP_NOTIF_IDS.WEEKLY_AUDIT,
+    title: "Sunday Weekly Audit 📊",
+    body: "Review your weekly study hours, share your Weekly Parent Report, and export a JSON backup.",
+    channelId: "neet_alerts",
+    schedule: { allowWhileIdle: true, on: { weekday: 1, hour: 20, minute: 0 }, repeats: true }
+  });
+
+  // 9. Countdown Milestone Alert (365, 200, 150, 100, 60, 30, 15, 7, 1 days left)
+  const exDateStr = (data.settings && data.settings.examDate) || "2027-05-02";
+  const daysLeft = Math.ceil((Date.parse(exDateStr + "T14:00:00") - Date.now()) / 86400000);
+  const milestones = [365, 200, 150, 100, 60, 30, 15, 7, 1];
+  if (milestones.includes(daysLeft)) {
+    const at9 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    if (at9.getTime() > Date.now()) {
+      toSchedule.push({
+        id: CAP_NOTIF_IDS.MILESTONE,
+        title: `${daysLeft} Days to NEET! ⏳`,
+        body: `Major countdown milestone: ${daysLeft} day${daysLeft === 1 ? "" : "s"} left. Stay locked in on high-weightage NCERT chapters!`,
+        channelId: "neet_alerts",
+        schedule: { allowWhileIdle: true, at: at9 }
+      });
+    }
+  }
+
+  try {
+    if (toSchedule.length) await ln.schedule({ notifications: toSchedule });
+  } catch (e) {}
 }
 
 function dispatchSystemNotification(title, message) {
@@ -4573,6 +4997,8 @@ function dispatchSystemNotification(title, message) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
   const opts = {
     body: message,
+    icon: "./icon-192.png",
+    badge: "./icon-192.png",
     tag: "neet-cmd-alert-" + Date.now(),
     renotify: true,
     requireInteraction: true,
@@ -4985,7 +5411,7 @@ function playDoomsdayTick(force = false) {
     const bus = ctx.createGain();
     bus.gain.setValueAtTime(0.95, now);
     bus.connect(ctx.destination);
-    if (_tickReverb) bus.connect(_tickReverb);
+    if (_tickReverb && !(data && data.settings && data.settings.liteMode)) bus.connect(_tickReverb);
 
     // Layer 1: Crisp iron escapement snap (band-passed mechanical transient)
     const snapSrc = ctx.createBufferSource();
@@ -5192,7 +5618,7 @@ window.validateIncomingLbMinutes = (val, maxCap) => {
 
 function currentStreak() {
   const days = new Set(data.sessions.map(s => s.date));
-  let d = new Date(), streak = 0;
+  let d = studyNow(), streak = 0;
   if (!days.has(dateKey(d))) d.setDate(d.getDate() - 1);
   while (days.has(dateKey(d))) { streak++; d.setDate(d.getDate() - 1); }
   return streak;
@@ -5270,6 +5696,7 @@ function missionHTML(m, date = today(), idx = -1, total = 0) {
     <button type="button" class="check ${m.done ? "done" : ""}" onclick="toggleMission(${m.id},'${date}')">✓</button>
     <div class="item-main"><strong style="${m.done ? "text-decoration:line-through;color:var(--muted)" : ""}">${esc(m.name || m.text || "")}</strong><small>${esc(m.subject)} · ${esc(m.priority || "Normal")}</small></div>
     ${orderBtns}
+    <button type="button" class="icon-btn btn-small" onclick="toggleMissionDailyHabit(${m.id},'${date}')" title="Pin as Daily Habit (auto-adds every morning)" style="${m.dailyHabit ? 'border-color:var(--lime);color:var(--lime)' : ''}">🔁</button>
     <button type="button" class="icon-btn btn-small" onclick="openEditMissionModal(${m.id},'${date}')" title="Edit mission">✎</button>
     <button type="button" class="icon-btn btn-small" onclick="deleteMission(${m.id},'${date}')" title="Delete mission">×</button>
   </div>`;
@@ -5312,7 +5739,7 @@ window.saveEditedMission = () => {
   save(); closeEditMissionModal(); renderMissions(); renderDashboard(); notify("Mission updated!");
 };
 function daysAgoStr(n) {
-  const d = new Date();
+  const d = studyNow();
   d.setDate(d.getDate() - n);
   return localDateString(d);
 }
@@ -5410,7 +5837,60 @@ function renderMissionHistory() {
     </div>`;
   }).join("");
 }
+function ensureDailyHabitsPopulated() {
+  const td = today();
+  const habits = (data.settings && Array.isArray(data.settings.dailyHabits)) ? data.settings.dailyHabits : [];
+  if (!habits.length) return;
+  if (!Array.isArray(data.missions[td])) data.missions[td] = [];
+  const existingNames = new Set(data.missions[td].map(m => (m.name || "").trim().toLowerCase()));
+  let added = false;
+  habits.forEach((h, i) => {
+    const key = (h.name || "").trim().toLowerCase();
+    if (key && !existingNames.has(key)) {
+      data.missions[td].push({ id: Date.now() + i + 1, name: h.name, subject: h.subject || "Biology", priority: h.priority || "High", done: false, dailyHabit: true });
+      existingNames.add(key);
+      added = true;
+    }
+  });
+  if (added) save();
+}
+window.toggleMissionDailyHabit = (id, date) => {
+  const arr = getMissions(date);
+  const m = arr.find(x => x.id === id); if (!m) return;
+  m.dailyHabit = !m.dailyHabit;
+  if (!Array.isArray(data.settings.dailyHabits)) data.settings.dailyHabits = [];
+  const key = (m.name || "").trim().toLowerCase();
+  if (m.dailyHabit) {
+    if (!data.settings.dailyHabits.some(h => (h.name || "").trim().toLowerCase() === key)) {
+      data.settings.dailyHabits.push({ name: m.name, subject: m.subject, priority: m.priority });
+    }
+    notify("Pinned as a Daily Habit — auto-adds every morning!");
+  } else {
+    data.settings.dailyHabits = data.settings.dailyHabits.filter(h => (h.name || "").trim().toLowerCase() !== key);
+    notify("Removed from Daily Habits.");
+  }
+  save(); renderMissions(); renderDashboard();
+};
+window.rollOverYesterdayMissions = () => {
+  const yStr = daysAgoStr(1), tStr = today();
+  const yUnfinished = getMissions(yStr).filter(m => !m.done);
+  if (!yUnfinished.length) return notify("No unfinished missions from yesterday!");
+  if (!Array.isArray(data.missions[tStr])) data.missions[tStr] = [];
+  const existing = new Set(data.missions[tStr].map(m => (m.name || "").trim().toLowerCase()));
+  let count = 0;
+  yUnfinished.forEach((m, i) => {
+    const k = (m.name || "").trim().toLowerCase();
+    if (!existing.has(k)) {
+      data.missions[tStr].push({ id: Date.now() + i + 1, name: m.name, subject: m.subject, priority: m.priority, done: false, dailyHabit: Boolean(m.dailyHabit) });
+      existing.add(k); count++;
+    }
+  });
+  if (!count) return notify("Yesterday's unfinished missions are already in today's list.");
+  save(); setMissionBoardDate(tStr); renderDashboard();
+  notify(`Carried forward ${count} unfinished mission${count === 1 ? "" : "s"} to today!`);
+};
 function renderMissions() {
+  ensureDailyHabitsPopulated();
   const di = document.getElementById("missionDate");
   const bd = document.getElementById("missionBoardDate");
   if (di && !di.value) di.value = today();
@@ -5541,6 +6021,7 @@ function showTimer() {
     document.getElementById("timerDisplay").textContent = txt;
     document.getElementById("timerProgress").style.width = pct + "%";
     document.getElementById("focusDisplay").textContent = txt;
+    const pfs1 = document.getElementById("pureFsTimerDisplay"); if (pfs1) pfs1.textContent = txt;
     document.getElementById("focusProgress").style.width = pct + "%";
     const hintEl = document.getElementById("flowHintPill");
     if (hintEl) {
@@ -5560,6 +6041,7 @@ function showTimer() {
   document.getElementById("timerDisplay").textContent = txt;
   document.getElementById("timerProgress").style.width = pct + "%";
   document.getElementById("focusDisplay").textContent = txt;
+  const pfs2 = document.getElementById("pureFsTimerDisplay"); if (pfs2) pfs2.textContent = txt;
   document.getElementById("focusProgress").style.width = pct + "%";
 }
 function stopTimer() {
@@ -5575,11 +6057,27 @@ function tickTimer() {
     if (!data.timer.startedAt) return;
     flowElapsed = Math.max(0, Math.floor((Date.now() - data.timer.startedAt) / 1000));
     data.timer.flowElapsed = flowElapsed;
+    // 60-min Flowmodoro pacing chime & 20-20-20 eye-rest micro-nudge
+    const hrMark = Math.floor(flowElapsed / 3600);
+    if (hrMark > 0 && hrMark !== (window._lastFlowHrChime || 0)) {
+      window._lastFlowHrChime = hrMark;
+      triggerAppAlert(`${hrMark * 60}m Flow Hit!`, `Take a ${hrMark * 12}m earned break or keep rolling.`, "🔔");
+    }
+    const eyeMark = Math.floor(flowElapsed / 1200);
+    if (eyeMark > 0 && eyeMark !== (window._lastEyeMark || 0)) {
+      window._lastEyeMark = eyeMark;
+      notify("20-20-20 Eye Rest: Look 20 ft away for 20 seconds.");
+    }
     showTimer();
     return;
   }
   if (!data.timer.endAt) return;
   timerRemaining = Math.max(0, Math.ceil((data.timer.endAt - Date.now()) / 1000));
+  if (window._neetExamSimActive) {
+    if (timerRemaining <= 1800 && !window._examBell30) { window._examBell30 = true; triggerAppAlert("Exam Bell: 30 Mins Left", "30 minutes remaining in your 180-min NEET Simulation.", "🔔"); }
+    if (timerRemaining <= 600 && !window._examBell10) { window._examBell10 = true; triggerAppAlert("Exam Bell: 10 Mins Left", "10 minutes remaining — wrap up remaining questions.", "🔔"); }
+    if (timerRemaining <= 300 && !window._examBell5) { window._examBell5 = true; triggerAppAlert("Exam Bell: 5 Mins Left (OMR Check)", "Final 5 minutes — double-check all OMR bubbles!", "🔔"); }
+  }
   showTimer();
   if (timerRemaining <= 0) {
     if (data.timer.completedSaved) { stopTimer(); return; }
@@ -6154,94 +6652,107 @@ window.removeChapter = (id) => {
   data.chapters = data.chapters.filter(x => x.id !== id);
   save(); renderChapters(); renderDashboard();
 };
-/* ALLEN NEET 2027 Chapter-wise Weightage Lookup (from user-provided ALLEN tables) */
+/* ALLEN NEET 2027 Chapter-wise Weightage Lookup (keyed by "subject::chapter name") */
 const CHAPTER_WEIGHTAGE_MAP = {
-  // Physics (1001042405.jpg)
-  "units and measurements": "2% (~1 Q)",
-  "motion in a straight line": "2% (~1 Q)",
-  "motion in a plane": "2% (~1 Q)",
-  "laws of motion": "7% (~3 Qs)",
-  "work, energy and power": "4% (~2 Qs)",
-  "system of particles and rotational motion": "7% (~3 Qs)",
-  "gravitation": "3% (~2 Qs)",
-  "mechanical properties of solids": "3% (~2 Qs)",
-  "mechanical properties of fluids": "3% (~2 Qs)",
-  "thermal properties of matter": "2% (~1 Q)",
-  "thermodynamics": "7% (~3 Qs)",
-  "kinetic theory": "2% (~1 Q)",
-  "oscillations": "3% (~1 Q)",
-  "waves": "4% (~2 Qs)",
-  "electric charges and fields": "2% (~1 Q)",
-  "electrostatic potential and capacitance": "2% (~1 Q)",
-  "current electricity": "6% (~3 Qs)",
-  "moving charges and magnetism": "6% (~3 Qs)",
-  "magnetism and matter": "6% (~3 Qs)",
-  "electromagnetic induction": "2% (~1 Q)",
-  "alternating current": "3% (~1 Q)",
-  "electromagnetic waves": "1% (~1 Q)",
-  "ray optics and optical instruments": "5% (~3 Qs)",
-  "wave optics": "4% (~2 Qs)",
-  "dual nature of radiation and matter": "4% (~2 Qs)",
-  "atoms": "5% unit (~2 Qs)",
-  "nuclei": "5% unit (~2 Qs)",
-  "semiconductor electronics": "6% (~3 Qs)",
-  // Chemistry (1001042407.jpg)
-  "some basic concepts of chemistry": "5% (~2 Qs)",
-  "structure of atom": "2% (~1 Q)",
-  "classification of elements and periodicity": "4% (~2 Qs)",
-  "chemical bonding and molecular structure": "8% (~4 Qs)",
-  "chemical thermodynamics": "2% (~1 Q)",
-  "equilibrium": "6% (~3 Qs)",
-  "redox reactions": "2% (~1 Q)",
-  "organic chemistry: basic principles and techniques": "4% (~2 Qs)",
-  "hydrocarbons": "3% (~2 Qs)",
-  "solutions": "4% (~2 Qs)",
-  "electrochemistry": "3% (~1 Q)",
-  "chemical kinetics": "4% (~2 Qs)",
-  "d- and f-block elements": "3% (~2 Qs)",
-  "coordination compounds": "5% (~2 Qs)",
-  "haloalkanes and haloarenes": "3% (~2 Qs)",
-  "alcohols, phenols and ethers": "3% (~2 Qs)",
-  "aldehydes, ketones and carboxylic acids": "3% (~2 Qs)",
-  "amines": "3% (~2 Qs)",
-  "p-block elements": "6% (~3 Qs)",
-  "principles related to practical chemistry": "2% (~1 Q)",
-  // Biology (1001042409.jpg — Botany & Zoology unit/chapter weightages)
-  "the living world": "12% unit (~7 Qs)",
-  "biological classification": "12% unit (~7 Qs)",
-  "plant kingdom": "12% unit (~7 Qs)",
-  "animal kingdom": "10% (~3 Qs)",
-  "morphology of flowering plants": "7% (~4 Qs)",
-  "anatomy of flowering plants": "4% (~2 Qs)",
-  "structural organisation in animals": "5% (~2 Qs)",
-  "cell: the unit of life": "10% unit (~6 Qs)",
-  "cell cycle and cell division": "10% unit (~6 Qs)",
-  "biomolecules": "3% (~2 Qs)",
-  "photosynthesis in higher plants": "14% unit (~8 Qs)",
-  "respiration in plants": "14% unit (~8 Qs)",
-  "plant growth and development": "14% unit (~8 Qs)",
-  "breathing and exchange of gases": "45% unit (~13 Qs)",
-  "body fluids and circulation": "45% unit (~13 Qs)",
-  "excretory products and their elimination": "45% unit (~13 Qs)",
-  "locomotion and movement": "45% unit (~13 Qs)",
-  "neural control and coordination": "45% unit (~13 Qs)",
-  "chemical coordination and integration": "45% unit (~13 Qs)",
-  "sexual reproduction in flowering plants": "9% (~5 Qs)",
-  "human reproduction": "16% unit (~5 Qs)",
-  "reproductive health": "16% unit (~5 Qs)",
-  "principles of inheritance and variation": "25% unit (~15 Qs)",
-  "molecular basis of inheritance": "25% unit (~15 Qs)",
-  "evolution": "10% (~3 Qs)",
-  "human health and disease": "9% (~3 Qs)",
-  "microbes in human welfare": "2% (~1 Q)",
-  "biotechnology: principles and processes": "25% unit (~15 Qs)",
-  "biotechnology and its applications": "25% unit (~15 Qs)",
-  "organisms and populations": "16% unit (~10 Qs)",
-  "ecosystem": "16% unit (~10 Qs)",
-  "biodiversity and conservation": "16% unit (~10 Qs)"
+  // Physics
+  "physics::units and measurements": { label: "2% (~1 Q)", pct: 2 },
+  "physics::motion in a straight line": { label: "2% (~1 Q)", pct: 2 },
+  "physics::motion in a plane": { label: "2% (~1 Q)", pct: 2 },
+  "physics::laws of motion": { label: "7% (~3 Qs)", pct: 7 },
+  "physics::work, energy and power": { label: "4% (~2 Qs)", pct: 4 },
+  "physics::system of particles and rotational motion": { label: "7% (~3 Qs)", pct: 7 },
+  "physics::gravitation": { label: "3% (~2 Qs)", pct: 3 },
+  "physics::mechanical properties of solids": { label: "3% (~2 Qs)", pct: 3 },
+  "physics::mechanical properties of fluids": { label: "3% (~2 Qs)", pct: 3 },
+  "physics::thermal properties of matter": { label: "2% (~1 Q)", pct: 2 },
+  "physics::thermodynamics": { label: "7% (~3 Qs)", pct: 7 },
+  "physics::kinetic theory": { label: "2% (~1 Q)", pct: 2 },
+  "physics::oscillations": { label: "3% (~1 Q)", pct: 3 },
+  "physics::waves": { label: "4% (~2 Qs)", pct: 4 },
+  "physics::electric charges and fields": { label: "2% (~1 Q)", pct: 2 },
+  "physics::electrostatic potential and capacitance": { label: "2% (~1 Q)", pct: 2 },
+  "physics::current electricity": { label: "6% (~3 Qs)", pct: 6 },
+  "physics::moving charges and magnetism": { label: "6% (~3 Qs)", pct: 6 },
+  "physics::magnetism and matter": { label: "6% (~3 Qs)", pct: 6 },
+  "physics::electromagnetic induction": { label: "2% (~1 Q)", pct: 2 },
+  "physics::alternating current": { label: "3% (~1 Q)", pct: 3 },
+  "physics::electromagnetic waves": { label: "1% (~1 Q)", pct: 1 },
+  "physics::ray optics and optical instruments": { label: "5% (~3 Qs)", pct: 5 },
+  "physics::wave optics": { label: "4% (~2 Qs)", pct: 4 },
+  "physics::dual nature of radiation and matter": { label: "4% (~2 Qs)", pct: 4 },
+  "physics::atoms": { label: "5% unit (~2 Qs)", pct: 3 },
+  "physics::nuclei": { label: "5% unit (~2 Qs)", pct: 2 },
+  "physics::semiconductor electronics": { label: "6% (~3 Qs)", pct: 6 },
+  // Chemistry (includes exact defaultChapters names + aliases)
+  "chemistry::some basic concepts of chemistry": { label: "5% (~2 Qs)", pct: 5 },
+  "chemistry::structure of atom": { label: "2% (~1 Q)", pct: 2 },
+  "chemistry::classification of elements and periodicity": { label: "4% (~2 Qs)", pct: 4 },
+  "chemistry::chemical bonding": { label: "8% (~4 Qs)", pct: 8 },
+  "chemistry::chemical bonding and molecular structure": { label: "8% (~4 Qs)", pct: 8 },
+  "chemistry::chemical thermodynamics": { label: "2% (~1 Q)", pct: 2 },
+  "chemistry::equilibrium": { label: "6% (~3 Qs)", pct: 6 },
+  "chemistry::redox reactions": { label: "2% (~1 Q)", pct: 2 },
+  "chemistry::organic chemistry: basic principles": { label: "4% (~2 Qs)", pct: 4 },
+  "chemistry::organic chemistry: basic principles and techniques": { label: "4% (~2 Qs)", pct: 4 },
+  "chemistry::hydrocarbons": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::solutions": { label: "4% (~2 Qs)", pct: 4 },
+  "chemistry::electrochemistry": { label: "3% (~1 Q)", pct: 3 },
+  "chemistry::chemical kinetics": { label: "4% (~2 Qs)", pct: 4 },
+  "chemistry::d- and f-block elements": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::coordination compounds": { label: "5% (~2 Qs)", pct: 5 },
+  "chemistry::haloalkanes and haloarenes": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::alcohols, phenols and ethers": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::aldehydes, ketones and carboxylic acids": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::amines": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::p-block elements": { label: "6% (~3 Qs)", pct: 6 },
+  "chemistry::biomolecules": { label: "3% (~2 Qs)", pct: 3 },
+  "chemistry::principles related to practical chemistry": { label: "2% (~1 Q)", pct: 2 },
+  // Biology (Botany & Zoology)
+  "biology::the living world": { label: "12% unit (~7 Qs)", pct: 4 },
+  "biology::biological classification": { label: "12% unit (~7 Qs)", pct: 4 },
+  "biology::plant kingdom": { label: "12% unit (~7 Qs)", pct: 4 },
+  "biology::animal kingdom": { label: "10% (~3 Qs)", pct: 10 },
+  "biology::morphology of flowering plants": { label: "7% (~4 Qs)", pct: 7 },
+  "biology::anatomy of flowering plants": { label: "4% (~2 Qs)", pct: 4 },
+  "biology::structural organisation in animals": { label: "5% (~2 Qs)", pct: 5 },
+  "biology::cell: the unit of life": { label: "10% unit (~6 Qs)", pct: 5 },
+  "biology::cell cycle and cell division": { label: "10% unit (~6 Qs)", pct: 5 },
+  "biology::biomolecules": { label: "3% Bio (~2 Qs)", pct: 3 },
+  "biology::photosynthesis in higher plants": { label: "14% unit (~8 Qs)", pct: 5 },
+  "biology::respiration in plants": { label: "14% unit (~8 Qs)", pct: 4.5 },
+  "biology::plant growth and development": { label: "14% unit (~8 Qs)", pct: 4.5 },
+  "biology::breathing and exchange of gases": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::body fluids and circulation": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::excretory products and their elimination": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::locomotion and movement": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::neural control and coordination": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::chemical coordination and integration": { label: "45% unit (~13 Qs)", pct: 7.5 },
+  "biology::sexual reproduction in flowering plants": { label: "9% (~5 Qs)", pct: 9 },
+  "biology::human reproduction": { label: "16% unit (~5 Qs)", pct: 8 },
+  "biology::reproductive health": { label: "16% unit (~5 Qs)", pct: 8 },
+  "biology::principles of inheritance and variation": { label: "25% unit (~15 Qs)", pct: 12.5 },
+  "biology::molecular basis of inheritance": { label: "25% unit (~15 Qs)", pct: 12.5 },
+  "biology::evolution": { label: "10% (~3 Qs)", pct: 10 },
+  "biology::human health and disease": { label: "9% (~3 Qs)", pct: 9 },
+  "biology::microbes in human welfare": { label: "2% (~1 Q)", pct: 2 },
+  "biology::biotechnology: principles and processes": { label: "25% unit (~15 Qs)", pct: 8 },
+  "biology::biotechnology and its applications": { label: "25% unit (~15 Qs)", pct: 8 },
+  "biology::organisms and populations": { label: "16% unit (~10 Qs)", pct: 5.5 },
+  "biology::ecosystem": { label: "16% unit (~10 Qs)", pct: 5.5 },
+  "biology::biodiversity and conservation": { label: "16% unit (~10 Qs)", pct: 5 }
 };
-function getChapterWeightage(name) {
-  return CHAPTER_WEIGHTAGE_MAP[(name || "").trim().toLowerCase()] || "";
+function getChapterWeightageInfo(name, subject = "") {
+  const n = (name || "").trim().toLowerCase();
+  const s = (subject || "").trim().toLowerCase();
+  if (s && CHAPTER_WEIGHTAGE_MAP[`${s}::${n}`]) return CHAPTER_WEIGHTAGE_MAP[`${s}::${n}`];
+  for (const subj of ["biology", "chemistry", "physics"]) {
+    if (CHAPTER_WEIGHTAGE_MAP[`${subj}::${n}`]) return CHAPTER_WEIGHTAGE_MAP[`${subj}::${n}`];
+  }
+  return null;
+}
+function getChapterWeightage(name, subject = "") {
+  const info = getChapterWeightageInfo(name, subject);
+  return info ? info.label : "";
 }
 
 function renderChapters() {
@@ -6263,6 +6774,15 @@ function renderChapters() {
   if (sort === "prio_desc") list.sort((a, b) => (prioRank[b.priority || "None"] || 0) - (prioRank[a.priority || "None"] || 0));
   if (sort === "rev_desc") list.sort((a, b) => (b.revisionCount || 0) - (a.revisionCount || 0));
   if (sort === "sol_desc") list.sort((a, b) => (b.solvedCount || 0) - (a.solvedCount || 0));
+  if (sort === "weight_unfinished") {
+    list.sort((a, b) => {
+      const aDone = isChapterCompleted(a) ? 1 : 0, bDone = isChapterCompleted(b) ? 1 : 0;
+      if (aDone !== bDone) return aDone - bDone;
+      const aw = (getChapterWeightageInfo(a.name, a.subject) || { pct: 0 }).pct;
+      const bw = (getChapterWeightageInfo(b.name, b.subject) || { pct: 0 }).pct;
+      return bw - aw;
+    });
+  }
   if (sort === "acc_asc") list.sort((a, b) => ((chapterAccuracy(a) != null ? chapterAccuracy(a) : 999)) - ((chapterAccuracy(b) != null ? chapterAccuracy(b) : 999)));
 
   const done = data.chapters.filter(isChapterCompleted).length;
@@ -6273,6 +6793,17 @@ function renderChapters() {
   document.getElementById("chapterRingNum").textContent = pct + "%";
   document.getElementById("chapterRing").style.setProperty("--angle", pct * 3.6 + "deg");
   document.getElementById("chapterDoneCount").textContent = `${done} / ${data.chapters.length}`;
+  const wmEl = document.getElementById("chapterWeightedMarksText");
+  if (wmEl) {
+    let totW = 0, doneW = 0;
+    data.chapters.forEach(ch => {
+      const w = (getChapterWeightageInfo(ch.name, ch.subject) || { pct: 1 }).pct;
+      totW += w;
+      if (isChapterCompleted(ch)) doneW += w;
+    });
+    const wPct = totW > 0 ? Math.round((doneW / totW) * 100) : 0;
+    wmEl.textContent = `~${wPct}% of NEET weighted marks covered`;
+  }
   document.getElementById("chapterPyqCount").textContent = `${pyq} PYQ done`;
   document.getElementById("chapterTotalRevised").textContent = data.chapters.reduce((a, c) => a + (c.revisionCount || 0), 0) + "× Rev";
   document.getElementById("chapterTotalSolved").textContent = data.chapters.reduce((a, c) => a + (c.solvedCount || 0), 0) + "× Sol";
@@ -6308,7 +6839,7 @@ function renderChapters() {
     return `
     <div class="chapter-item">
       <div class="item-main">
-        <strong>${esc(c.name)} <span class="small muted" style="font-weight:600">(${progPct}%)</span>${getChapterWeightage(c.name) ? ` <span class="tag cyan" style="font-size:9px;padding:2px 6px;margin-left:4px" title="NEET Weightage (ALLEN)">⚖ ${esc(getChapterWeightage(c.name))}</span>` : ""}</strong>
+        <strong>${esc(c.name)} <span class="small muted" style="font-weight:600">(${progPct}%)</span>${getChapterWeightage(c.name, c.subject) ? ` <span class="tag cyan" style="font-size:9px;padding:2px 6px;margin-left:4px" title="NEET Weightage (ALLEN)">⚖ ${esc(getChapterWeightage(c.name, c.subject))}</span>` : ""}</strong>
         <small>${esc(c.subject)} · ${esc(c.level)}${c.notes ? " · 📝 " + esc(c.notes.slice(0, 48)) + (c.notes.length > 48 ? "…" : "") : ""}</small>
         <div class="ch-mini-bar"><div class="ch-mini-fill" style="width:${progPct}%"></div></div>
         <div class="ch-meta-pills">${accTag}${confTag}${revTag}</div>
@@ -6370,7 +6901,7 @@ window.autoSetRevisionDateFromConfidence = () => {
   }
 };
 window.setRevisionDateOffset = (days) => {
-  const d = new Date(); d.setDate(d.getDate() + days);
+  const d = studyNow(); d.setDate(d.getDate() + days);
   const el = document.getElementById("revisionDate");
   if (el) el.value = dateKey(d);
 };
@@ -6919,7 +7450,7 @@ window.addMock = () => {
   if (hasSubjStats === true) record.subjectStats = subjectStats;
   if (totalTimeMins !== null && totalTimeMins > 0) record.totalTimeMins = totalTimeMins;
   if (mistakes) record.mistakes = mistakes;
-  if (_miDraftQLogs.length) record.questionLogs = _miDraftQLogs.slice();
+  
 
   pushMockUndoSnapshot();
   data.mocks.push(record);
@@ -7618,7 +8149,8 @@ function renderMockPredictor(full) {
   const p = MockCalc.predictNEET(full);
   if (!p.sufficient) {
     if (badge) badge.textContent = "INSUFFICIENT DATA";
-    host.innerHTML = `<div class="empty">Insufficient full mock data (${p.count} / 2 full mocks logged). Log at least 2 Full NEET Mocks (720 marks) to generate a statistical estimate. Part tests are never treated as full NEET scores.</div>`;
+    host.innerHTML = `<div class="empty">Insufficient full mock data (${p.count} / 2 full mocks logged). Log at least 2 Full NEET Mocks (720 marks) to generate a statistical estimate — meanwhile, use the Re-NEET 2026 Rank Predictor below with any score!</div>`;
+    renderRankPredictorWidget(host, full.length ? full[full.length - 1].total : (data.settings.targetScore || 650));
     return;
   }
   if (badge) badge.textContent = `${p.reliability.toUpperCase()} · ${p.count} MOCKS`;
@@ -7636,6 +8168,7 @@ function renderMockPredictor(full) {
     </div>
     <p class="small muted section-gap">Statistical estimate based on your last 3 avg (${p.avg3}), last 5 avg (${p.avg5}), and score consistency. This is a diagnostic projection, not a guaranteed NEET exam score.</p>
   `;
+  renderRankPredictorWidget(host, p.current);
 }
 
 /* 9. Automatic Improvement Planner (Confirmation-Gated Integrations) */
@@ -7845,6 +8378,14 @@ window.openMockReportModal = (id) => {
   if (prev) {
     const diff = m.total - prev.total;
     htmlParts.push(`<div class="mi-report-section"><div class="eyebrow">6. COMPARISON WITH PREVIOUS MOCK</div><div class="small" style="margin-top:6px">vs <strong>${esc(prev.name)}</strong> (${prev.total}/720): <strong style="color:${diff >= 0 ? "var(--lime)" : "var(--pink)"}">${diff >= 0 ? "+" : ""}${diff} marks</strong></div></div>`);
+  }
+  if (inc !== null && inc > 0) {
+    htmlParts.push(`<div class="whatif-box">
+      <div class="eyebrow" style="color:var(--lime)">INTERACTIVE "+4 / -1" WHAT-IF SIMULATOR</div>
+      <div class="small" style="margin:6px 0">If I had skipped <strong id="whatIfPctLbl">50%</strong> of my ${inc} wrong guesses (<strong id="whatIfSkipCnt">${Math.round(inc * 0.5)}</strong> Qs):</div>
+      <input type="range" class="range-slider" id="whatIfSlider" min="0" max="100" step="5" value="50" oninput="updateMockWhatIf(${m.total}, ${m.maxMarks || 720}, ${inc}, this.value)">
+      <div style="margin-top:8px;font:700 15px 'DM Mono',monospace;color:var(--lime)" id="whatIfResultTxt">New Score: ${Math.min(m.maxMarks || 720, m.total + Math.round(inc * 0.5))} / ${m.maxMarks || 720} (+${Math.round(inc * 0.5)} marks saved!)</div>
+    </div>`);
   }
   document.getElementById("mockReportBody").innerHTML = htmlParts.join("");
   document.getElementById("mockReportModal").classList.add("open");
@@ -8239,6 +8780,20 @@ function buildFlashcardDeck() {
   }
 
   // 2. Cleaned NCERT Facts (sample up to 45 shuffled cards per session so it stays snappy)
+  if (src === "starred") {
+    const sf = (data.settings && data.settings.starredFacts) || { bio: [], chem: [], phy: [] };
+    [{ key: "bio", label: "Biology" }, { key: "chem", label: "Chemistry" }, { key: "phy", label: "Physics" }].forEach(({ key, label }) => {
+      if (subjFilter !== "All" && subjFilter !== label) return;
+      const arr = (NCERT_FACTS && Array.isArray(NCERT_FACTS[key])) ? NCERT_FACTS[key] : [];
+      (sf[key] || []).forEach(idx => {
+        if (arr[idx]) {
+          const card = makeFactFlashcard(label, arr[idx][0], arr[idx][1]);
+          card.subjKey = key; card.factIdx = idx;
+          cards.push(card);
+        }
+      });
+    });
+  }
   if (src === "all" || src === "facts") {
     const subjMap = [
       { key: "bio", label: "Biology" },
@@ -8249,14 +8804,18 @@ function buildFlashcardDeck() {
     subjMap.forEach(({ key, label }) => {
       if (subjFilter !== "All" && subjFilter !== label) return;
       const arr = (NCERT_FACTS && Array.isArray(NCERT_FACTS[key])) ? NCERT_FACTS[key] : [];
-      arr.forEach(item => factPool.push({ label, ch: item[0], text: item[1] }));
+      arr.forEach((item, idx) => factPool.push({ key, idx, label, ch: item[0], text: item[1] }));
     });
     // Fisher-Yates sample up to 45 facts
     for (let i = factPool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [factPool[i], factPool[j]] = [factPool[j], factPool[i]];
     }
-    factPool.slice(0, 45).forEach(f => cards.push(makeFactFlashcard(f.label, f.ch, f.text)));
+    factPool.slice(0, 45).forEach(f => {
+      const card = makeFactFlashcard(f.label, f.ch, f.text);
+      card.subjKey = f.key; card.factIdx = f.idx;
+      cards.push(card);
+    });
   }
 
   fcDeck = cards;
@@ -8311,6 +8870,18 @@ function renderFlashcard() {
   document.getElementById("fcBackChapter").textContent = c.chapter;
   document.getElementById("fcBackBody").innerHTML = c.backHtml;
   if (counterEl) counterEl.textContent = `Card ${fcIndex + 1} / ${fcDeck.length}`;
+  const starBtn = document.getElementById("fcStarBtn");
+  if (starBtn) {
+    if (c.subjKey && typeof c.factIdx === "number") {
+      starBtn.style.display = "inline-flex";
+      const sf = (data.settings && data.settings.starredFacts) || { bio: [], chem: [], phy: [] };
+      const starred = (sf[c.subjKey] || []).includes(c.factIdx);
+      starBtn.textContent = starred ? "★ Starred" : "☆ Star";
+      starBtn.classList.toggle("btn-lime", starred);
+    } else {
+      starBtn.style.display = "none";
+    }
+  }
   if (masteredEl) masteredEl.textContent = `Mastered: ${fcMastered}`;
   if (barEl) barEl.style.width = Math.round(((fcIndex) / fcDeck.length) * 100) + "%";
   if (revealRow) revealRow.style.display = "flex";
@@ -8725,6 +9296,8 @@ window.openShareParentModal = () => {
   const info = buildParentReportData();
   drawParentReportCanvas(info);
   document.getElementById("parentReportText").value = info.text;
+  _parentReportMode = "daily";
+  if (document.getElementById("prModeDailyBtn")) { document.getElementById("prModeDailyBtn").classList.add("btn-primary"); document.getElementById("prModeWeeklyBtn").classList.remove("btn-primary"); }
   document.getElementById("shareParentModal").classList.add("open");
 };
 window.closeShareParentModal = () => document.getElementById("shareParentModal").classList.remove("open");
@@ -8996,6 +9569,8 @@ window.clearData = () => {
 };
 
 function refreshAllViews() {
+  if (typeof renderStudyTimerInsights === 'function') renderStudyTimerInsights();
+  if (typeof renderParkedThoughts === 'function') renderParkedThoughts();
   updateDoctorDisplay();
   renderDashboard();
   renderMissions();
@@ -9452,6 +10027,309 @@ showTimer();
 refreshAllViews();
 window.addEventListener("resize", () => { if (document.getElementById("dashboard").classList.contains("active")) drawActivity(); });
 
+
+/* =========================================================================
+   v2.6 ZERO-COST FEATURES: BIO-CLOCK, SUBJECT BALANCE, OMR, BREATHING, PARKING LOT, PARENT WEEKLY
+   ========================================================================= */
+window.updateMockWhatIf = (baseScore, maxM, wrongCount, pct) => {
+  const skipped = Math.round(wrongCount * (Number(pct) / 100));
+  const newScore = Math.min(maxM, baseScore + skipped);
+  const pEl = document.getElementById("whatIfPctLbl");
+  const sEl = document.getElementById("whatIfSkipCnt");
+  const rEl = document.getElementById("whatIfResultTxt");
+  if (pEl) pEl.textContent = pct + "%";
+  if (sEl) sEl.textContent = skipped;
+  if (rEl) rEl.textContent = `New Score: ${newScore} / ${maxM} (+${skipped} marks saved!)`;
+};
+
+window.toggleStarCurrentFlashcard = () => {
+  if (!fcDeck.length || fcIndex >= fcDeck.length) return;
+  const c = fcDeck[fcIndex];
+  if (!c.subjKey || typeof c.factIdx !== "number") return;
+  if (!data.settings.starredFacts) data.settings.starredFacts = { bio: [], chem: [], phy: [] };
+  if (!Array.isArray(data.settings.starredFacts[c.subjKey])) data.settings.starredFacts[c.subjKey] = [];
+  const arr = data.settings.starredFacts[c.subjKey];
+  const pos = arr.indexOf(c.factIdx);
+  if (pos >= 0) { arr.splice(pos, 1); notify("Removed from Starred Facts."); }
+  else { arr.push(c.factIdx); notify("Saved to ★ Starred / Tricky Facts!"); }
+  save();
+  renderFlashcard();
+};
+
+/* Weekly Subject Balance Pill + NEET Bio-Clock Readiness (2:00 PM - 5:00 PM) */
+function renderStudyTimerInsights() {
+  // 1. Weekly Subject Balance
+  const host = document.getElementById("weeklySubjectBalanceHost");
+  if (host) {
+    const wkStart = getWeekKey(studyNow());
+    const wkSessions = (data.sessions || []).filter(s => s.date >= wkStart);
+    let bio = 0, chem = 0, phy = 0;
+    wkSessions.forEach(s => {
+      const m = Number(s.minutes) || 0;
+      if (s.subject === "Biology") bio += m;
+      else if (s.subject === "Chemistry") chem += m;
+      else if (s.subject === "Physics") phy += m;
+    });
+    const tot = bio + chem + phy;
+    if (tot <= 0) {
+      host.innerHTML = '<div class="eyebrow">WEEKLY SUBJECT BALANCE</div><div class="small muted" style="margin-top:3px">Log Biology, Chemistry &amp; Physics sessions this week to see your balance bar.</div>';
+    } else {
+      const bp = Math.round((bio / tot) * 100), cp = Math.round((chem / tot) * 100), pp = Math.max(0, 100 - bp - cp);
+      const lowWarn = pp < 20 ? '<span class="tag pink" style="font-size:9px">Physics &lt;20%</span>' : (cp < 20 ? '<span class="tag orange" style="font-size:9px">Chemistry &lt;20%</span>' : '<span class="tag lime" style="font-size:9px">Balanced</span>');
+      host.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span class="eyebrow">WEEKLY SUBJECT BALANCE</span>${lowWarn}</div>
+        <div class="subj-bal-bar"><div style="width:${bp}%;background:var(--lime)"></div><div style="width:${cp}%;background:var(--orange)"></div><div style="width:${pp}%;background:var(--cyan)"></div></div>
+        <div class="subj-bal-legend"><span style="color:var(--lime)">Bio ${bp}%</span><span style="color:var(--orange)">Chem ${cp}%</span><span style="color:var(--cyan)">Phy ${pp}%</span></div>`;
+    }
+  }
+  // 2. Bio-Clock Readiness (2:00 PM - 5:00 PM IST window)
+  const bcEl = document.getElementById("bioClockStatusText");
+  if (bcEl) {
+    const timed = (data.sessions || []).filter(s => s.timestamp && !s.manual);
+    if (!timed.length) {
+      bcEl.innerHTML = 'Readiness: <strong>--</strong> <span class="muted">(study between 2–5 PM to build exam stamina)</span>';
+    } else {
+      const inWindow = timed.filter(s => { const h = new Date(s.timestamp).getHours(); return h >= 14 && h < 17; });
+      const pct = Math.round((inWindow.length / timed.length) * 100);
+      bcEl.innerHTML = `Readiness: <strong style="color:${pct >= 30 ? "var(--lime)" : "var(--cyan)"}">${pct}%</strong> <span class="muted">(${inWindow.length}/${timed.length} timed sessions in 2–5 PM window)</span>`;
+    }
+  }
+}
+window.startNeetExamSim = () => {
+  if (timerRunning) return notify("Pause or End & Save your active session first.");
+  setTimerMode("countdown");
+  handleTimerDurationEdit(180);
+  const tEl = document.getElementById("timerTopic");
+  if (tEl && !tEl.value.trim()) tEl.value = "NEET Full Exam Simulation (180m)";
+  window._neetExamSimActive = true;
+  window._examBell30 = false; window._examBell10 = false; window._examBell5 = false;
+  startTimer();
+  notify("NEET 180-min Exam Simulation started with 30m, 10m & 5m OMR bell cues!");
+};
+
+/* Interactive Digital OMR Sprint Sheet (Zero Cloud Storage) */
+let _omrSize = 45, _omrAnswers = [], _omrStartAt = 0, _omrLastTapAt = 0, _omrTick = null;
+window.openOmrSprintModal = () => {
+  document.getElementById("omrSprintModal").classList.add("open");
+  if (!_omrAnswers.length) initOmrSheet(45);
+  startOmrClock();
+};
+window.closeOmrSprintModal = () => {
+  clearInterval(_omrTick); _omrTick = null;
+  document.getElementById("omrSprintModal").classList.remove("open");
+};
+window.initOmrSheet = (size) => {
+  _omrSize = size === 180 ? 180 : 45;
+  _omrAnswers = new Array(_omrSize).fill("");
+  _omrStartAt = Date.now();
+  _omrLastTapAt = Date.now();
+  document.getElementById("omrSize45Btn").classList.toggle("btn-primary", _omrSize === 45);
+  document.getElementById("omrSize180Btn").classList.toggle("btn-primary", _omrSize === 180);
+  renderOmrGrid();
+  startOmrClock();
+};
+window.resetOmrSheet = () => initOmrSheet(_omrSize);
+function startOmrClock() {
+  clearInterval(_omrTick);
+  _omrTick = setInterval(() => {
+    const sec = Math.floor((Date.now() - _omrStartAt) / 1000);
+    const m = Math.floor(sec / 60), s = sec % 60;
+    const cTag = document.getElementById("omrClockTag");
+    if (cTag) cTag.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    const qSec = Math.floor((Date.now() - _omrLastTapAt) / 1000);
+    const wTag = document.getElementById("omrPaceWarnTag");
+    if (wTag) wTag.style.display = qSec > 90 ? "inline-flex" : "none";
+  }, 500);
+}
+window.tapOmrBubble = (idx, opt) => {
+  _omrAnswers[idx] = (_omrAnswers[idx] === opt) ? "" : opt;
+  _omrLastTapAt = Date.now();
+  const wTag = document.getElementById("omrPaceWarnTag");
+  if (wTag) wTag.style.display = "none";
+  renderOmrGrid();
+};
+function renderOmrGrid() {
+  const host = document.getElementById("omrGridHost");
+  if (!host) return;
+  const att = _omrAnswers.filter(x => x && x !== "S").length;
+  const aTag = document.getElementById("omrAttemptedTag");
+  if (aTag) aTag.textContent = `${att} / ${_omrSize} Att`;
+  host.innerHTML = _omrAnswers.map((val, i) => {
+    const opts = ["A","B","C","D","S"];
+    return `<div class="omr-row"><span>Q${i + 1}</span><div style="display:flex;gap:3px">${opts.map(o => `<button type="button" class="omr-bub ${val === o ? "sel" : ""}" onclick="tapOmrBubble(${i},'${o}')">${o}</button>`).join("")}</div></div>`;
+  }).join("");
+}
+window.sendOmrToMockAnalytics = () => {
+  const att = _omrAnswers.filter(x => x && x !== "S").length;
+  const mins = Math.max(1, Math.round((Date.now() - _omrStartAt) / 60000));
+  closeOmrSprintModal();
+  navigate("mocks");
+  if (typeof switchMockTab === "function") switchMockTab("add");
+  const typeEl = document.getElementById("mockType");
+  if (typeEl) { typeEl.value = _omrSize === 180 ? "full" : "subject"; updateMockForm(); }
+  const attEl = document.getElementById("mockAttempted");
+  const tmEl = document.getElementById("mockTotalTime");
+  if (attEl) attEl.value = att;
+  if (tmEl) tmEl.value = mins;
+  updateLiveMockAccuracy();
+  _omrAnswers = []; // Discard bubbles (0 bytes stored in Firestore!)
+  notify(`Loaded ${att} attempted Qs & ${mins}m into Add Mock (bubbles discarded).`);
+};
+
+/* 60-Second Box Breathing (Exam-Anxiety Reset) */
+let _breathTimer = null, _breathLeft = 60;
+window.openBoxBreathingModal = () => {
+  document.getElementById("boxBreathingModal").classList.add("open");
+};
+window.closeBoxBreathingModal = () => {
+  clearInterval(_breathTimer); _breathTimer = null;
+  document.getElementById("boxBreathingModal").classList.remove("open");
+};
+window.startBoxBreathing = () => {
+  clearInterval(_breathTimer);
+  _breathLeft = 60;
+  const phases = [
+    { label: "INHALE", r: 72 },
+    { label: "HOLD", r: 72 },
+    { label: "EXHALE", r: 32 },
+    { label: "HOLD", r: 32 }
+  ];
+  const tickBreath = () => {
+    const elapsed = 60 - _breathLeft;
+    const p = phases[Math.floor(elapsed / 4) % 4];
+    const circ = document.getElementById("breathSvgCircle");
+    const txt = document.getElementById("breathPhaseText");
+    const lbl = document.getElementById("breathCountdownLbl");
+    if (circ) circ.setAttribute("r", String(p.r));
+    if (txt) txt.textContent = p.label;
+    if (lbl) lbl.textContent = `${_breathLeft}s remaining · ${p.label} (4s)`;
+    if (_breathLeft <= 0) {
+      clearInterval(_breathTimer); _breathTimer = null;
+      if (txt) txt.textContent = "RESET ✓";
+      if (lbl) lbl.textContent = "60-second reset complete. Ready to focus!";
+    }
+    _breathLeft--;
+  };
+  tickBreath();
+  _breathTimer = setInterval(tickBreath, 1000);
+};
+
+/* Focus Mode "Thought Parking Lot" (Local Only) */
+function getParkedThoughts() {
+  try { return JSON.parse(localStorage.getItem("neet_thought_parking") || "[]"); } catch (e) { return []; }
+}
+function saveParkedThoughts(arr) {
+  try { localStorage.setItem("neet_thought_parking", JSON.stringify(arr.slice(0, 15))); } catch (e) {}
+}
+function renderParkedThoughts() {
+  const host = document.getElementById("focusParkingList");
+  if (!host) return;
+  const arr = getParkedThoughts();
+  if (!arr.length) { host.innerHTML = '<div class="small muted">No parked thoughts. Keep your mind clear!</div>'; return; }
+  host.innerHTML = arr.map((txt, i) => `<div class="parking-item">
+    <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">${esc(txt)}</span>
+    <span style="display:inline-flex;gap:4px;flex-shrink:0">
+      <button type="button" class="btn btn-small btn-lime" onclick="promoteParkedToMission(${i})">+ Mission</button>
+      <button type="button" class="icon-btn btn-small" onclick="removeParkedThought(${i})">×</button>
+    </span>
+  </div>`).join("");
+}
+window.addParkedThought = () => {
+  const inp = document.getElementById("focusParkingInput");
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (!val) return;
+  const arr = getParkedThoughts();
+  arr.unshift(val);
+  saveParkedThoughts(arr);
+  inp.value = "";
+  renderParkedThoughts();
+};
+window.removeParkedThought = (idx) => {
+  const arr = getParkedThoughts();
+  arr.splice(idx, 1);
+  saveParkedThoughts(arr);
+  renderParkedThoughts();
+};
+window.promoteParkedToMission = (idx) => {
+  const arr = getParkedThoughts();
+  const txt = arr[idx]; if (!txt) return;
+  const td = today();
+  if (!Array.isArray(data.missions[td])) data.missions[td] = [];
+  data.missions[td].push({ id: Date.now(), name: txt, subject: "Revision", priority: "Normal", done: false });
+  arr.splice(idx, 1);
+  saveParkedThoughts(arr);
+  save(); renderMissions(); renderDashboard(); renderParkedThoughts();
+  notify("Promoted parked thought to Today's Missions!");
+};
+
+/* Share Report to Parent: Daily | Weekly Toggle with 7-Day Bar Chart */
+let _parentReportMode = "daily";
+window.setParentReportMode = (mode) => {
+  _parentReportMode = mode === "weekly" ? "weekly" : "daily";
+  const db = document.getElementById("prModeDailyBtn");
+  const wb = document.getElementById("prModeWeeklyBtn");
+  if (db) db.classList.toggle("btn-primary", _parentReportMode === "daily");
+  if (wb) wb.classList.toggle("btn-primary", _parentReportMode === "weekly");
+  if (_parentReportMode === "weekly") renderWeeklyParentReport();
+  else if (typeof openShareParentModal === "function") {
+    const r = buildParentReportData();
+    document.getElementById("parentReportText").value = r.text;
+    drawParentReportCanvas(r);
+  }
+};
+function renderWeeklyParentReport() {
+  const name = formatDoctorName(data.settings.name);
+  const days = [];
+  let totalWkMins = 0;
+  for (let i = 6; i >= 0; i--) {
+    const d = studyNow(); d.setDate(d.getDate() - i);
+    const k = localDateString(d);
+    const mins = (data.sessions || []).filter(s => s.date === k).reduce((a, s) => a + (Number(s.minutes) || 0), 0);
+    totalWkMins += mins;
+    days.push({ lbl: d.toLocaleDateString("en", { weekday: "short" }), mins });
+  }
+  const avgDaily = Math.round(totalWkMins / 7);
+  const streak = currentStreak();
+  const text = [
+    `NEET Weekly Study Report (Last 7 Days)`,
+    `Student: ${name}`,
+    `Total Weekly Study Time: ${formatStudyTime(totalWkMins)}`,
+    `Daily Average: ${formatStudyTime(avgDaily)} / day`,
+    `Current Streak: ${streak} day(s)`,
+    `7-Day Breakdown: ${days.map(x => `${x.lbl}: ${formatStudyTime(x.mins)}`).join(" | ")}`
+  ].join("\n");
+  document.getElementById("parentReportText").value = text;
+
+  const c = document.getElementById("parentReportCanvas");
+  if (!c) return;
+  const ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  ctx.fillStyle = "#081224"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#61d9f5"; ctx.font = "bold 14px monospace";
+  ctx.fillText("NEET COMMAND CENTRE 2027 · WEEKLY PARENT REPORT", 36, 44);
+  ctx.fillStyle = "#edf4ff"; ctx.font = "bold 26px sans-serif";
+  ctx.fillText(`${name} — ${formatStudyTime(totalWkMins)} (7 Days)`, 36, 82);
+  ctx.fillStyle = "#94a3b8"; ctx.font = "14px sans-serif";
+  ctx.fillText(`Daily Avg: ${formatStudyTime(avgDaily)} · Streak: ${streak} day(s)`, 36, 110);
+
+  // Draw 7-day bar chart
+  const maxM = Math.max(60, ...days.map(x => x.mins));
+  const chartX = 48, chartY = 148, chartW = W - 96, chartH = 220;
+  const step = chartW / 7, barW = 54;
+  days.forEach((d, i) => {
+    const bx = chartX + i * step + (step - barW) / 2;
+    const bh = Math.max(8, Math.round((d.mins / maxM) * (chartH - 36)));
+    const by = chartY + chartH - bh - 26;
+    ctx.fillStyle = d.mins >= (Number(data.settings.dailyTargetMinutes) || 360) ? "#c4f36b" : "#61d9f5";
+    ctx.fillRect(bx, by, barW, bh);
+    ctx.fillStyle = "#edf4ff"; ctx.font = "bold 12px monospace"; ctx.textAlign = "center";
+    ctx.fillText(d.mins ? `${(d.mins / 60).toFixed(1)}h` : "0h", bx + barW / 2, by - 8);
+    ctx.fillStyle = "#94a3b8"; ctx.font = "12px monospace";
+    ctx.fillText(d.lbl, bx + barW / 2, chartY + chartH - 4);
+  });
+  ctx.textAlign = "left";
+}
+
 /* Startup Reminders, Network Status & Background Reminder Worker */
 updateNetworkBadge();
 startReminderWorker();
@@ -9624,10 +10502,20 @@ function setCloudStatus(msg) {
       const nowTs = Date.now();
       d.updatedAt = Math.max(Number(d.updatedAt) || 0, nowTs);
 
-      // 1. Private document: strictly owner read/write (holds full appData)
+      // 1. Private document: strictly owner read/write (strip ephemeral UI state to keep Spark plan tiny)
+      const cloudPayload = {
+        ...d,
+        timer: { mode: (d.timer && d.timer.mode) || "countdown", total: (d.timer && d.timer.total) || 3000 },
+        settings: { ...(d.settings || {}), reminderLog: undefined },
+        mocks: (d.mocks || []).map(m => {
+          if (!m || !m.questionLogs) return m;
+          const copy = { ...m }; delete copy.questionLogs; return copy;
+        })
+      };
+      delete cloudPayload.settings.reminderLog;
       const privateWrite = setDoc(doc(db, "users", currentUser.uid), {
         uid: currentUser.uid,
-        appData: d,
+        appData: cloudPayload,
         updatedAt: d.updatedAt
       }, { merge: true });
 
@@ -10243,20 +11131,276 @@ function setCloudStatus(msg) {
 </script>
 
 
+<script>
+
+/* ============================================================================
+   v2.6 FINAL FEATURES: PURE FULLSCREEN TIMER, RE-NEET 2026 RANK PREDICTOR,
+   FREE WEB APP NOTIFICATIONS (SERVICE WORKER + WEB SCHEDULER)
+   ============================================================================ */
+
+/* 1. Pure Fullscreen Timer Mode (Zero Distractions: Only Timer + Close) */
+window.openPureFullscreenTimer = () => {
+  const ov = document.getElementById("pureFullscreenTimer");
+  const disp = document.getElementById("pureFsTimerDisplay");
+  if (!ov) return;
+  if (disp) {
+    const curTxt = (document.getElementById("timerDisplay") && document.getElementById("timerDisplay").textContent) || "50:00";
+    disp.textContent = curTxt;
+  }
+  ov.classList.add("open");
+  try {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  } catch (e) {}
+};
+window.closePureFullscreenTimer = () => {
+  const ov = document.getElementById("pureFullscreenTimer");
+  if (ov) ov.classList.remove("open");
+  try {
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+  } catch (e) {}
+};
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const ov = document.getElementById("pureFullscreenTimer");
+    if (ov && ov.classList.contains("open")) window.closePureFullscreenTimer();
+  }
+});
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement) {
+    const ov = document.getElementById("pureFullscreenTimer");
+    if (ov && ov.classList.contains("open")) ov.classList.remove("open");
+  }
+});
+
+/* 2. Re-NEET 2026 Official Result Rank Predictor (NTA Declared 16 July 2026) */
+const RENEET_2026_TOTAL_APPEARED = 1999895;
+const RENEET_2026_ANCHORS = [
+  // [marks, official/calibrated cumulative AIR]
+  [720, 1],
+  [715, 1],        // Official NTA: Joint AIR 1 at 715 (Aryan Gupta & Panshul Bansal; no 720)
+  [700, 19],       // Official NTA: 19 candidates > 700
+  [690, 138],      // Official NTA: 138 candidates >= 690
+  [650, 1492],     // Official NTA: 1,492 candidates >= 650
+  [600, 10160],    // Official NTA: 10,160 candidates >= 600
+  [557, 31719],    // Verified AACCC R1 counselling data point
+  [550, 37183],    // Verified counselling data point
+  [500, 90780],    // Official NTA: 90,780 candidates >= 500
+  [450, 180000],
+  [400, 320000],
+  [350, 490000],
+  [300, 680000],
+  [250, 890000],
+  [213, 996935],   // Official NTA: UR/EWS 50th %ile qualifying cutoff (715-213 band)
+  [177, 1078046],  // Official NTA: OBC/SC/ST 40th %ile qualifying cutoff (+81,111 in 212-177)
+  [100, 1550000],
+  [0,   1999895]
+];
+const RENEET_2026_CAT_META = {
+  UR:   { label: "General (UR)", cutoff: 213, pct: "50th %ile", ratio: () => 1.0 },
+  OBC:  { label: "OBC-NCL",      cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.34 : s >= 600 ? 0.37 : s >= 550 ? 0.42 : 0.47 },
+  EWS:  { label: "Gen-EWS",      cutoff: 213, pct: "50th %ile", ratio: (s) => s >= 650 ? 0.075 : s >= 600 ? 0.082 : s >= 550 ? 0.092 : 0.105 },
+  SC:   { label: "SC",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.098 : s >= 600 ? 0.108 : s >= 550 ? 0.122 : 0.138 },
+  ST:   { label: "ST",           cutoff: 177, pct: "40th %ile", ratio: (s) => s >= 650 ? 0.044 : s >= 600 ? 0.048 : s >= 550 ? 0.055 : 0.062 },
+  PWBD: { label: "UR-PwBD",      cutoff: 194, pct: "45th %ile", ratio: () => 0.008 }
+};
+function predictReNeet2026Air(score) {
+  const s = Math.max(0, Math.min(720, Math.round(Number(score) || 0)));
+  if (s >= 715) return 1;
+  for (let i = 0; i < RENEET_2026_ANCHORS.length - 1; i++) {
+    const [mHi, rHi] = RENEET_2026_ANCHORS[i];
+    const [mLo, rLo] = RENEET_2026_ANCHORS[i + 1];
+    if (s <= mHi && s >= mLo) {
+      if (mHi === mLo) return rHi;
+      const t = (mHi - s) / (mHi - mLo);
+      // Log-linear interpolation matches exponential rank density accurately
+      const logR = Math.log(Math.max(1, rHi)) * (1 - t) + Math.log(Math.max(1, rLo)) * t;
+      return Math.max(1, Math.min(RENEET_2026_TOTAL_APPEARED, Math.round(Math.exp(logR))));
+    }
+  }
+  return RENEET_2026_TOTAL_APPEARED;
+}
+function fmtIndianNum(n) {
+  return Math.round(n).toLocaleString("en-IN");
+}
+function getReNeet2026Outlook(score, air, cat) {
+  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
+  if (score < meta.cutoff) {
+    return { badge: "Below Qualifying Cutoff", color: "var(--rose)", text: `Below the Re-NEET 2026 ${meta.label} qualifying cutoff (${meta.cutoff} marks / ${meta.pct}). Focus on NCERT Biology (360 marks) + high-weightage Chemistry first to cross 450+ quickly.` };
+  }
+  if (air <= 150) return { badge: "AIIMS Delhi / Top National Tier", color: "var(--lime)", text: "Elite Top-150 zone in Re-NEET 2026 (only 138 candidates crossed 690). Strong contender for AIIMS New Delhi, MAMC, VMMC, and JIPMER." };
+  if (air <= 2000) return { badge: "Top AIIMS & Premier Govt MBBS", color: "var(--lime)", text: "Top-0.1% zone (only 1,492 scored 650+ in Re-NEET 2026). Opens AIIMS Jodhpur/Bhubaneswar/Rishikesh, IMS-BHU, and top state medical colleges." };
+  if (air <= 12000) return { badge: "Strong AIQ & Top State Govt MBBS", color: "var(--cyan)", text: "Very strong All India Quota (15%) & State Quota (85%) Government MBBS zone. Only 10,160 candidates crossed 600 in Re-NEET 2026." };
+  if (air <= 32000) return { badge: "Govt MBBS (AIQ / State Quota)", color: "var(--cyan)", text: "Competitive Government MBBS range (AIQ closing ~30,000 for UR; stronger chances via 85% State Quota & category benefits)." };
+  if (air <= 95000) return { badge: "State Quota / Govt BDS / Private MBBS", color: "var(--orange)", text: "In the 500–550 crowded band (90,780 scored 500+). Good chances for Govt BDS, AYUSH, Deemed/Private MBBS, or Govt MBBS for reserved categories. +30 marks here jumps tens of thousands of ranks!" };
+  return { badge: "Qualified — Target Score Boost", color: "var(--orange)", text: `Qualified for counselling (above ${meta.cutoff} cutoff), ideal for Private/Deemed MBBS, BDS, or AYUSH depending on state & category. Improving accuracy by 25–30 questions creates a massive rank leap.` };
+}
+let _rpLastScore = null;
+let _rpLastCat = "UR";
+window.updateReNeetRankPredictor = (scoreVal, catVal) => {
+  const sInput = document.getElementById("rpScoreInput");
+  const sRange = document.getElementById("rpScoreSlider");
+  const cSel = document.getElementById("rpCatSelect");
+  let s = scoreVal !== undefined ? Number(scoreVal) : Number((sInput && sInput.value) || 650);
+  if (isNaN(s)) s = 650;
+  s = Math.max(0, Math.min(720, Math.round(s)));
+  const cat = catVal || (cSel && cSel.value) || _rpLastCat || "UR";
+  _rpLastScore = s; _rpLastCat = cat;
+  if (sInput && Number(sInput.value) !== s) sInput.value = s;
+  if (sRange && Number(sRange.value) !== s) sRange.value = s;
+  if (cSel && cSel.value !== cat) cSel.value = cat;
+
+  const air = predictReNeet2026Air(s);
+  const spread = s >= 705 ? 3 : s >= 680 ? Math.max(10, Math.round(air * 0.12)) : Math.max(50, Math.round(air * 0.08));
+  const airLo = Math.max(1, air - spread);
+  const airHi = Math.min(RENEET_2026_TOTAL_APPEARED, air + spread);
+  const meta = RENEET_2026_CAT_META[cat] || RENEET_2026_CAT_META.UR;
+  const catRank = Math.max(1, Math.round(air * meta.ratio(s)));
+  const pct = Math.max(0, Math.min(99.9999, ((RENEET_2026_TOTAL_APPEARED - air) / RENEET_2026_TOTAL_APPEARED) * 100));
+  const outlook = getReNeet2026Outlook(s, air, cat);
+
+  const airBoost = predictReNeet2026Air(Math.min(720, s + 20));
+  const rankSaved = Math.max(0, air - airBoost);
+
+  const outEl = document.getElementById("rpOutputHost");
+  if (!outEl) return;
+  outEl.innerHTML = `
+    <div class="rp-result-grid">
+      <div class="mi-stat-card" style="border-color:var(--lime)">
+        <div class="stat-label">EXPECTED AIR (RE-NEET 2026)</div>
+        <div class="mi-stat-val" style="color:var(--lime);font-size:20px">${s >= 715 ? "AIR 1" : fmtIndianNum(airLo) + " – " + fmtIndianNum(airHi)}</div>
+        <div class="mi-stat-sub">Midpoint: ~AIR ${fmtIndianNum(air)}</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">${esc(meta.label.toUpperCase())} RANK</div>
+        <div class="mi-stat-val" style="color:var(--cyan);font-size:20px">~${fmtIndianNum(catRank)}</div>
+        <div class="mi-stat-sub">Cutoff: ${meta.cutoff} (${meta.pct})</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">ESTIMATED PERCENTILE</div>
+        <div class="mi-stat-val" style="font-size:20px">${pct.toFixed(2)}%</div>
+        <div class="mi-stat-sub">Out of 19.99 Lakh appeared</div>
+      </div>
+      <div class="mi-stat-card">
+        <div class="stat-label">+20 MARKS IMPACT (${Math.min(720, s + 20)}/720)</div>
+        <div class="mi-stat-val" style="color:var(--orange);font-size:19px">${rankSaved > 0 ? "↑ " + fmtIndianNum(rankSaved) : "Top Tier"}</div>
+        <div class="mi-stat-sub">${rankSaved > 0 ? "Ranks gained (~AIR " + fmtIndianNum(airBoost) + ")" : "Already at AIR 1 zone"}</div>
+      </div>
+    </div>
+    <div class="rp-outlook-box">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+        <strong style="color:${outlook.color}">🎯 ${esc(outlook.badge)}</strong>
+        <span class="tag ${s >= meta.cutoff ? 'lime' : 'pink'}">${s >= meta.cutoff ? 'Qualified' : 'Not Qualified'}</span>
+      </div>
+      <div class="muted">${esc(outlook.text)}</div>
+    </div>
+  `;
+};
+function renderRankPredictorWidget(host, defaultScore) {
+  if (!host) return;
+  const initScore = _rpLastScore !== null ? _rpLastScore : Math.max(0, Math.min(720, Math.round(Number(defaultScore) || 650)));
+  const wrap = document.createElement("div");
+  wrap.className = "rp-card";
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <div>
+        <div class="eyebrow">BASED ON OFFICIAL NTA RE-NEET 2026 RESULT (16 JULY 2026)</div>
+        <h3 style="margin:3px 0 0;font-size:17px">🏆 Re-NEET 2026 Rank Predictor</h3>
+      </div>
+      <span class="tag cyan">Topper: 715/720 · 19.99L Appeared</span>
+    </div>
+    <div class="rp-controls">
+      <div>
+        <label class="field-label" for="rpScoreInput">YOUR EXPECTED / MOCK SCORE (OUT OF 720)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="field" type="number" id="rpScoreInput" min="0" max="720" value="${initScore}" style="max-width:110px;font-weight:700" oninput="updateReNeetRankPredictor(this.value)">
+          <input type="range" class="range-slider" id="rpScoreSlider" min="0" max="720" step="1" value="${initScore}" style="flex:1" oninput="updateReNeetRankPredictor(this.value)">
+        </div>
+      </div>
+      <div>
+        <label class="field-label" for="rpCatSelect">CATEGORY</label>
+        <select class="field" id="rpCatSelect" onchange="updateReNeetRankPredictor(undefined, this.value)">
+          <option value="UR" ${_rpLastCat === "UR" ? "selected" : ""}>General (UR)</option>
+          <option value="OBC" ${_rpLastCat === "OBC" ? "selected" : ""}>OBC-NCL</option>
+          <option value="EWS" ${_rpLastCat === "EWS" ? "selected" : ""}>Gen-EWS</option>
+          <option value="SC" ${_rpLastCat === "SC" ? "selected" : ""}>SC</option>
+          <option value="ST" ${_rpLastCat === "ST" ? "selected" : ""}>ST</option>
+          <option value="PWBD" ${_rpLastCat === "PWBD" ? "selected" : ""}>UR-PwBD</option>
+        </select>
+      </div>
+    </div>
+    <div id="rpOutputHost"></div>
+    <details style="margin-top:12px">
+      <summary class="small" style="cursor:pointer;color:var(--cyan);font-weight:600">📊 View Official Re-NEET 2026 NTA Anchor Data</summary>
+      <table class="rp-table">
+        <thead><tr><th>Score (/720)</th><th>Re-NEET 2026 AIR</th><th>Official NTA Fact</th></tr></thead>
+        <tbody>
+          <tr><td><strong>715</strong></td><td>AIR 1</td><td>Highest score (2 joint toppers, no 720)</td></tr>
+          <tr><td><strong>700+</strong></td><td>Top 19</td><td>Only 19 candidates crossed 700</td></tr>
+          <tr><td><strong>690+</strong></td><td>Top 138</td><td>138 candidates scored 690 or above</td></tr>
+          <tr><td><strong>650+</strong></td><td>~1,492</td><td>1,492 candidates scored 650+</td></tr>
+          <tr><td><strong>600+</strong></td><td>~10,160</td><td>10,160 candidates scored 600+</td></tr>
+          <tr><td><strong>550</strong></td><td>~30k – 37k</td><td>Crowded AIQ / State Govt MBBS border</td></tr>
+          <tr><td><strong>500+</strong></td><td>~90,780</td><td>90,780 candidates scored 500+</td></tr>
+          <tr><td><strong>213</strong></td><td>~9.97 Lakh</td><td>UR / EWS 50th %ile Qualifying Cutoff</td></tr>
+          <tr><td><strong>177</strong></td><td>~10.78 Lakh</td><td>OBC / SC / ST 40th %ile Qualifying Cutoff</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted" style="margin:8px 0 0">Note: Anchors (715, 700, 690, 650, 600, 500, 213, 177) use official NTA Re-NEET 2026 counts; intermediate scores use log-linear curve interpolation. Actual NEET 2027 ranks will vary with paper difficulty.</p>
+    </details>
+  `;
+  host.appendChild(wrap);
+  updateReNeetRankPredictor(initScore, _rpLastCat);
+}
+
+/* 3. Free Web App Notifications: Service Worker Registration & Status Sync */
+(function initFreeWebNotifications() {
+  try {
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+    const statusEl = document.getElementById("alertPermStatus");
+    if (statusEl && !getCapLocalNotif() && "Notification" in window) {
+      if (Notification.permission === "granted") {
+        statusEl.textContent = "Chrome / Web Notifications + chime + vibration enabled ✓";
+      } else if (Notification.permission === "denied") {
+        statusEl.textContent = "Blocked in browser — allow notifications in Site Settings (lock icon)";
+      }
+    }
+  } catch (e) {}
+})();
+
+</script>
+
 <!-- CHANGELOG MODAL -->
 <div class="modal-overlay" id="changelogModal" role="dialog" aria-modal="true" aria-labelledby="changelogModalTitle" style="z-index:290" onclick="if(event.target===this)closeChangelogModal()">
   <div class="modal-card" style="max-width:560px">
     <div class="panel-head" style="margin-bottom:10px">
       <div>
         <div class="eyebrow">RELEASE NOTES</div>
-        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.5</h2>
+        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.6</h2>
       </div>
       <button type="button" class="icon-btn" onclick="closeChangelogModal()" aria-label="Close">✕</button>
     </div>
     <div id="changelogModalBody" style="max-height:60vh;overflow-y:auto;line-height:1.55;font-size:13.5px">
       <div id="liveGitHubReleaseBox" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.12);border:1px solid var(--lime)"></div>
       <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.08);border:1px solid var(--line)">
-        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.5</strong>
+        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.6</strong>
+        <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
+          <li><strong>Re-NEET 2026 Rank Predictor:</strong> Estimate your expected All India Rank, category rank, percentile, +20 marks jump, and MBBS/BDS chances right inside Mock Analytics using official Re-NEET 2026 result data.</li>
+          <li><strong>Pure Fullscreen Timer Mode:</strong> Open a completely distraction-free fullscreen clock showing nothing except your timer and a close button — available both outside and inside Focus Mode.</li>
+          <li><strong>NEET Bio-Clock Trainer &amp; Digital OMR Sheet:</strong> Train during the real 2:00–5:00 PM exam window with a 180-minute Exam Simulation (30m/10m/5m bells) and practice bubbling on a timed OMR sheet.</li>
+          <li><strong>Focus Calm Tools:</strong> Added a Thought Parking Lot inside Focus Mode to dump distracting thoughts and a 60-second Box Breathing guide to calm exam stress.</li>
+          <li><strong>Smarter Upgrades Across Modules:</strong> Sort chapters by highest unfinished weightage, track weekly subject balance in Timer, pin daily recurring habits or roll over yesterday's missions, star tricky flashcards, test &quot;What-If&quot; mock scores, and share a 7-day weekly chart with parents.</li>
+          <li><strong>Free Web App Notifications &amp; 720 Home Screen Logo:</strong> Allow free browser notifications on Chrome/Desktop, get stronger background reminders on Android, and see the 720 logo when adding the website to your home screen on iOS, macOS, or Windows.</li>
+          <li><strong>Cleaner NCERT Facts &amp; Refreshed Study Tips:</strong> Fixed hundreds of NCERT formulas, arrows, and chapter tags, and updated the rotating Study Tips.</li>
+          <li><strong>Many Bugs Fixed:</strong> Fixed Flashcard popup layout, Light Mode styling, late-night custom day reset dates, chapter weightage matching, and improved Lite Mode speed.</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(97,217,245,.08);border:1px solid var(--line)">
+        <strong style="color:var(--cyan);display:block;margin-bottom:6px">Version 2.5</strong>
         <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
           <li><strong>Mock Intelligence 2.0:</strong> Completely redesigned Mock Analytics with 10 organised tabs — Overview with date filters, Hybrid Quick + Detailed Entry, 4 Subject Dashboards, Practice-Grounded Chapter Heatmap (with editable/deletable question logs), Mistake &amp; Time Analysis, 9 Progression Graphs, Side-by-Side Comparison, Statistical Score Predictor, Automatic Improvement Planner, and Individual Reports with CSV/JSON Backup &amp; Undo/Redo.</li>
           <li><strong>NEET Chapter Weightage Badges:</strong> Added chapter-wise NEET weightage and average question count right beside each chapter in Chapter Tracker.</li>
@@ -10318,7 +11462,7 @@ window.closeChangelogModal = () => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") window.closeChangelogModal();
 });
-const APP_VERSION = "2.5";
+const APP_VERSION = "2.6";
 const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
 function parseVerParts(v) {
   return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
