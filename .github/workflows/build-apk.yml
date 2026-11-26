@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release version tag (e.g. v2.6)'
+        description: 'Release version tag (e.g. v2.7)'
         required: true
-        default: 'v2.6'
+        default: 'v2.7'
 
 permissions:
   contents: write
@@ -37,7 +37,7 @@ jobs:
         run: |
           TAG="${{ github.event.inputs.release_tag }}"
           if [ -z "$TAG" ]; then
-            TAG="v2.6"
+            TAG="v2.7"
           fi
           VER_NAME="${TAG#v}"
           echo "value=$TAG" >> $GITHUB_OUTPUT
@@ -84,7 +84,7 @@ jobs:
 
           # 1. Auto-increment versionCode and set versionName
           vcode = 100 + int(os.environ.get("RUN_NUM", "1"))
-          vname = os.environ.get("VER_NAME", "2.6")
+          vname = os.environ.get("VER_NAME", "2.7")
           txt = re.sub(r"versionCode\s+\d+", f"versionCode {vcode}", txt, count=1)
           txt = re.sub(r"versionName\s+\"[^\"]+\"", f"versionName \"{vname}\"", txt, count=1)
 
