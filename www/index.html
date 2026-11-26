@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.6</title>
+<title>NEET COMMAND CENTRE 2027 — v2.7</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -25,6 +25,7 @@
   --panel2: #142139;
   --line: rgba(160, 190, 230, .12);
   --line2: rgba(160, 190, 230, .24);
+  --border: var(--line);
   --rose: #ff5c8a;
   --text: #edf4ff;
   --muted: #8292ad;
@@ -1900,10 +1901,12 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
   cursor: pointer;
   padding: 0;
 }
-.omr-bub.sel {
-  background: var(--cyan);
+.omr-bub.sel, .omr-bub.filled {
+  background: linear-gradient(135deg, var(--cyan), var(--lime));
   color: #07101f;
   border-color: var(--cyan);
+  font-weight: 800;
+  box-shadow: 0 0 8px rgba(97, 217, 245, .35);
 }
 .breath-ring-wrap {
   display: flex;
@@ -2039,16 +2042,201 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 }
 .rp-table th { color: var(--muted); font-weight: 600; }
 
+
+/* === v2.7 UI DECLUTTERING, MOBILE MISSIONS, OMR LANDSCAPE COLS, INBOX, CHAT, CHALLENGES, ACCORDIONS === */
+.mission-item { flex-wrap: wrap; }
+.mission-actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+  .mission-actions-wrap {
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 6px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--border);
+  }
+}
+/* Clean Collapsible Settings Accordions & Timer Drawers */
+details.v27-acc {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+details.v27-acc > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 14px 'Space Grotesk', sans-serif;
+  user-select: none;
+}
+details.v27-acc > summary::-webkit-details-marker { display: none; }
+details.v27-acc > summary::after {
+  content: "▾";
+  font-size: 13px;
+  color: var(--muted);
+  transition: transform .18s ease;
+}
+details.v27-acc[open] > summary::after { transform: rotate(180deg); }
+details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* Community Sub-tabs (Leaderboard | Friends & Chat | Challenges) */
+.comm-tabs-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.comm-tab-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  color: var(--muted);
+  font: 600 13px 'Space Grotesk', sans-serif;
+}
+.comm-tab-btn.active {
+  background: rgba(97,217,245,.16);
+  border-color: var(--cyan);
+  color: var(--text);
+}
+.comm-panel { display: none; }
+.comm-panel.active { display: block; }
+
+/* Inbox Bell Badge */
+.inbox-btn { position: relative; }
+.inbox-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
+  font: 700 10px 'DM Mono', monospace;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.inbox-badge.show { display: inline-flex; }
+
+/* Friends-Only Text Chat */
+.chat-messages-box {
+  height: 290px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid var(--border);
+  margin: 10px 0;
+}
+:root[data-theme="light"] .chat-messages-box { background: rgba(15,23,42,.04); }
+.chat-bubble {
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+.chat-bubble.me {
+  align-self: flex-end;
+  background: rgba(97,217,245,.18);
+  border: 1px solid rgba(97,217,245,.4);
+}
+.chat-bubble.them {
+  align-self: flex-start;
+  background: rgba(255,255,255,.07);
+  border: 1px solid var(--border);
+}
+:root[data-theme="light"] .chat-bubble.them { background: rgba(15,23,42,.07); }
+.chat-meta { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* True NEET Vertical Column-Major OMR in Landscape */
+.omr-grid.omr-col-major {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(5, auto);
+  grid-auto-columns: minmax(195px, 1fr);
+  gap: 8px 14px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+@media (max-width: 640px) {
+  .omr-grid.omr-col-major {
+    grid-auto-flow: row;
+    grid-template-rows: none;
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+}
+/* Fullscreen Final Countdown Overlay */
+.pure-fs-cd-grid {
+  display: flex;
+  gap: clamp(14px, 3.2vw, 38px);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  padding: 20px;
+}
+.pure-fs-cd-unit { text-align: center; }
+.pure-fs-cd-num {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(44px, 11vw, 126px);
+  font-weight: 500;
+  color: #f4f8ff;
+  line-height: 1;
+}
+.pure-fs-cd-lbl {
+  font: 700 12px 'Space Grotesk', sans-serif;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,.45);
+  margin-top: 8px;
+}
+
+/* Improved Landscape Grid Workflow */
+@media (min-width: 1024px) {
+  .v27-timer-landscape {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .v27-settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+}
+/* Splash SVG Stage */
+#splashSvgStage { width: 132px; height: 132px; display: none; align-items: center; justify-content: center; }
+#splashSvgStage svg { width: 100%; height: 100%; }
+
 </style>
 </head>
 <body>
 
 <!-- APP STARTUP LOADING SCREEN WITH LOGO -->
 <div id="appLoadingScreen" aria-label="Loading NEET Command Centre">
-  <div class="loader-logo-wrap">
+  <div class="loader-logo-wrap" id="splashClassicWrap">
     <div class="loader-ring"></div>
     <div class="loader-badge">720</div>
   </div>
+  <div id="splashSvgStage" aria-hidden="true"></div>
   <div style="text-align:center">
     <div style="font:700 17px 'Space Grotesk',sans-serif;letter-spacing:.8px">NEET COMMAND CENTRE</div>
     <div class="small muted" style="font-family:'DM Mono',monospace;margin-top:3px">2027 EDITION · LOADING WORKSPACE</div>
@@ -2133,6 +2321,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);">
       <button type="button" class="btn" id="offlineGuestBtn" style="width:100%;padding:10px;border-color:rgba(97,217,245,.38);color:var(--cyan)" onclick="enterOfflineGuestMode()">✈ Continue Offline (Guest Mode)</button>
       <div class="small muted" id="offlineLoginHint" style="margin-top:6px;line-height:1.4">Study offline anytime — your data stays on this device and merges when you sign in later.</div>
+    <div style="text-align:center;margin-top:12px"><button type="button" class="btn btn-small" style="background:transparent;border:none;color:var(--cyan);text-decoration:underline;font-size:12px" onclick="openPrivacyPolicyModal()">🔒 Privacy Policy &amp; Student Safety</button></div>
     </div>
 
     <div id="authError" style="color:var(--pink);font-size:11.5px;margin-top:12px;min-height:16px;line-height:1.45;"></div>
@@ -2158,7 +2347,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.6</div>
+        <div class="brand-sub">NEET 2027 / v2.7</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -2202,31 +2391,24 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
       <div class="top-right">
         <span class="net-pill online" id="netStatusBadge" title="Connection status">● Online</span>
-        <button type="button" class="live" id="focusingNowBtn" onclick="openFocusingNowModal()" title="View Aspirants Focusing Now" style="cursor:pointer">
-          <span aria-hidden="true">👥</span>
-          <span class="dot"></span>
-          <span id="virtualLibraryCounter">0 focusing now</span>
+        <button class="icon-btn inbox-btn" id="openInboxBtn" type="button" onclick="openInboxModal()" title="Inbox: Alerts, Friend Requests & Challenges">
+          🔔 <span class="inbox-badge" id="inboxUnreadBadge">0</span>
         </button>
-        <button type="button" class="ambient-pill" id="topbarAmbientBtn" onclick="toggleAmbientMusic()" title="Play / Pause Soft Ambient Study Music">
-          <span>🎵</span>
-          <span id="topbarAmbientLabel">Ambient: Off</span>
-        </button>
-        <div class="undo-controls">
-          <button class="undo-btn" id="undoActionBtn" type="button" onclick="undoLastAction()" disabled>↶ Undo</button>
-          <button class="undo-btn" id="redoActionBtn" type="button" onclick="redoLastAction()" disabled>↷ Redo</button>
-        </div>
         <button class="doctor-badge" type="button" onclick="navigate('settings')">
           <span class="doctor-badge-dot">720</span>
           <span id="topDoctorName">Dr. Xyz</span>
         </button>
         <button class="icon-btn" id="themeToggle" type="button" title="Switch Theme"><span id="themeIcon">☀</span><span id="themeText">Light</span></button>
-        <button class="icon-btn" id="quickTimer" type="button" title="Study Timer">◷</button>
-        <button class="icon-btn" id="quickSettings" type="button" title="Settings & Backup">⚙</button>
       </div>
     </header>
 
     <!-- 1. OVERVIEW / DASHBOARD (Default Sequence A -> L, customizable in Settings) -->
     <section class="view active" id="dashboard">
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="small muted">View:</span>
+        <button type="button" class="btn btn-small ov-density-btn" data-density="minimal" onclick="applyOverviewPreset('minimal')">✨ Minimal</button>
+        <button type="button" class="btn btn-small btn-primary ov-density-btn" data-density="full" onclick="applyOverviewPreset('full')">📊 Full</button>
+      </div>
       <!-- A) Rotating Dynamic Tips Bar -->
       <div class="dynamic-tip-bar" id="dynamicTipBar" data-overview-id="tips">
         <span class="dynamic-tip-badge">TIP</span>
@@ -2267,7 +2449,8 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
               <p>Your NEET 2027 mission for 720/720 is in motion. Make today count.</p>
             </div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-              <button type="button" class="btn btn-small" id="countdownTickBtn" onclick="toggleCountdownTickSound()" title="Toggle Doomsday Clock tick sound on Overview">🔇 Tick: Off</button>
+              <button type="button" class="btn btn-small" id="countdownTickBtn" onclick="toggleCountdownTickSound()" title="Toggle Doomsday Clock tick sound">🔇 Tick: Off</button>
+              <button type="button" class="btn btn-small" onclick="openFullscreenCountdown()" title="Fullscreen Final Countdown">⛶ Fullscreen</button>
               <span class="pill">TARGET / 720</span>
             </div>
           </div>
@@ -2360,7 +2543,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="btn btn-lime" onclick="openCloseDayModal()">✓ Close my day</button>
-          <button type="button" class="btn btn-primary" onclick="openShareParentModal()">📤 Share Report to Parent</button>
+          <button type="button" class="btn btn-primary" onclick="openShareParentModal('daily')">📤 Share Report</button><button type="button" class="btn btn-small" onclick="openShareParentModal('weekly')">📊 Weekly Report</button>
         </div>
       </div>
     </section>
@@ -2439,14 +2622,14 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="btn btn-lime" onclick="openCloseDayModal()">✓ Close my day</button>
-          <button type="button" class="btn btn-primary" onclick="openShareParentModal()">📤 Share Report to Parent</button>
+          <button type="button" class="btn btn-primary" onclick="openShareParentModal('daily')">📤 Share Report</button><button type="button" class="btn btn-small" onclick="openShareParentModal('weekly')">📊 Weekly Report</button>
         </div>
       </div>
     </section>
 
     <!-- 3. STUDY TIMER (1st: Timer, 2nd: Daily Target Circle) -->
     <section class="view" id="study">
-      <div class="grid grid-2">
+      <div class="v27-timer-landscape">
         <!-- 1st: Main Focus Timer / Break Stopwatch Column -->
         <div style="min-width:0">
         <div class="panel" id="focusTimerPanel">
@@ -2455,7 +2638,19 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
               <div class="eyebrow">FOCUS PROTOCOL</div>
               <div class="panel-title" style="margin-top:4px">Study session</div>
             </div>
-            <span class="tag cyan" id="timerStatus">READY</span>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <button type="button" class="live" id="focusingNowBtn" onclick="openFocusingNowModal()" title="View Aspirants Focusing Now" style="cursor:pointer">
+                <span aria-hidden="true">👥</span>
+                <span class="dot"></span>
+                <span id="virtualLibraryCounter">0 focusing now</span>
+              </button>
+              <button type="button" class="ambient-pill" id="topbarAmbientBtn" onclick="toggleAmbientMusic()" title="Play / Pause Soft Ambient Study Music">
+                <span>🎵</span>
+                <span id="topbarAmbientLabel">Ambient: Off</span>
+              </button>
+              <button type="button" class="btn btn-small" id="timerTickSoundBtn" onclick="toggleTimerTickSound()" title="Toggle Doomsday Tick Sound in Study Timer">🔇 Tick</button>
+              <span class="tag cyan" id="timerStatus">READY</span>
+            </div>
           </div>
           <div id="weeklySubjectBalanceHost" class="subj-bal-wrap"></div>
           <div class="bioclock-strip">
@@ -2515,6 +2710,18 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
             </div>
             <div class="topic-dropdown" id="timerTopicDropdown" role="listbox"></div>
           </div>
+
+          <!-- Parked Thoughts Card (Visible Outside Focus Mode) -->
+          <details class="v27-acc" id="timerParkedThoughtsAcc" style="margin-top:12px">
+            <summary>💭 Parked Thoughts <span class="tag cyan" id="parkedCountBadge">0</span></summary>
+            <div class="v27-acc-body">
+              <div style="display:flex;gap:6px;margin-bottom:8px">
+                <input class="field" id="timerParkingInput" placeholder="Park a thought to review later..." onkeydown="if(event.key==='Enter')addParkedThought('timerParkingInput')">
+                <button type="button" class="btn btn-small btn-primary" onclick="addParkedThought('timerParkingInput')">+ Park</button>
+              </div>
+              <div id="timerParkingList"><div class="small muted">No parked thoughts yet. Anything you jot down inside Focus Mode appears here.</div></div>
+            </div>
+          </details>
 
           <!-- Ambient Study Music Card (Study Timer) -->
           <div class="ambient-card">
@@ -2806,6 +3013,12 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
 
       <!-- 10-Section Navigation Tabs -->
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <span class="small muted">Analysing:</span>
+        <button type="button" class="btn btn-small btn-primary mi-scope-btn" data-scope="full" onclick="setMockAnalysisScope('full')">Full Mocks (720)</button>
+        <button type="button" class="btn btn-small mi-scope-btn" data-scope="part" onclick="setMockAnalysisScope('part')">Subject / Part Tests</button>
+        <button type="button" class="btn btn-small mi-scope-btn" data-scope="all" onclick="setMockAnalysisScope('all')">All Tests</button>
+      </div>
       <div class="mi-tabs-wrap" id="miTabsBar" role="tablist">
         <button type="button" class="mi-tab-btn active" data-mitab="overview" onclick="switchMockTab('overview')">1. Overview</button>
         <button type="button" class="mi-tab-btn" data-mitab="add" onclick="switchMockTab('add')">2. Add Mock</button>
@@ -2977,7 +3190,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           <!-- B. Optional Expandable Detailed Entry -->
           <details class="mi-accordion" id="miDetailedEntryBox" style="margin-top:14px">
             <summary>
-              <span>🔬 Detailed Diagnostic Entry <small class="muted">(Optional: Subject Breakdown, Time, Mistakes &amp; Time)</small></span>
+              <span>🔬 Detailed Diagnostic Entry <small class="muted">(Optional: Subject Breakdown, Time &amp; Mistakes)</small></span>
               <span class="tag cyan">EXPAND</span>
             </summary>
             <div class="mi-accordion-body">
@@ -3253,9 +3466,15 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
       </div>
     </section>
 
-    <!-- 11. LEADERBOARD -->
+    <!-- 11. COMMUNITY HUB (Leaderboard | Friends & Chat | Challenges) -->
     <section class="view" id="leaderboard">
-      <div class="grid grid-2">
+      <div class="comm-tabs-bar" role="tablist">
+        <button type="button" class="comm-tab-btn active" data-commtab="rankings" onclick="switchCommunityTab('rankings')">🏆 Leaderboard</button>
+        <button type="button" class="comm-tab-btn" data-commtab="friends" onclick="switchCommunityTab('friends')">💬 Friends &amp; Chat</button>
+        <button type="button" class="comm-tab-btn" data-commtab="challenges" onclick="switchCommunityTab('challenges')">⚔️ Challenges</button>
+      </div>
+      <div class="comm-panel active" id="commPanel-rankings">
+        <div class="grid">
         <div class="panel">
           <div class="panel-head">
             <div>
@@ -3273,7 +3492,9 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           <div id="weeklyLeaderboardList"><div class="empty">Loading daily rankings...</div></div>
         </div>
 
-        <!-- Study Friends Card (Leaderboard) -->
+        </div>
+      </div>
+      <div class="comm-panel" id="commPanel-friends">
         <div class="panel">
           <div class="panel-head">
             <div>
@@ -3302,14 +3523,52 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
           </div>
         </div>
       </div>
+      <div class="comm-panel" id="commPanel-challenges">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">ZERO-COST FRIEND DUELS</div>
+              <div class="panel-title" style="margin-top:3px">⚔️ Focus Arena &amp; Mock Improvement</div>
+            </div>
+            <button type="button" class="btn btn-small" onclick="refreshChallenges()">↻ Refresh</button>
+          </div>
+          <div class="form-row" style="margin-bottom:10px">
+            <div>
+              <label class="field-label">CHALLENGE TYPE</label>
+              <select class="field" id="chalTypeSelect" onchange="toggleChallengeDurField()">
+                <option value="focus_arena">🔥 Focus Arena (Who Breaks First)</option>
+                <option value="mock_jump">📈 Mock Score Improvement (+Marks Jump)</option>
+              </select>
+            </div>
+            <div id="chalDurWrap">
+              <label class="field-label">SESSION TARGET</label>
+              <select class="field" id="chalDurationSelect">
+                <option value="60">1 Hour Endurance (60m)</option>
+                <option value="120">2 Hour Deep Work (120m)</option>
+                <option value="180">3 Hour Exam Marathon (180m)</option>
+                <option value="0">∞ Flowmodoro (Last Standing)</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+            <select class="field" id="chalFriendSelect" style="flex:1;min-width:180px">
+              <option value="">Select Study Friend (or All Friends)</option>
+            </select>
+            <button type="button" class="btn btn-primary" onclick="createFriendChallenge()">⚔️ Send Challenge</button>
+          </div>
+          <div id="challengesListHost"><div class="empty">No active challenges yet. Challenge a Study Friend to a Focus Arena or Mock Improvement duel!</div></div>
+        </div>
+      </div>
     </section>
 
-    <!-- 12. SETTINGS & BACKUP -->
+    <!-- 12. SETTINGS & BACKUP (5 Organized Collapsible Sections) -->
     <section class="view" id="settings">
-      <div class="grid grid-2">
-        <div class="panel">
-          <div class="panel-title">Exam & Doctor Profile</div>
-          <div class="form-row">
+      <div class="v27-settings-grid">
+        <div>
+          <details class="v27-acc" open>
+            <summary>🩺 1. Profile &amp; NEET Target</summary>
+            <div class="v27-acc-body">
+              <div class="form-row">
             <div><label class="field-label">NEET EXAM DATE</label><input class="field" type="date" id="examDate"></div>
             <div><label class="field-label">NEET EXAM TIME</label><input class="field" type="time" id="examTime" value="14:00"></div>
           </div>
@@ -3336,58 +3595,43 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
             <div><label class="field-label">TARGET MINUTES</label><input class="field" type="number" id="settingsTargetMins" min="0" max="55" step="5" value="0"></div>
           </div>
           <button type="button" class="btn btn-primary" style="width:100%;margin-top:14px" onclick="saveSettings()">Save configuration</button>
-
-          <!-- Dynamic Tips Toggle -->
-          <div style="margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px">
-            <div>
-              <div style="font:700 12.5px 'Space Grotesk',sans-serif">Dynamic Study Tips</div>
-              <div class="small muted">Rotate study tips every 10s on Overview</div>
             </div>
-            <input type="checkbox" class="switch-input" id="dynamicTipsToggle" checked onchange="toggleDynamicTips(this.checked)">
-          </div>
+          </details>
 
-          <!-- Essential Study Alerts & Smart Reminders -->
-          <div style="margin-top:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <details class="v27-acc">
+            <summary>🎨 2. Appearance, Splash &amp; Overview Layout</summary>
+            <div class="v27-acc-body">
+              <!-- Splash Screen Animation Selector (5 Styles) -->
+          <div style="margin-top:12px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
               <div>
-                <div style="font:700 12.5px 'Space Grotesk',sans-serif">Smart Reminders & Alerts</div>
-                <div class="small muted" id="alertPermStatus">Free Chrome / Desktop / PWA &amp; Android notifications + chime</div>
+                <div style="font:700 12.5px 'Space Grotesk',sans-serif">Splash Screen Animation</div>
+                <div class="small muted">Choose from 5 startup logo animations</div>
               </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button type="button" class="btn btn-small btn-primary" onclick="requestAlertPermission(true)">Enable</button>
-                <button type="button" class="btn btn-small" onclick="testEssentialAlert()">Test</button>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <select id="splashAnimSelect" class="field" style="width:auto;padding:5px 10px;font-size:12px" onchange="setSplashAnimationStyle(this.value)">
+                  <option value="classic">Classic Ring (Default)</option>
+                  <option value="reveal">Command Lock-In</option>
+                  <option value="counter">720 Score Surge</option>
+                  <option value="pulse">Aurora Pulse</option>
+                  <option value="radar">Radar Scanner</option>
+                </select>
+                <button type="button" class="btn btn-small btn-primary" onclick="previewSplashAnimation()">▶ Preview</button>
               </div>
-            </div>
-            <div style="display:grid;gap:8px;margin-top:6px">
-              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
-                <span>Daily study target completion alert & popup</span>
-                <input type="checkbox" class="switch-input" id="remTargetDone" checked onchange="saveReminderSettings()">
-              </label>
-              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
-                <span>Smart revision reminders (due & weak chapters)</span>
-                <input type="checkbox" class="switch-input" id="remSmartRevision" checked onchange="saveReminderSettings()">
-              </label>
-              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
-                <span>Study consistency alert (if 0m logged by 7 PM)</span>
-                <input type="checkbox" class="switch-input" id="remConsistency" checked onchange="saveReminderSettings()">
-              </label>
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px">
-                <label style="display:flex;align-items:center;gap:8px">
-                  <span>Parent report reminder at night</span>
-                </label>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <input type="time" class="field" id="remNightReportTime" value="22:30" style="width:110px;padding:5px 8px;font-size:12px" onchange="saveReminderSettings()">
-                  <input type="checkbox" class="switch-input" id="remNightReport" checked onchange="saveReminderSettings()">
-                </div>
-              </div>
-            </div>
-            <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-              <span class="small muted" style="flex:1;min-width:170px">For locked-phone alarms when the app is completely closed, export a native calendar reminder:</span>
-              <button type="button" class="btn btn-small" onclick="downloadDailyReminderICS()">📅 Export OS Alarm (.ics)</button>
             </div>
           </div>
-
-          <!-- Low-End Device / Performance Lite Mode -->
+              <!-- 1-Tap Dashboard Density Preset (Minimal vs Full) -->
+          <div style="margin-top:12px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div>
+              <div style="font:700 12.5px 'Space Grotesk',sans-serif">Overview Dashboard Density</div>
+              <div class="small muted">Switch instantly between a calm Minimal view or Full Command Cockpit</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-small" onclick="applyOverviewPreset('minimal')">✨ Minimal</button>
+              <button type="button" class="btn btn-small btn-primary" onclick="applyOverviewPreset('full')">📊 Full</button>
+            </div>
+          </div>
+              <!-- Low-End Device / Performance Lite Mode -->
           <div style="margin-top:12px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px">
             <div>
               <div style="font:700 12.5px 'Space Grotesk',sans-serif">Low-End Device Mode (Lite UI)</div>
@@ -3395,8 +3639,35 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
             </div>
             <input type="checkbox" class="switch-input" id="liteModeToggle" onchange="toggleLiteMode(this.checked)">
           </div>
+              <!-- Dynamic Tips Toggle -->
+          <div style="margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div>
+              <div style="font:700 12.5px 'Space Grotesk',sans-serif">Dynamic Study Tips</div>
+              <div class="small muted">Rotate study tips every 10s on Overview</div>
+            </div>
+            <input type="checkbox" class="switch-input" id="dynamicTipsToggle" checked onchange="toggleDynamicTips(this.checked)">
+          </div>
+              <div style="margin-top:12px">
+                <!-- Overview Layout & Visibility Manager (Only for Overview Section) -->
+      <div style="margin-top:6px">
+        <div class="panel-head">
+          <div>
+            <div class="eyebrow">CUSTOMIZE OVERVIEW</div>
+            <div class="panel-title" style="margin-top:3px">Overview Section Order & Visibility</div>
+            <div class="small muted">Turn any Overview block on or off and reorder its sequence using ▲ / ▼</div>
+          </div>
+          <button type="button" class="btn btn-small" onclick="resetOverviewLayout()">↺ Reset Default Order</button>
+        </div>
+        <div class="layout-manager-list" id="overviewLayoutManager"></div>
+      </div>
+              </div>
+            </div>
+          </details>
 
-          <!-- Ambient Music Settings -->
+          <details class="v27-acc">
+            <summary>🎵 3. Audio, Focus &amp; NCERT Facts</summary>
+            <div class="v27-acc-body">
+              <!-- Ambient Music Settings -->
           <div class="ambient-card">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
               <div>
@@ -3422,27 +3693,9 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-title">Account, Cloud Sync & Backup</div>
-          <label class="field-label">YOUR UID (SHARE WITH STUDY FRIENDS)</label>
-          <div style="display:flex;gap:8px">
-            <input type="text" class="field" id="settingsUidField" readonly value="Sign in to view UID" style="font-family:'DM Mono',monospace;font-size:11px">
-            <button type="button" class="btn btn-primary btn-small" onclick="copyUserUid()">Copy</button>
-          </div>
-          <div class="small muted" id="cloudSyncStatus" style="margin-top:8px">Cloud status: Connecting...</div>
-
-          <div class="form-row" style="margin-top:14px">
-            <button type="button" class="btn btn-primary" onclick="exportData()">↓ Export Backup</button>
-            <label class="btn" style="cursor:pointer">↑ Import Backup<input type="file" id="importFile" accept=".json,application/json" hidden onchange="importData(event)"></label>
-          </div>
-          <div class="form-row" style="margin-top:10px">
-            <button type="button" class="btn btn-danger" onclick="clearData()">Reset Local Data</button>
-            <button type="button" class="btn btn-danger" id="settingsAuthActionBtn" onclick="handleLogout()">Log Out</button>
-          </div>
-
-          <div class="section-title">NCERT Fact Settings</div>
+            
+              <div style="margin-top:12px">
+                <div class="section-title">NCERT Fact Settings</div>
           <div class="grid grid-3" style="gap:8px">
             <div class="mini-box">
               <label style="display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--lime)">Bio <input type="checkbox" id="ncertBioOn" checked onchange="toggleNcertSubject('bio',this.checked)"></label>
@@ -3458,28 +3711,123 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
             </div>
           </div>
 
-          <div class="section-title">System Information</div>
-          <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.6 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
-          <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
-        </div>
-      </div>
-
-      <!-- Overview Layout & Visibility Manager (Only for Overview Section) -->
-      <div class="panel section-gap">
-        <div class="panel-head">
-          <div>
-            <div class="eyebrow">CUSTOMIZE OVERVIEW</div>
-            <div class="panel-title" style="margin-top:3px">Overview Section Order & Visibility</div>
-            <div class="small muted">Turn any Overview block on or off and reorder its sequence using ▲ / ▼</div>
           </div>
-          <button type="button" class="btn btn-small" onclick="resetOverviewLayout()">↺ Reset Default Order</button>
+            </div>
+          </details>
         </div>
-        <div class="layout-manager-list" id="overviewLayoutManager"></div>
+
+        <div>
+          <details class="v27-acc">
+            <summary>🔔 4. Smart Reminders &amp; Notifications</summary>
+            <div class="v27-acc-body">
+              <!-- Essential Study Alerts & Smart Reminders -->
+          <div style="margin-top:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+              <div>
+                <div style="font:700 12.5px 'Space Grotesk',sans-serif">Smart Reminders & Alerts</div>
+                <div class="small muted" id="alertPermStatus">Free Chrome / Desktop / PWA &amp; Android notifications + chime</div>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="btn btn-small btn-primary" onclick="requestAlertPermission(true)">Enable</button>
+                <button type="button" class="btn btn-small" onclick="testEssentialAlert()">Test</button>
+              </div>
+            </div>
+            <div style="display:grid;gap:8px;margin-top:6px">
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>Daily study target completion alert & popup</span>
+                <input type="checkbox" class="switch-input" id="remTargetDone" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>Smart revision reminders (due & weak chapters)</span>
+                <input type="checkbox" class="switch-input" id="remSmartRevision" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>5:00 PM progress check (if &lt;50% daily target logged)</span>
+                <input type="checkbox" class="switch-input" id="remConsistency" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>1:55 PM NEET Bio-Clock prep alert</span>
+                <input type="checkbox" class="switch-input" id="remBioClock" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>8:30 PM "Almost There" (70–99% target) nudge</span>
+                <input type="checkbox" class="switch-input" id="remAlmostThere" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>Streak Rescue (90 min before Day Reset)</span>
+                <input type="checkbox" class="switch-input" id="remStreakRescue" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>8:00 AM High-Weightage Morning Brief</span>
+                <input type="checkbox" class="switch-input" id="remMorningBrief" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>60m Flowmodoro &amp; 20-20-20 eye rest chime</span>
+                <input type="checkbox" class="switch-input" id="remFlowEyeRest" checked onchange="saveReminderSettings()">
+              </label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px">
+                <span>14-Day Mock Cadence &amp; Sunday 8 PM Weekly Audit</span>
+                <input type="checkbox" class="switch-input" id="remMockWeekly" checked onchange="saveReminderSettings()">
+              </label>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px">
+                <label style="display:flex;align-items:center;gap:8px">
+                  <span>Parent report reminder (default 30m before Day Reset)</span>
+                </label>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input type="time" class="field" id="remNightReportTime" value="23:30" style="width:110px;padding:5px 8px;font-size:12px" onchange="saveReminderSettings()">
+                  <input type="checkbox" class="switch-input" id="remNightReport" checked onchange="saveReminderSettings()">
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="small muted" style="flex:1;min-width:170px">For locked-phone alarms when the app is completely closed, export a native calendar reminder:</span>
+              <button type="button" class="btn btn-small" onclick="downloadDailyReminderICS()">📅 Export OS Alarm (.ics)</button>
+            </div>
+          </div>
+            </div>
+          </details>
+
+          <details class="v27-acc">
+            <summary>🔐 5. Account, Privacy Policy &amp; Backup</summary>
+            <div class="v27-acc-body">
+              <label class="field-label">YOUR UID (SHARE WITH STUDY FRIENDS)</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" class="field" id="settingsUidField" readonly value="Sign in to view UID" style="font-family:'DM Mono',monospace;font-size:11px">
+            <button type="button" class="btn btn-primary btn-small" onclick="copyUserUid()">Copy</button>
+          </div>
+          <div class="small muted" id="cloudSyncStatus" style="margin-top:8px">Cloud status: Connecting...</div>
+
+          <div class="form-row" style="margin-top:14px">
+            <button type="button" class="btn btn-primary" onclick="exportData()">↓ Export Backup</button>
+            <label class="btn" style="cursor:pointer">↑ Import Backup<input type="file" id="importFile" accept=".json,application/json" hidden onchange="importData(event)"></label>
+          </div>
+          <div class="form-row" style="margin-top:10px">
+            <button type="button" class="btn btn-danger" onclick="clearData()">Reset Local Data</button>
+            <button type="button" class="btn btn-danger" id="settingsAuthActionBtn" onclick="handleLogout()">Log Out</button>
+          </div>
+
+          <!-- Privacy Policy & Student Safety -->
+          <div style="margin-top:12px;padding:11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div>
+              <div style="font:700 12.5px 'Space Grotesk',sans-serif">Privacy Policy &amp; Community Safety</div>
+              <div class="small muted">Data handling, non-E2EE chat notice &amp; minor safety rules</div>
+            </div>
+            <button type="button" class="btn btn-small" onclick="openPrivacyPolicyModal()">🔒 Read Policy</button>
+          </div>
+            
+              <div style="margin-top:12px">
+                <div class="section-title">System Information</div>
+          <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.7 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
+          <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
+              </div>
+            </div>
+          </details>
+        </div>
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.6 · Built for personal study tracking. Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.7 · Built for personal study tracking. <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color:var(--cyan);margin-left:6px">Privacy &amp; Safety</a> Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -3566,33 +3914,50 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
 </div>
 
 
-<!-- Digital OMR Sprint Sheet Modal (Zero Cloud Storage) -->
+<!-- Digital OMR 2.0 Sprint Sheet Modal (10-180 Qs, Timer/Stopwatch, Lock, Vertical Cols, PNG Export & Study Hours) -->
 <div class="modal-overlay" id="omrSprintModal" role="dialog" aria-modal="true" style="z-index:280" onclick="if(event.target===this)closeOmrSprintModal()">
-  <div class="modal-card" style="max-width:680px;max-height:90vh;overflow-y:auto">
+  <div class="modal-card" style="max-width:860px;max-height:92vh;overflow-y:auto">
     <div class="modal-header-row">
       <div>
-        <div class="eyebrow">ZERO-CLOUD SPRINT SHEET</div>
+        <div class="eyebrow">DIGITAL OMR 2.0 · LOGS STUDY HOURS &amp; LIVE FOCUSING</div>
         <h3 class="modal-title" style="margin:2px 0 0">📝 Interactive Digital OMR Sheet</h3>
       </div>
       <button type="button" class="modal-close-x" onclick="closeOmrSprintModal()" aria-label="Close">✕</button>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:10px 0">
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="btn btn-small btn-primary" id="omrSize45Btn" onclick="initOmrSheet(45)">45 Qs (Subject)</button>
-        <button type="button" class="btn btn-small" id="omrSize180Btn" onclick="initOmrSheet(180)">180 Qs (Full NEET)</button>
+    <div id="omrSetupBar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border)">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <label class="small muted" for="omrQCountInput">Questions (10–180):</label>
+        <input type="number" id="omrQCountInput" class="field" min="10" max="180" value="45" style="width:74px;padding:5px 8px" onchange="initOmrSheet(this.value)">
+        <button type="button" class="btn btn-small omr-preset-btn" data-omrpreset="30" onclick="initOmrSheet(30)">30</button>
+        <button type="button" class="btn btn-small btn-primary omr-preset-btn" data-omrpreset="45" id="omrSize45Btn" onclick="initOmrSheet(45)">45</button>
+        <button type="button" class="btn btn-small omr-preset-btn" data-omrpreset="90" onclick="initOmrSheet(90)">90</button>
+        <button type="button" class="btn btn-small omr-preset-btn" data-omrpreset="180" id="omrSize180Btn" onclick="initOmrSheet(180)">180</button>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;font:700 12px 'DM Mono',monospace">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <select id="omrModeSelect" class="field" style="width:auto;padding:5px 8px;font-size:12px" onchange="toggleOmrTimerMode(this.value)">
+          <option value="stopwatch">⏱ Stopwatch (No Limit)</option>
+          <option value="countdown">⏳ Countdown Timer</option>
+        </select>
+        <input type="number" id="omrTimerMinsInput" class="field" min="1" max="240" value="45" style="width:68px;padding:5px 8px;display:none" title="Countdown minutes">
+        <span class="small muted" id="omrTimerMinsLbl" style="display:none">min</span>
+      </div>
+    </div>
+    <div id="omrLockedHint" class="small muted" style="display:none;margin:6px 0;color:var(--orange)">🔒 OMR locked while filling (prevents accidental wipe). Tap Reset OMR to change question count.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:8px 0">
+      <div style="display:flex;gap:8px;align-items:center;font:700 12px 'DM Mono',monospace;flex-wrap:wrap">
         <span class="tag cyan" id="omrClockTag">00:00</span>
         <span class="tag lime" id="omrAttemptedTag">0 / 45 Att</span>
         <span class="tag pink" id="omrPaceWarnTag" style="display:none">⚠ >90s on Q!</span>
       </div>
+      <span class="small muted">Status: <strong style="color:var(--lime)">Focusing: Filling OMR</strong></span>
     </div>
-    <div id="omrGridHost" class="omr-grid"></div>
-    <div class="modal-actions" style="justify-content:space-between;flex-wrap:wrap">
-      <button type="button" class="btn btn-small btn-danger" onclick="resetOmrSheet()">Reset Bubbles</button>
+    <div id="omrGridHost" class="omr-grid omr-col-major"></div>
+    <div class="modal-actions" style="justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:12px">
+      <button type="button" class="btn btn-small btn-danger" onclick="resetOmrSheet(true)">Reset OMR</button>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="btn btn-lime" onclick="sendOmrToMockAnalytics()">↗ Send to Mock Analytics</button>
-        <button type="button" class="btn" onclick="closeOmrSprintModal()">Close</button>
+        <button type="button" class="btn btn-small" onclick="downloadOmrPNG()">⬇ Download OMR PNG</button>
+        <button type="button" class="btn btn-small btn-primary" onclick="finishOmrAndLogStudy()">✓ Finish &amp; Log Study Time</button>
+        <button type="button" class="btn btn-small" onclick="closeOmrSprintModal()">Close</button>
       </div>
     </div>
   </div>
@@ -3632,6 +3997,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
         <button type="button" class="btn btn-primary" onclick="startTimer()">Start / Resume</button>
         <button type="button" class="btn" style="border-color:var(--orange);color:var(--orange)" onclick="startBreakStopwatch()">☕ Take a Break</button>
         <button type="button" class="btn" id="focusAmbientBtn" onclick="toggleAmbientMusic()">🎵 Music: Off</button>
+        <button type="button" class="btn" id="focusTickBtn" onclick="toggleTimerTickSound()">🔇 Tick: Off</button>
         <button type="button" class="btn btn-lime" onclick="finishFocusSession()">End & Save</button>
         <button type="button" class="btn" style="border-color:var(--cyan);color:var(--cyan)" onclick="openBoxBreathingModal()">🌬 Breathe</button>
         <button type="button" class="btn" onclick="openPureFullscreenTimer()" title="Pure Fullscreen Timer">⛶ Fullscreen</button>
@@ -4203,7 +4569,13 @@ const DYNAMIC_TIPS = [
   "Customize your Overview page in Settings — toggle any section on or off and rearrange the order to fit your workflow.",
   "Export a Backup JSON from Settings before switching phones so your entire study history stays safe.",
   "Adding a weak chapter to the Revision Queue lets Spaced Repetition automatically schedule your next review date.",
-  "Add this website to your Home Screen (iOS / macOS / Windows) for a native full-screen app experience with the 720 logo."
+  "Add this website to your Home Screen (iOS / macOS / Windows) for a native full-screen app experience with the 720 logo.",
+  "Tap the 🔔 Inbox icon in the top bar anytime to read full-text Alerts, Friend Requests, and Challenge invites.",
+  "Challenge a Study Friend to a Focus Arena endurance duel or Mock Score Improvement race in the Community tab.",
+  "Use the 1-tap ✨ Minimal | 📊 Full toggle on Overview for a calm, distraction-free dashboard.",
+  "Try all 5 startup Splash Screen Animations (including 720 Score Surge & Radar Scanner) in Settings → Appearance.",
+  "Open Digital OMR 2.0 (10–180 Qs) to show live 'Filling OMR' status, log study hours, and save your sheet as a PNG.",
+  "Tap ⛶ Fullscreen on the Overview Final Countdown for a pure dark-screen NEET 2027 exam clock."
 ];
 
 const defaultChapters = [
@@ -4249,9 +4621,9 @@ const defaultChapters = [
   ["Chemistry","Class 12","Principles Related to Practical Chemistry"]
 ];
 
-const NCERT_FACTS = {"bio":[["XI Ch 1: The Living World","Ernst Mayr (1904–2004), born on 5 July 1904 in Kempten, Germany, is known as 'The Darwin of the 20th century'."],["XI Ch 1: The Living World","Ernst Mayr pioneered the currently accepted biological concept of species and made the origin of species diversity the central question of evolutionary biology."],["XI Ch 1: The Living World","Ernst Mayr was awarded the 'triple crown of biology': the Balzan Prize (1983), the International Prize for Biology (1994), and the Crafoord Prize (1999)."],["XI Ch 1: The Living World","The number of species that are known and described ranges between 1.7–1.8 million, which refers to biodiversity."],["XI Ch 1: The Living World","ICBN stands for International Code for Botanical Nomenclature, which provides agreed principles and criteria for naming plants."],["XI Ch 1: The Living World","ICZN stands for International Code of Zoological Nomenclature, evolved by animal taxonomists for naming animals."],["XI Ch 1: The Living World","Binomial nomenclature, given by Carolus Linnaeus, is the system of providing a scientific name with two components: Generic name and specific epithet."],["XI Ch 1: The Living World","In Mangifera indica Linn., Mangifera represents the genus, indica is the specific epithet, and Linn. indicates the species was first described by Linnaeus."],["XI Ch 1: The Living World","Biological names are generally in Latin and printed in italics, or separately underlined when handwritten to indicate their Latin origin."],["XI Ch 1: The Living World","The first word denoting the genus starts with a capital letter, while the specific epithet starts with a small letter."]],"chem":[["XI Ch 1: Some Basic Concepts of Chemistry","Matter Classification: Pure substances have fixed composition (elements, compounds); mixtures have variable composition (homogeneous solutions or heterogeneous). ▸ Pure: Fixed ratio; Mixture: Variable ratio"],["XI Ch 1: Some Basic Concepts of Chemistry","SI Base Units in Chemistry: Seven SI base units include metre (m), kilogram (kg), second (s), ampere (A), kelvin (K), mole (mol, 6.022×10^23 entities), and candela (cd). ▸ 1 mol = 6.02214076 × 10^23 elementary entities"],["XI Ch 1: Some Basic Concepts of Chemistry","Mass vs Weight & Volume Conversions: Mass is constant matter content (SI unit kg), while weight W = mg varies with gravity; 1 L = 1 dm^3 = 1000 cm^3 = 10^-3 m^3. ▸ 1 m^3 = 10^3 L = 10^6 cm^3 (mL)"],["XI Ch 1: Some Basic Concepts of Chemistry","Temperature Scale Conversions: Kelvin temperature relates to Celsius as T(K) = t(°C) + 273.15, and Fahrenheit relates to Celsius as °F = (9/5)°C + 32. ▸ °F = 1.8(°C) + 32; −40°C = −40°F"],["XI Ch 1: Some Basic Concepts of Chemistry","Significant Figures Rules: All non-zero digits and captive zeros are significant. ▸ 0.002050 has 4 sig. figs; 2.50 × 10^3 has 3 sig. figs"],["XI Ch 1: Some Basic Concepts of Chemistry","Precision vs Accuracy: Precision reflects closeness among repeated measurements of the same quantity. ▸ Small random spread ⇒ High precision; Zero systematic bias ⇒ High accuracy"],["XI Ch 1: Some Basic Concepts of Chemistry","Rounding Off Rules in Calculations: In multiplication/division, keep as many significant figures as the factor with fewest sig. figs. ▸ Digit 5 rule: Preceding odd digit rounds up (+1), even stays unchanged"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Conservation of Mass (Lavoisier, 1789): In all physical and chemical changes (ignoring nuclear mass defect), the total mass of products equals the total mass of reactants. ▸ ∑ m_reactants = ∑ m_products"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Definite Proportions (Proust, 1799): A given chemical compound always contains the exact same constituent elements combined together in the same fixed proportion. ▸ Pure H2O always has m(H) : m(O) = 1 : 8 by mass"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Multiple Proportions (Dalton, 1803): When two elements combine to form more than one compound. ▸ CO (12:16) vs CO2 (12:32) ⇒ Oxygen ratio = 16 : 32 = 1 : 2"]],"phy":[["XI Ch 1: Units and Measurement","Seven Base SI Units: The seven fundamental SI quantities and units are length (m), mass (kg), time (s), electric current (A), thermodynamic temperature (K), luminous intensity (cd), and amount of substance (mol). Nbase = 7"],["XI Ch 1: Units and Measurement","Plane Angle Radian: Plane angle dθ is the ratio of arc length ds to radius r; it is a dimensionless supplementary SI quantity measured in radians (rad). dθ = ds / r (1 rad = 180° / π ≈ 57.3°)"],["XI Ch 1: Units and Measurement","Solid Angle Steradian: Solid angle dΩ is the ratio of intercepted spherical surface area dA to the square of radius r, measured in steradians (sr). dΩ = dA / r² (Ωsphere = 4π sr)"],["XI Ch 1: Units and Measurement","Significant Figures Rules: All non-zero digits and zeros trapped between non-zero digits are significant; leading zeros are never significant, whereas trailing zeros are significant only when a decimal point is present. 0.002308 → 4 sig. figs; 2.30 × 10⁴ → 3 sig. figs"],["XI Ch 1: Units and Measurement","Arithmetic Rounding Rule: In multiplication or division, the final result retains as many significant figures as the input measurement with the fewest significant figures; in addition or subtraction, it retains the fewest decimal places. Rmult/div → min(sig. figs); Radd/sub → min(decimal places)"],["XI Ch 1: Units and Measurement","Rounding Preceding Digit: When dropping a digit equal to 5 followed only by zeros, the preceding digit is raised by 1 if it is odd and left unchanged if it is even. 2.745 → 2.74 (even); 2.735 → 2.74 (odd)"],["XI Ch 1: Units and Measurement","Principle of Homogeneity: Only physical quantities having identical dimensional formulas can be added, subtracted, or equated on opposite sides of a valid physical equation. [A + B] ⇒ [A] = [B]"],["XI Ch 1: Units and Measurement","Force and Energy Dimensions: Force has dimensions of mass times acceleration, while work, torque, and all forms of energy share the same dimensional formula. [F] = [MLT⁻²]; [W] = [τ] = [E] = [ML²T⁻²]"],["XI Ch 1: Units and Measurement","Pressure and Stress Dimensions: Pressure, mechanical stress, Young's modulus, bulk modulus,shear modulus, and energy density all share identical dimensions of force per unit area. [P] = [σ] = [Y] = [B] = [uE] = [ML⁻¹T⁻²]"],["XI Ch 1: Units and Measurement","Surface Tension and Spring Constant: Surface tension S (force per unit length) and spring force constant k share identical dimensions. [S] = [k] = [F / L] = [MT]"]]};
+const NCERT_FACTS = {"bio":[["XI Ch 1: The Living World","Ernst Mayr (1904–2004), born on 5 July 1904 in Kempten, Germany, is known as 'The Darwin of the 20th century'."],["XI Ch 1: The Living World","Ernst Mayr pioneered the currently accepted biological concept of species and made the origin of species diversity the central question of evolutionary biology."],["XI Ch 1: The Living World","Ernst Mayr was awarded the 'triple crown of biology': the Balzan Prize (1983), the International Prize for Biology (1994), and the Crafoord Prize (1999)."],["XI Ch 1: The Living World","The number of species that are known and described ranges between 1.7–1.8 million, which refers to biodiversity."],["XI Ch 1: The Living World","ICBN stands for International Code for Botanical Nomenclature, which provides agreed principles and criteria for naming plants."],["XI Ch 1: The Living World","ICZN stands for International Code of Zoological Nomenclature, evolved by animal taxonomists for naming animals."],["XI Ch 1: The Living World","Binomial nomenclature, given by Carolus Linnaeus, is the system of providing a scientific name with two components: Generic name and specific epithet."],["XI Ch 1: The Living World","In Mangifera indica Linn., Mangifera represents the genus, indica is the specific epithet, and Linn. indicates the species was first described by Linnaeus."],["XI Ch 1: The Living World","Biological names are generally in Latin and printed in italics, or separately underlined when handwritten to indicate their Latin origin."],["XI Ch 1: The Living World","The first word denoting the genus starts with a capital letter, while the specific epithet starts with a small letter."]],"chem":[["XI Ch 1: Some Basic Concepts of Chemistry","Matter Classification: Pure substances have fixed composition (elements, compounds); mixtures have variable composition (homogeneous solutions or heterogeneous). ▸ Pure: Fixed ratio; Mixture: Variable ratio"],["XI Ch 1: Some Basic Concepts of Chemistry","SI Base Units in Chemistry: Seven SI base units include metre (m), kilogram (kg), second (s), ampere (A), kelvin (K), mole (mol, 6.022×10^23 entities), and candela (cd). ▸ 1 mol = 6.02214076 × 10^23 elementary entities"],["XI Ch 1: Some Basic Concepts of Chemistry","Mass vs Weight & Volume Conversions: Mass is constant matter content (SI unit kg), while weight W = mg varies with gravity; 1 L = 1 dm^3 = 1000 cm^3 = 10^-3 m^3. ▸ 1 m^3 = 10^3 L = 10^6 cm^3 (mL)"],["XI Ch 1: Some Basic Concepts of Chemistry","Temperature Scale Conversions: Kelvin temperature relates to Celsius as T(K) = t(°C) + 273.15, and Fahrenheit relates to Celsius as °F = (9/5)°C + 32. ▸ °F = 1.8(°C) + 32; −40°C = −40°F"],["XI Ch 1: Some Basic Concepts of Chemistry","Significant Figures Rules: All non-zero digits and captive zeros are significant. ▸ 0.002050 has 4 sig. figs; 2.50 × 10^3 has 3 sig. figs"],["XI Ch 1: Some Basic Concepts of Chemistry","Precision vs Accuracy: Precision reflects closeness among repeated measurements of the same quantity. ▸ Small random spread ⇒ High precision; Zero systematic bias ⇒ High accuracy"],["XI Ch 1: Some Basic Concepts of Chemistry","Rounding Off Rules in Calculations: In multiplication/division, keep as many significant figures as the factor with fewest sig. figs. ▸ Digit 5 rule: Preceding odd digit rounds up (+1), even stays unchanged"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Conservation of Mass (Lavoisier, 1789): In all physical and chemical changes (ignoring nuclear mass defect), the total mass of products equals the total mass of reactants. ▸ ∑ m_reactants = ∑ m_products"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Definite Proportions (Proust, 1799): A given chemical compound always contains the exact same constituent elements combined together in the same fixed proportion. ▸ Pure H2O always has m(H) : m(O) = 1 : 8 by mass"],["XI Ch 1: Some Basic Concepts of Chemistry","Law of Multiple Proportions (Dalton, 1803): When two elements combine to form more than one compound. ▸ CO (12:16) vs CO2 (12:32) ⇒ Oxygen ratio = 16 : 32 = 1 : 2"]],"phy":[["XI Ch 1: Units and Measurement","Seven Base SI Units: The seven fundamental SI quantities and units are length (m), mass (kg), time (s), electric current (A), thermodynamic temperature (K), luminous intensity (cd), and amount of substance (mol). Nbase = 7"],["XI Ch 1: Units and Measurement","Plane Angle Radian: Plane angle dθ is the ratio of arc length ds to radius r; it is a dimensionless supplementary SI quantity measured in radians (rad). dθ = ds / r (1 rad = 180° / π ≈ 57.3°)"],["XI Ch 1: Units and Measurement","Solid Angle Steradian: Solid angle dΩ is the ratio of intercepted spherical surface area dA to the square of radius r, measured in steradians (sr). dΩ = dA / r² (Ωsphere = 4π sr)"],["XI Ch 1: Units and Measurement","Significant Figures Rules: All non-zero digits and zeros trapped between non-zero digits are significant; leading zeros are never significant, whereas trailing zeros are significant only when a decimal point is present. 0.002308 → 4 sig. figs; 2.30 × 10⁴ → 3 sig. figs"],["XI Ch 1: Units and Measurement","Arithmetic Rounding Rule: In multiplication or division, the final result retains as many significant figures as the input measurement with the fewest significant figures; in addition or subtraction, it retains the fewest decimal places. Rmult/div → min(sig. figs); Radd/sub → min(decimal places)"],["XI Ch 1: Units and Measurement","Rounding Preceding Digit: When dropping a digit equal to 5 followed only by zeros, the preceding digit is raised by 1 if it is odd and left unchanged if it is even. 2.745 → 2.74 (even); 2.735 → 2.74 (odd)"],["XI Ch 1: Units and Measurement","Principle of Homogeneity: Only physical quantities having identical dimensional formulas can be added, subtracted, or equated on opposite sides of a valid physical equation. [A + B] ⇒ [A] = [B]"],["XI Ch 1: Units and Measurement","Force and Energy Dimensions: Force has dimensions of mass times acceleration, while work, torque, and all forms of energy share the same dimensional formula. [F] = [MLT⁻²]; [W] = [τ] = [E] = [ML²T⁻²]"],["XI Ch 1: Units and Measurement","Pressure and Stress Dimensions: Pressure, mechanical stress, Young's modulus, bulk modulus, shear modulus, and energy density all share identical dimensions of force per unit area. [P] = [σ] = [Y] = [B] = [uE] = [ML⁻¹T⁻²]"],["XI Ch 1: Units and Measurement","Surface Tension and Spring Constant: Surface tension S (force per unit length) and spring force constant k share identical dimensions. [S] = [k] = [F / L] = [MT⁻²]"]]};
 (function loadExternalNcertFacts() {
-  const CACHE_KEY = 'neet_ncert_facts_cache_v26';
+  const CACHE_KEY = 'neet_ncert_facts_cache_v27';
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
@@ -4584,7 +4956,15 @@ let data = (() => {
   catch (e) { return defaultDataObject(); }
 })();
 window.appDataRef = () => data;
-window.setAppData = (newObj) => { data = normalizeData(newObj); try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {} refreshAllViews(); };
+window.setAppData = (newObj) => {
+  const prevLocalTimer = (typeof data !== "undefined" && data && data.timer) ? { ...data.timer } : null;
+  data = normalizeData(newObj);
+  if (prevLocalTimer && (prevLocalTimer.running || (prevLocalTimer.remaining > 0 && prevLocalTimer.remaining < prevLocalTimer.total) || prevLocalTimer.flowElapsed > 0)) {
+    data.timer = prevLocalTimer;
+  }
+  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+  refreshAllViews();
+};
 
 let undoHistory = [], redoHistory = [], lastSnap = JSON.stringify(data);
 function updateUndoButtons() {
@@ -4595,19 +4975,10 @@ function updateUndoButtons() {
 function save(syncCloud = true) {
   try {
     data.updatedAt = Date.now();
-    const cur = JSON.stringify(data);
-    if (cur !== lastSnap) {
-      undoHistory.push(lastSnap);
-      if (undoHistory.length > 5) undoHistory.shift();
-      redoHistory = [];
-      lastSnap = cur;
-      updateUndoButtons();
-    }
-    localStorage.setItem(KEY, cur);
+    localStorage.setItem(KEY, JSON.stringify(data));
   } catch (e) {}
   if (syncCloud) {
     scheduleCloudSync();
-  if (typeof syncCapacitorDailyAlarms === 'function') { clearTimeout(window._capAlarmDebounce); window._capAlarmDebounce = setTimeout(() => syncCapacitorDailyAlarms(), 2500); }
   }
 }
 let _cloudSyncTimer = null;
@@ -4819,7 +5190,10 @@ async function capScheduleNotification({ id, title, body, at, on, repeats = fals
         id: Number(id),
         title,
         body,
+        largeBody: body,
+        summaryText: "NEET Command Centre 2027",
         channelId: "neet_alerts",
+        extra: { title, body },
         schedule
       }]
     });
@@ -4856,7 +5230,7 @@ async function syncCapacitorDailyAlarms() {
 
   const pushAtTodayOrTomorrow = (id, title, body, hour, minute, repeats = true) => {
     toSchedule.push({
-      id, title, body, channelId: "neet_alerts",
+      id, title, body, largeBody: body, summaryText: "NEET Command Centre 2027", channelId: "neet_alerts",
       schedule: { allowWhileIdle: true, on: { hour, minute }, repeats }
     });
   };
@@ -4873,7 +5247,7 @@ async function syncCapacitorDailyAlarms() {
   }
 
   // 2. 2:00 PM Bio-Clock Kickoff (1:55 PM daily)
-  pushAtTodayOrTomorrow(
+  if (rem.bioClock !== false) pushAtTodayOrTomorrow(
     CAP_NOTIF_IDS.BIO_CLOCK,
     "NEET Bio-Clock Window in 5 Mins 🎯",
     "Official NEET window (2:00–5:00 PM) starts at 2:00 PM. Start a deep session or mock to train afternoon focus.",
@@ -4881,13 +5255,14 @@ async function syncCapacitorDailyAlarms() {
   );
 
   // 3. 5:00 PM Halfway Target Check (if < 50% of daily target done)
-  if (pctToday < 50) {
+  if (rem.consistency !== false && pctToday < 50) {
     const at5 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
     if (at5.getTime() > Date.now()) {
       toSchedule.push({
         id: CAP_NOTIF_IDS.FIVE_PM,
         title: "5:00 PM Study Check-In ⚡",
         body: `You're at ${pctToday}% of your daily study target. Lock in an evening session to cross 50%+!`,
+        largeBody: `You're at ${pctToday}% of your daily study target. Lock in an evening session to cross 50%+!`,
         channelId: "neet_alerts",
         schedule: { allowWhileIdle: true, at: at5 }
       });
@@ -4895,7 +5270,7 @@ async function syncCapacitorDailyAlarms() {
   }
 
   // 4. "Almost There" Daily Target Nudge (8:30 PM — only if 70–99% done)
-  if (pctToday >= 70 && pctToday < 100) {
+  if (rem.almostThere !== false && pctToday >= 70 && pctToday < 100) {
     const remMins = Math.max(1, targetMins - loggedToday);
     const at830 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 20, 30, 0);
     if (at830.getTime() > Date.now()) {
@@ -4903,6 +5278,7 @@ async function syncCapacitorDailyAlarms() {
         id: CAP_NOTIF_IDS.ALMOST_THERE,
         title: "Almost There! 🎯",
         body: `Only ${remMins} mins left to hit 100% of your ${(targetMins / 60).toFixed(1)}h daily target!`,
+        largeBody: `Only ${remMins} mins left to hit 100% of your ${(targetMins / 60).toFixed(1)}h daily target!`,
         channelId: "neet_alerts",
         schedule: { allowWhileIdle: true, at: at830 }
       });
@@ -4910,7 +5286,7 @@ async function syncCapacitorDailyAlarms() {
   }
 
   // 5. Custom dayResetHour Streak Rescue (90 mins before configured reset hour)
-  if (rem.consistency !== false) {
+  if (rem.streakRescue !== false) {
     const resetHr = Math.max(0, Math.min(6, Number(data.settings.dayResetHour) || 0));
     const rescueTotalMins = ((resetHr * 60) - 90 + 1440) % 1440;
     const rH = Math.floor(rescueTotalMins / 60), rM = rescueTotalMins % 60;
@@ -4931,15 +5307,17 @@ async function syncCapacitorDailyAlarms() {
         return w ? `${r.topic} (${w})` : r.topic;
       }).join(" & ") + " due for revision today."
     : "Morning Brief: Check your top-priority missions & high-weightage chapters for today!";
-  pushAtTodayOrTomorrow(CAP_NOTIF_IDS.MORNING_BRIEF, "NEET Morning Brief ☀️", briefBody, 8, 0, true);
+  if (rem.morningBrief !== false) pushAtTodayOrTomorrow(CAP_NOTIF_IDS.MORNING_BRIEF, "NEET Morning Brief ☀️", briefBody, 8, 0, true);
 
   // 7. Mock Test Cadence Reminder (Saturday 7:00 PM if >14 days since last Full Mock)
   const fullMocks = (data.mocks || []).filter(m => !m.type || m.type === "full").sort((a, b) => (a.date || "").localeCompare(b.date || ""));
   const lastMockDate = fullMocks.length ? fullMocks[fullMocks.length - 1].date : null;
   const daysSinceMock = lastMockDate ? Math.floor((Date.now() - Date.parse(lastMockDate + "T00:00:00")) / 86400000) : 99;
-  if (daysSinceMock > 14) {
+  if (rem.mockWeekly !== false && daysSinceMock > 14) {
+    const mcBody = lastMockDate ? `It's been ${daysSinceMock} days since your last Full Mock — block tomorrow 2:00 PM for a 720-mark test.` : "Block 2:00–5:00 PM tomorrow for your first 720-mark NEET Full Mock!";
     toSchedule.push({
       id: CAP_NOTIF_IDS.MOCK_CADENCE,
+      largeBody: mcBody, summaryText: "NEET Command Centre 2027",
       title: "Full Mock Test Due 📝",
       body: lastMockDate ? `It's been ${daysSinceMock} days since your last Full Mock — block tomorrow 2:00 PM for a 720-mark test.` : "Block 2:00–5:00 PM tomorrow for your first 720-mark NEET Full Mock!",
       channelId: "neet_alerts",
@@ -4948,10 +5326,12 @@ async function syncCapacitorDailyAlarms() {
   }
 
   // 8. Sunday Weekly Audit (Sunday 8:00 PM)
-  toSchedule.push({
+  if (rem.mockWeekly !== false) toSchedule.push({
     id: CAP_NOTIF_IDS.WEEKLY_AUDIT,
     title: "Sunday Weekly Audit 📊",
     body: "Review your weekly study hours, share your Weekly Parent Report, and export a JSON backup.",
+    largeBody: "Review your weekly study hours, share your Weekly Parent Report, and export a JSON backup.",
+    summaryText: "NEET Command Centre 2027",
     channelId: "neet_alerts",
     schedule: { allowWhileIdle: true, on: { weekday: 1, hour: 20, minute: 0 }, repeats: true }
   });
@@ -5034,6 +5414,7 @@ function triggerAppAlert(title, message, icon = "🔔") {
     clearTimeout(triggerAppAlert._t);
     triggerAppAlert._t = setTimeout(() => b.classList.remove("show"), 7500);
   }
+  if (typeof window.recordInboxAlert === "function") window.recordInboxAlert(title, message, icon);
   dispatchSystemNotification(title, message);
 }
 window.requestAlertPermission = (showToast = true) => {
@@ -5315,8 +5696,6 @@ document.querySelectorAll(".nav-btn,.mob-nav-item").forEach(b => b.addEventListe
 document.getElementById("menuBtn").onclick = () => setSidebarOpen(!document.getElementById("sidebar").classList.contains("open"));
 document.getElementById("closeSidebarBtn").onclick = () => setSidebarOpen(false);
 document.getElementById("sidebarBackdrop").onclick = () => setSidebarOpen(false);
-document.getElementById("quickTimer").onclick = () => navigate("study");
-document.getElementById("quickSettings").onclick = () => navigate("settings");
 
 function applyTheme(t) {
   const light = t === "light";
@@ -5381,6 +5760,33 @@ function updateCountdownTickUI() {
   btn.textContent = on ? "🔊 Tick: On" : "🔇 Tick: Off";
   btn.classList.toggle("btn-lime", on);
 }
+
+/* Dedicated Study Timer Doomsday Tick Sound (Independent of Overview Final Countdown) */
+function updateTimerTickUI() {
+  const on = Boolean(data && data.settings && data.settings.timerTickSound);
+  const b1 = document.getElementById("timerTickSoundBtn");
+  const b2 = document.getElementById("focusTickBtn");
+  if (b1) { b1.textContent = on ? "🔊 Tick: On" : "🔇 Tick"; b1.classList.toggle("btn-lime", on); }
+  if (b2) { b2.textContent = on ? "🔊 Tick: On" : "🔇 Tick: Off"; b2.classList.toggle("btn-lime", on); }
+}
+window.toggleTimerTickSound = () => {
+  data.settings.timerTickSound = !Boolean(data.settings.timerTickSound);
+  save();
+  updateTimerTickUI();
+  if (data.settings.timerTickSound) {
+    playDoomsdayTick(true);
+    notify("Study Timer tick sound enabled (plays while timer runs).");
+  } else {
+    notify("Study Timer tick sound muted.");
+  }
+};
+setInterval(() => {
+  if (typeof timerRunning !== "undefined" && timerRunning && data && data.settings && data.settings.timerTickSound && !document.hidden) {
+    playDoomsdayTick(true);
+  }
+}, 1000);
+setTimeout(() => { try { updateTimerTickUI(); } catch (e) {} }, 600);
+
 window.toggleCountdownTickSound = () => {
   data.settings.countdownTickSound = !Boolean(data.settings.countdownTickSound);
   save();
@@ -5392,7 +5798,10 @@ window.toggleCountdownTickSound = () => {
     notify("Final Countdown tick sound muted.");
   }
 };
+let _lastTickAt = 0;
 function playDoomsdayTick(force = false) {
+  if (Date.now() - _lastTickAt < 700) return;
+  _lastTickAt = Date.now();
   if (!force && (!data || !data.settings || !data.settings.countdownTickSound)) return;
   if (document.hidden) return;
   const dashEl = document.getElementById("dashboard");
@@ -5458,7 +5867,7 @@ function playDoomsdayTick(force = false) {
   } catch (e) {}
 }
 document.addEventListener("pointerdown", () => {
-  if (_tickAudioCtx && _tickAudioCtx.state === "suspended" && data && data.settings && data.settings.countdownTickSound) {
+  if (_tickAudioCtx && _tickAudioCtx.state === "suspended" && data && data.settings && (data.settings.countdownTickSound || data.settings.timerTickSound)) {
     _tickAudioCtx.resume().catch(() => {});
   }
 }, { passive: true });
@@ -5531,12 +5940,12 @@ function formatBreakDuration(sec) {
 }
 function minsToday() { return data.sessions.filter(s => s.date === today()).reduce((a, s) => a + (Number(s.minutes) || 0), 0); }
 function minsThisWeek() {
-  const wk = getWeekKey(new Date());
+  const wk = getWeekKey();
   return data.sessions.filter(s => s.date >= wk).reduce((a, s) => a + (Number(s.minutes) || 0), 0);
 }
 function getValidatedLeaderboardMinutes(mode = "today") {
   const td = today();
-  const wk = getWeekKey(new Date());
+  const wk = getWeekKey();
   const byDay = {};
   (data.sessions || []).forEach(s => {
     if (!s || typeof s.date !== "string" || s.date > td) return;
@@ -5556,7 +5965,7 @@ window.getValidatedTodayMinutes = () => getValidatedLeaderboardMinutes("today");
 window.getValidatedWeeklyMinutes = () => getValidatedLeaderboardMinutes("weekly");
 function getManualLeaderboardStats(mode = "weekly") {
   const td = today();
-  const wk = getWeekKey(new Date());
+  const wk = getWeekKey();
   let totalMins = 0, manualMins = 0;
   const heavyManualByDay = {};
   (data.sessions || []).forEach(s => {
@@ -5582,7 +5991,7 @@ window.getManualLeaderboardStats = getManualLeaderboardStats;
 
 window.getPublicProgressSnapshot = () => {
   const td = today();
-  const wk = getWeekKey(new Date());
+  const wk = getWeekKey();
   const ms = getMissions(td);
   const doneM = ms.filter(m => m.done).length;
   const chTotal = (data.chapters || []).length || 81;
@@ -5695,10 +6104,12 @@ function missionHTML(m, date = today(), idx = -1, total = 0) {
   return `<div class="mission-item">
     <button type="button" class="check ${m.done ? "done" : ""}" onclick="toggleMission(${m.id},'${date}')">✓</button>
     <div class="item-main"><strong style="${m.done ? "text-decoration:line-through;color:var(--muted)" : ""}">${esc(m.name || m.text || "")}</strong><small>${esc(m.subject)} · ${esc(m.priority || "Normal")}</small></div>
-    ${orderBtns}
-    <button type="button" class="icon-btn btn-small" onclick="toggleMissionDailyHabit(${m.id},'${date}')" title="Pin as Daily Habit (auto-adds every morning)" style="${m.dailyHabit ? 'border-color:var(--lime);color:var(--lime)' : ''}">🔁</button>
-    <button type="button" class="icon-btn btn-small" onclick="openEditMissionModal(${m.id},'${date}')" title="Edit mission">✎</button>
-    <button type="button" class="icon-btn btn-small" onclick="deleteMission(${m.id},'${date}')" title="Delete mission">×</button>
+    <div class="mission-actions-wrap">
+      ${orderBtns}
+      <button type="button" class="icon-btn btn-small" onclick="toggleMissionDailyHabit(${m.id},'${date}')" title="Pin as Daily Habit" style="${m.dailyHabit ? 'border-color:var(--lime);color:var(--lime)' : ''}">🔁</button>
+      <button type="button" class="icon-btn btn-small" onclick="openEditMissionModal(${m.id},'${date}')" title="Edit mission">✎</button>
+      <button type="button" class="icon-btn btn-small" style="color:var(--rose)" onclick="deleteMission(${m.id},'${date}')" title="Delete mission">×</button>
+    </div>
   </div>`;
 }
 window.openEditMissionModal = (id, date) => {
@@ -5839,20 +6250,40 @@ function renderMissionHistory() {
 }
 function ensureDailyHabitsPopulated() {
   const td = today();
-  const habits = (data.settings && Array.isArray(data.settings.dailyHabits)) ? data.settings.dailyHabits : [];
+  if (!data.settings) data.settings = {};
+  if (!Array.isArray(data.settings.dailyHabits)) {
+    data.settings.dailyHabits = [{ name: "Read Daily NCERT Facts", subject: "Revision", priority: "Normal" }];
+    data.settings.defaultNcertHabitAdded = true;
+  } else if (!data.settings.defaultNcertHabitAdded) {
+    const hasNcert = data.settings.dailyHabits.some(h => (h.name || "").trim().toLowerCase() === "read daily ncert facts");
+    if (!hasNcert) data.settings.dailyHabits.push({ name: "Read Daily NCERT Facts", subject: "Revision", priority: "Normal" });
+    data.settings.defaultNcertHabitAdded = true;
+  }
+  const habits = data.settings.dailyHabits;
   if (!habits.length) return;
+  if (!data.settings.dailyHabitSpawnedDates || typeof data.settings.dailyHabitSpawnedDates !== "object") {
+    data.settings.dailyHabitSpawnedDates = {};
+  }
+  if (!Array.isArray(data.settings.dailyHabitSpawnedDates[td])) {
+    data.settings.dailyHabitSpawnedDates[td] = [];
+  }
   if (!Array.isArray(data.missions[td])) data.missions[td] = [];
-  const existingNames = new Set(data.missions[td].map(m => (m.name || "").trim().toLowerCase()));
+  const spawned = data.settings.dailyHabitSpawnedDates[td];
   let added = false;
   habits.forEach((h, i) => {
     const key = (h.name || "").trim().toLowerCase();
-    if (key && !existingNames.has(key)) {
-      data.missions[td].push({ id: Date.now() + i + 1, name: h.name, subject: h.subject || "Biology", priority: h.priority || "High", done: false, dailyHabit: true });
-      existingNames.add(key);
+    if (!key || spawned.includes(key)) return;
+    const exists = data.missions[td].some(m => (m.name || "").trim().toLowerCase() === key);
+    if (!exists) {
+      data.missions[td].push({ id: Date.now() + i + 1, name: h.name, subject: h.subject || "Revision", priority: h.priority || "Normal", done: false, dailyHabit: true });
       added = true;
     }
+    spawned.push(key);
   });
-  if (added) save();
+  // Keep only last 7 spawned dates to stay tiny
+  const dKeys = Object.keys(data.settings.dailyHabitSpawnedDates).sort();
+  while (dKeys.length > 7) delete data.settings.dailyHabitSpawnedDates[dKeys.shift()];
+  if (added) save(false);
 }
 window.toggleMissionDailyHabit = (id, date) => {
   const arr = getMissions(date);
@@ -6058,15 +6489,17 @@ function tickTimer() {
     flowElapsed = Math.max(0, Math.floor((Date.now() - data.timer.startedAt) / 1000));
     data.timer.flowElapsed = flowElapsed;
     // 60-min Flowmodoro pacing chime & 20-20-20 eye-rest micro-nudge
-    const hrMark = Math.floor(flowElapsed / 3600);
-    if (hrMark > 0 && hrMark !== (window._lastFlowHrChime || 0)) {
-      window._lastFlowHrChime = hrMark;
-      triggerAppAlert(`${hrMark * 60}m Flow Hit!`, `Take a ${hrMark * 12}m earned break or keep rolling.`, "🔔");
-    }
-    const eyeMark = Math.floor(flowElapsed / 1200);
-    if (eyeMark > 0 && eyeMark !== (window._lastEyeMark || 0)) {
-      window._lastEyeMark = eyeMark;
-      notify("20-20-20 Eye Rest: Look 20 ft away for 20 seconds.");
+    if (!data.settings.reminders || data.settings.reminders.flowEyeRest !== false) {
+      const hrMark = Math.floor(flowElapsed / 3600);
+      if (hrMark > 0 && hrMark !== (window._lastFlowHrChime || 0)) {
+        window._lastFlowHrChime = hrMark;
+        triggerAppAlert(`${hrMark * 60}m Flow Hit!`, `Take a ${hrMark * 12}m earned break or keep rolling.`, "🔔");
+      }
+      const eyeMark = Math.floor(flowElapsed / 1200);
+      if (eyeMark > 0 && eyeMark !== (window._lastEyeMark || 0)) {
+        window._lastEyeMark = eyeMark;
+        notify("20-20-20 Eye Rest: Look 20 ft away for 20 seconds.");
+      }
     }
     showTimer();
     return;
@@ -6114,7 +6547,7 @@ window.startTimer = () => {
     return;
   }
 
-  if (timerRemaining <= 0) resetTimer();
+  if (!Number.isFinite(timerRemaining) || timerRemaining <= 0) { timerRemaining = (data.timer && Number.isFinite(data.timer.remaining) && data.timer.remaining > 0) ? data.timer.remaining : timerTotal; } if (timerRemaining <= 0) resetTimer();
   timerRunning = true;
   document.getElementById("timerStatus").textContent = "FOCUSING";
   const endAt = Date.now() + timerRemaining * 1000;
@@ -6178,6 +6611,7 @@ function completeSession(minutes, sourceOverride) {
   data.timer.completedSaved = true;
   save(); renderSessions(); renderDashboard(); renderConsistency(); renderDailyTargetProgress();
   checkDailyGoalCompletion();
+  if (typeof syncCapacitorDailyAlarms === "function") syncCapacitorDailyAlarms();
 }
 window.finishFocusSession = () => {
   if (data.timer.completedSaved) return notify("Session already saved.");
@@ -6972,7 +7406,7 @@ window.completeRevision = (id, scheduleNextDays = 0, nextConfidence = null) => {
 };
 window.rescheduleRevision = (id, days = 3) => {
   const r = data.revisions.find(x => x.id === id); if (!r) return;
-  const nxt = new Date(); nxt.setDate(nxt.getDate() + days);
+  const nxt = studyNow(); nxt.setDate(nxt.getDate() + days);
   data.revisions.push({
     id: Date.now(),
     topic: r.topic,
@@ -7003,7 +7437,7 @@ window.fillSmartRevision = (chapterId) => {
 };
 function renderRevisions() {
   const td = today();
-  const wk = getWeekKey(new Date());
+  const wk = getWeekKey();
   const all = data.revisions.slice().sort((a, b) => a.date.localeCompare(b.date));
   const dueToday = all.filter(r => !r.done && r.date === td).length;
   const overdue = all.filter(r => !r.done && r.date < td).length;
@@ -7209,7 +7643,13 @@ function calcMockAccuracy(attempted, correct) {
 let _miActiveTab = "overview";
 let _miRangeFilter = "all";
 let _miCompareIds = [];
-let _miDraftQLogs = [];
+
+window.saveMockTargetScore = () => {
+  const val = Math.max(100, Math.min(720, Math.round(Number((document.getElementById("mockTargetScoreInput") && document.getElementById("mockTargetScoreInput").value)) || 600)));
+  data.settings.mockTargetScore = val;
+  save(); renderMocks(); renderIntelligence(); notify(`Mock target score set to ${val} / 720!`);
+};
+
 let _miCurrentReportId = null;
 const _miUndoStack = [];
 const _miRedoStack = [];
@@ -7261,7 +7701,7 @@ window.setMockRangeFilter = (rng) => {
 function getFilteredMocks() {
   const all = data.mocks.slice().sort((a, b) => (a.date || "").localeCompare(b.date || ""));
   if (_miRangeFilter === "all") return all;
-  const now = new Date();
+  const now = studyNow();
   let fromStr = "0000-01-01", toStr = "9999-12-31";
   if (_miRangeFilter === "7d") { const d = new Date(now); d.setDate(d.getDate() - 7); fromStr = dateKey(d); }
   else if (_miRangeFilter === "30d") { const d = new Date(now); d.setDate(d.getDate() - 30); fromStr = dateKey(d); }
@@ -7335,32 +7775,6 @@ window.syncDetailedToQuick = () => {
   if (sumTime > 0) document.getElementById("mockTotalTime").value = sumTime;
   updateLiveFullMockPreview(); updateLiveMockAccuracy();
   notify("Auto-filled subject marks and totals from breakdown!");
-};
-window.addDraftQuestionLog = () => {
-  const qNo = Number(document.getElementById("qlNum").value) || (_miDraftQLogs.length + 1);
-  const subject = document.getElementById("qlSubj").value;
-  const chapter = document.getElementById("qlChapter").value.trim();
-  const status = document.getElementById("qlStatus").value;
-  const mistakeType = document.getElementById("qlReason").value;
-  _miDraftQLogs.push({ q: qNo, s: subject, c: chapter, st: status, m: mistakeType });
-  document.getElementById("qlNum").value = "";
-  renderDraftQuestionLogs();
-};
-window.removeDraftQuestionLog = (idx) => {
-  _miDraftQLogs.splice(idx, 1);
-  renderDraftQuestionLogs();
-};
-function renderDraftQuestionLogs() {
-  const el = document.getElementById("draftQuestionLogsList");
-  if (!el) return;
-  if (!_miDraftQLogs.length) { el.innerHTML = "No question-level entries added (optional)."; return; }
-  el.innerHTML = _miDraftQLogs.map((q, i) => `<span class="tag" style="margin:2px;display:inline-flex;gap:5px;align-items:center">Q${q.q} · ${esc(q.s)}${q.c ? " (" + esc(q.c) + ")" : ""} · ${esc(q.st)} · ${esc(q.m)} <button type="button" style="border:0;background:none;color:var(--pink);cursor:pointer;padding:0 2px" onclick="removeDraftQuestionLog(${i})">×</button></span>`).join("");
-}
-
-window.saveMockTargetScore = () => {
-  const val = Math.max(100, Math.min(720, Math.round(Number((document.getElementById("mockTargetScoreInput") && document.getElementById("mockTargetScoreInput").value)) || 600)));
-  data.settings.mockTargetScore = val;
-  save(); renderMocks(); renderIntelligence(); notify(`Mock target score set to ${val} / 720!`);
 };
 
 window.addMock = () => {
@@ -7604,8 +8018,9 @@ function renderSvgLineChart(points, opts = {}) {
 function renderMocks() {
   syncMockUndoButtons();
   const all = getFilteredMocks();
-  const full = all.filter(isFullMock);
+  const fullRaw = all.filter(isFullMock);
   const other = all.filter(m => !isFullMock(m));
+  const full = window._miAnalysisScope === "part" ? other : (window._miAnalysisScope === "all" ? all : fullRaw);
   const targetScore = Math.max(100, Math.min(720, Number(data.settings.mockTargetScore) || 600));
   const tInp = document.getElementById("mockTargetScoreInput"); if (tInp) tInp.value = targetScore;
 
@@ -8367,7 +8782,7 @@ function renderRankPredictorWidget(host, defaultScore) {
 /* 3. Free Web App Notifications: Service Worker Registration & Status Sync */
 (function initFreeWebNotifications() {
   try {
-    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+    if ("serviceWorker" in navigator && !window.Capacitor && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
       navigator.serviceWorker.register("./sw.js").catch(() => {});
     }
     const statusEl = document.getElementById("alertPermStatus");
@@ -9794,6 +10209,7 @@ window.importData = (event) => {
   event.target.value = "";
 };
 window.clearData = () => {
+  if (typeof resetTimer === "function") resetTimer();
   openModal({
     title: "Reset All Data",
     message: "This clears all study data in this account. Continue?",
@@ -10021,54 +10437,77 @@ function checkDailyGoalCompletion() {
     openGoalCompletePopup(studied, target);
   }
 }
+function getLocalReminderLog() {
+  try { return JSON.parse(localStorage.getItem("neet_reminder_log_v27") || "{}") || {}; } catch (e) { return {}; }
+}
+function setLocalReminderLog(log) {
+  try { localStorage.setItem("neet_reminder_log_v27", JSON.stringify(log || {})); } catch (e) {}
+}
 function checkScheduledReminders() {
   if ((document.getElementById("loginScreen") && document.getElementById("loginScreen").style.display) === "flex") return;
   const rem = data.settings.reminders || {};
-  const log = data.settings.reminderLog || (data.settings.reminderLog = {});
+  const log = getLocalReminderLog();
   const t = today();
   const now = new Date();
-  const hhmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  const resetHr = Math.max(0, Math.min(6, Number(data.settings.dayResetHour) || 0));
+  const nowMinOfDay = now.getHours() * 60 + now.getMinutes();
+  // Shifted study-day minute (0..1439 where 0 = dayResetHour, 1439 = 1 min before next dayResetHour)
+  const studyMinOfDay = ((nowMinOfDay - resetHr * 60) + 1440) % 1440;
 
   // 1. Daily target completion check
   checkDailyGoalCompletion();
 
-  // 2. Smart revision reminders (due/overdue revisions + weak chapters < 65% accuracy)
+  // 2. Smart revision reminders (strictly max ONCE per study day — local-only log survives cloud sync!)
   if (rem.smartRevision !== false && log.smartRevisionDate !== t) {
     const dueRevs = (data.revisions || []).filter(r => !r.done && r.date <= t).length;
     const weakChaps = (data.chapters || []).filter(c => c.attempted >= 10 && (c.correct / c.attempted) < 0.65).length;
     if (dueRevs > 0 || weakChaps > 0) {
       log.smartRevisionDate = t;
-      save(false);
+      setLocalReminderLog(log);
       const parts = [];
       if (dueRevs > 0) parts.push(`${dueRevs} due revision(s)`);
-      if (weakChaps > 0) parts.push(`${weakChaps} weak chapter(s) below 65% accuracy`);
+      if (weakChaps > 0) parts.push(`${weakChaps} weak chapter(s) below 65% accuracy (shown in Revision Queue)`);
       triggerAppAlert("Smart Revision Reminder", `Focus today on ${parts.join(" and ")}.`, "↻");
     }
   }
 
-  // 3. Study consistency alert (if 0 minutes logged by 7:00 PM)
-  if (rem.consistency !== false && log.consistencyDate !== t && now.getHours() >= 19 && minsToday() === 0) {
+  // 3. 5:00 PM Progress Check (if <50% of daily target logged by 5:00 PM)
+  const targetMins = Math.max(15, Number(data.settings.dailyTargetMinutes) || 360);
+  const pctToday = Math.round((minsToday() / targetMins) * 100);
+  if (rem.consistency !== false && log.consistencyDate !== t && now.getHours() >= 17 && now.getHours() < 23 && pctToday < 50) {
     log.consistencyDate = t;
-    save(false);
-    triggerAppAlert("Protect Your Study Streak 🔥", "You haven't logged a study session yet today. Even a 25-minute sprint keeps your streak alive!", "🔥");
+    setLocalReminderLog(log);
+    triggerAppAlert("5:00 PM Progress Check 🔥", `You're at ${pctToday}% of today's study target (${formatStudyTime(minsToday())}). Lock in a focused sprint now!`, "🔥");
   }
 
-  // 4. Night Parent Report reminder
-  const reportTime = (rem.nightReportTime || "22:30").slice(0, 5);
+  // 4. Night Parent Report reminder — fires ONLY within the last 90 mins before dayResetHour (default 30m before reset) & NEVER after reset!
+  const defaultRepMin = ((resetHr * 60 - 30) + 1440) % 1440;
+  const defHH = String(Math.floor(defaultRepMin / 60)).padStart(2, "0");
+  const defMM = String(defaultRepMin % 60).padStart(2, "0");
+  const reportTime = (rem.nightReportTime || `${defHH}:${defMM}`).slice(0, 5);
+  const [rH, rM] = reportTime.split(":").map(n => parseInt(n, 10) || 0);
+  const targetStudyMin = (((rH * 60 + rM) - resetHr * 60) + 1440) % 1440;
   const hasClosedToday = (data.dailyReviews || []).some(r => r.date === t);
-  if (rem.nightReport !== false && log.nightReportDate !== t && !hasClosedToday && hhmm >= reportTime) {
+  if (rem.nightReport !== false && log.nightReportDate !== t && !hasClosedToday && studyMinOfDay >= targetStudyMin && studyMinOfDay <= 1435) {
     log.nightReportDate = t;
-    save(false);
+    setLocalReminderLog(log);
     triggerAppAlert("Time for Night Parent Report 📤", `You studied ${formatStudyTime(minsToday())} today. Close your day & share your report with parents.`, "📤");
   }
 }
 window.saveReminderSettings = () => {
+  const chk = (id) => (!document.getElementById(id) || document.getElementById(id).checked !== false);
   data.settings.reminders = {
-    targetDone: (!document.getElementById("remTargetDone") || document.getElementById("remTargetDone").checked !== false),
-    smartRevision: (!document.getElementById("remSmartRevision") || document.getElementById("remSmartRevision").checked !== false),
-    consistency: (!document.getElementById("remConsistency") || document.getElementById("remConsistency").checked !== false),
-    nightReport: (!document.getElementById("remNightReport") || document.getElementById("remNightReport").checked !== false),
-    nightReportTime: (document.getElementById("remNightReportTime") && document.getElementById("remNightReportTime").value) || "22:30"
+    targetDone: chk("remTargetDone"),
+    smartRevision: chk("remSmartRevision"),
+    consistency: chk("remConsistency"),
+    bioClock: chk("remBioClock"),
+    almostThere: chk("remAlmostThere"),
+    streakRescue: chk("remStreakRescue"),
+    morningBrief: chk("remMorningBrief"),
+    flowEyeRest: chk("remFlowEyeRest"),
+    mockWeekly: chk("remMockWeekly"),
+    nightReport: chk("remNightReport"),
+    nightReportTime: (document.getElementById("remNightReportTime") && document.getElementById("remNightReportTime").value) || "23:30"
   };
   save();
   syncCapacitorDailyAlarms();
@@ -10080,9 +10519,15 @@ function syncReminderSettingsUI() {
   setChk("remTargetDone", r.targetDone);
   setChk("remSmartRevision", r.smartRevision);
   setChk("remConsistency", r.consistency);
+  setChk("remBioClock", r.bioClock);
+  setChk("remAlmostThere", r.almostThere);
+  setChk("remStreakRescue", r.streakRescue);
+  setChk("remMorningBrief", r.morningBrief);
+  setChk("remFlowEyeRest", r.flowEyeRest);
+  setChk("remMockWeekly", r.mockWeekly);
   setChk("remNightReport", r.nightReport);
   const tEl = document.getElementById("remNightReportTime");
-  if (tEl) tEl.value = r.nightReportTime || "22:30";
+  if (tEl) tEl.value = r.nightReportTime || "23:30";
 }
 window.downloadDailyReminderICS = () => {
   const tStr = ((data.settings.reminders && data.settings.reminders.nightReportTime) || "22:30").replace(":", "") + "00";
@@ -10345,74 +10790,6 @@ window.startNeetExamSim = () => {
   notify("NEET 180-min Exam Simulation started with 30m, 10m & 5m OMR bell cues!");
 };
 
-/* Interactive Digital OMR Sprint Sheet (Zero Cloud Storage) */
-let _omrSize = 45, _omrAnswers = [], _omrStartAt = 0, _omrLastTapAt = 0, _omrTick = null;
-window.openOmrSprintModal = () => {
-  document.getElementById("omrSprintModal").classList.add("open");
-  if (!_omrAnswers.length) initOmrSheet(45);
-  startOmrClock();
-};
-window.closeOmrSprintModal = () => {
-  clearInterval(_omrTick); _omrTick = null;
-  document.getElementById("omrSprintModal").classList.remove("open");
-};
-window.initOmrSheet = (size) => {
-  _omrSize = size === 180 ? 180 : 45;
-  _omrAnswers = new Array(_omrSize).fill("");
-  _omrStartAt = Date.now();
-  _omrLastTapAt = Date.now();
-  document.getElementById("omrSize45Btn").classList.toggle("btn-primary", _omrSize === 45);
-  document.getElementById("omrSize180Btn").classList.toggle("btn-primary", _omrSize === 180);
-  renderOmrGrid();
-  startOmrClock();
-};
-window.resetOmrSheet = () => initOmrSheet(_omrSize);
-function startOmrClock() {
-  clearInterval(_omrTick);
-  _omrTick = setInterval(() => {
-    const sec = Math.floor((Date.now() - _omrStartAt) / 1000);
-    const m = Math.floor(sec / 60), s = sec % 60;
-    const cTag = document.getElementById("omrClockTag");
-    if (cTag) cTag.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-    const qSec = Math.floor((Date.now() - _omrLastTapAt) / 1000);
-    const wTag = document.getElementById("omrPaceWarnTag");
-    if (wTag) wTag.style.display = qSec > 90 ? "inline-flex" : "none";
-  }, 500);
-}
-window.tapOmrBubble = (idx, opt) => {
-  _omrAnswers[idx] = (_omrAnswers[idx] === opt) ? "" : opt;
-  _omrLastTapAt = Date.now();
-  const wTag = document.getElementById("omrPaceWarnTag");
-  if (wTag) wTag.style.display = "none";
-  renderOmrGrid();
-};
-function renderOmrGrid() {
-  const host = document.getElementById("omrGridHost");
-  if (!host) return;
-  const att = _omrAnswers.filter(x => x && x !== "S").length;
-  const aTag = document.getElementById("omrAttemptedTag");
-  if (aTag) aTag.textContent = `${att} / ${_omrSize} Att`;
-  host.innerHTML = _omrAnswers.map((val, i) => {
-    const opts = ["A","B","C","D","S"];
-    return `<div class="omr-row"><span>Q${i + 1}</span><div style="display:flex;gap:3px">${opts.map(o => `<button type="button" class="omr-bub ${val === o ? "sel" : ""}" onclick="tapOmrBubble(${i},'${o}')">${o}</button>`).join("")}</div></div>`;
-  }).join("");
-}
-window.sendOmrToMockAnalytics = () => {
-  const att = _omrAnswers.filter(x => x && x !== "S").length;
-  const mins = Math.max(1, Math.round((Date.now() - _omrStartAt) / 60000));
-  closeOmrSprintModal();
-  navigate("mocks");
-  if (typeof switchMockTab === "function") switchMockTab("add");
-  const typeEl = document.getElementById("mockType");
-  if (typeEl) { typeEl.value = _omrSize === 180 ? "full" : "subject"; updateMockForm(); }
-  const attEl = document.getElementById("mockAttempted");
-  const tmEl = document.getElementById("mockTotalTime");
-  if (attEl) attEl.value = att;
-  if (tmEl) tmEl.value = mins;
-  updateLiveMockAccuracy();
-  _omrAnswers = []; // Discard bubbles (0 bytes stored in Firestore!)
-  notify(`Loaded ${att} attempted Qs & ${mins}m into Add Mock (bubbles discarded).`);
-};
 
 /* 60-Second Box Breathing (Exam-Anxiety Reset) */
 let _breathTimer = null, _breathLeft = 60;
@@ -10569,6 +10946,507 @@ function renderWeeklyParentReport() {
   ctx.textAlign = "left";
 }
 
+
+/* ============================================================================
+   v2.7 FEATURE ENGINE: 5 SPLASH ANIMATIONS, FULLSCREEN COUNTDOWN, OMR 2.0,
+   INBOX HUB, FRIENDS-ONLY CHAT, CHALLENGES (FOCUS ARENA + MOCK JUMP),
+   AUTO-FLAGGED WEAK CHAPTERS IN REVISION QUEUE, MINIMAL/FULL PRESET, PRIVACY
+   ============================================================================ */
+
+/* 1. 5 Selectable Splash Screen Animations (Classic + 4 Studio SVG Presets) */
+const SPLASH_SVGS = {
+  reveal: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spSq{transform-origin:200px 200px;animation:spPop 1.4s cubic-bezier(.34,1.35,.64,1) infinite alternate}.spSon{transform-origin:200px 200px;animation:spRing 1.6s ease-out infinite}@keyframes spPop{0%{transform:scale(.86)}100%{transform:scale(1)}}@keyframes spRing{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(1.22)}}</style><rect class="spSon" x="56" y="56" width="288" height="288" rx="58" fill="none" stroke="url(#spG1)" stroke-width="5"/><g class="spSq"><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG1)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></g></svg>`,
+  counter: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG2)"/><text id="spSurgeTxt" x="200" y="236" text-anchor="middle" fill="#172437" font-family="Space Grotesk,sans-serif" font-weight="800" font-size="108">000</text></svg>`,
+  pulse: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spBr{transform-origin:200px 200px;animation:spB 2.2s ease-in-out infinite}@keyframes spB{0%,100%{transform:scale(.97)}50%{transform:scale(1.04)}}</style><g class="spBr"><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG3)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></g></svg>`,
+  radar: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spOrb{stroke-dasharray:90 220;animation:spO 2s linear infinite}@keyframes spO{from{stroke-dashoffset:0}to{stroke-dashoffset:-1240}}</style><rect class="spOrb" x="38" y="38" width="324" height="324" rx="68" fill="none" stroke="url(#spG4)" stroke-width="5" stroke-linecap="round"/><g stroke="url(#spG4)" stroke-width="5" stroke-linecap="round" fill="none"><path d="M 32 88 L 32 48 Q 32 32 48 32 L 88 32"/><path d="M 312 32 L 352 32 Q 368 32 368 48 L 368 88"/><path d="M 368 312 L 368 352 Q 368 368 352 368 L 312 368"/><path d="M 88 368 L 48 368 Q 32 368 32 352 L 32 312"/></g><rect x="64" y="64" width="272" height="272" rx="54" fill="url(#spG4)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></svg>`
+};
+let _splashSurgeTimer = null;
+function applySplashStyle(style) {
+  const classic = document.getElementById("splashClassicWrap");
+  const svgHost = document.getElementById("splashSvgStage");
+  const sel = document.getElementById("splashAnimSelect");
+  if (sel) sel.value = style || "classic";
+  clearInterval(_splashSurgeTimer);
+  if (!classic || !svgHost) return;
+  if (!style || style === "classic" || !SPLASH_SVGS[style]) {
+    classic.style.display = "";
+    svgHost.style.display = "none";
+    svgHost.innerHTML = "";
+    return;
+  }
+  classic.style.display = "none";
+  svgHost.style.display = "flex";
+  svgHost.innerHTML = SPLASH_SVGS[style];
+  if (style === "counter") {
+    let v = 0;
+    _splashSurgeTimer = setInterval(() => {
+      v = Math.min(720, v + 36);
+      const t = document.getElementById("spSurgeTxt");
+      if (t) t.textContent = String(v).padStart(3, "0");
+      if (v >= 720) clearInterval(_splashSurgeTimer);
+    }, 45);
+  }
+}
+window.setSplashAnimationStyle = (style) => {
+  try { localStorage.setItem("neet_splash_style", style || "classic"); } catch (e) {}
+  applySplashStyle(style);
+  notify(`Splash animation set to ${style}!`);
+};
+window.previewSplashAnimation = () => {
+  const style = (document.getElementById("splashAnimSelect") && document.getElementById("splashAnimSelect").value) || "classic";
+  applySplashStyle(style);
+  const el = document.getElementById("appLoadingScreen");
+  if (!el) return;
+  el.classList.remove("hidden");
+  setTimeout(() => el.classList.add("hidden"), 2200);
+};
+try { applySplashStyle(localStorage.getItem("neet_splash_style") || "classic"); } catch (e) {}
+
+/* 2. Fullscreen Final Countdown */
+let _fsCdInt = null;
+function syncFullscreenCountdown() {
+  const m = [["cdDays","fsCdDays"],["cdHours","fsCdHours"],["cdMins","fsCdMins"],["cdSecs","fsCdSecs"]];
+  m.forEach(([a, b]) => {
+    const s = document.getElementById(a), d = document.getElementById(b);
+    if (s && d) d.textContent = s.textContent;
+  });
+}
+window.openFullscreenCountdown = () => {
+  const ov = document.getElementById("pureFullscreenCountdown");
+  if (!ov) return;
+  syncFullscreenCountdown();
+  ov.classList.add("open");
+  clearInterval(_fsCdInt);
+  _fsCdInt = setInterval(syncFullscreenCountdown, 500);
+  try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
+};
+window.closeFullscreenCountdown = () => {
+  clearInterval(_fsCdInt);
+  const ov = document.getElementById("pureFullscreenCountdown");
+  if (ov) ov.classList.remove("open");
+  try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {}); } catch (e) {}
+};
+
+/* 3. Privacy Policy Modal */
+window.openPrivacyPolicyModal = () => { const m = document.getElementById("privacyPolicyModal"); if (m) m.classList.add("open"); };
+window.closePrivacyPolicyModal = () => { const m = document.getElementById("privacyPolicyModal"); if (m) m.classList.remove("open"); };
+
+/* 4. Overview 1-Tap Minimal vs Full Preset */
+window.applyOverviewPreset = (mode) => {
+  if (!data.settings) data.settings = {};
+  const minimalIds = ["countdown", "missions", "daily_target"];
+  const curLayout = normalizeOverviewLayout(data.settings.overviewLayout, data.settings.showDynamicTips);
+  data.settings.overviewLayout = curLayout.map(item => ({
+    ...item,
+    enabled: mode === "minimal" ? minimalIds.includes(item.id) : true
+  }));
+  data.settings.overviewDensity = mode === "minimal" ? "minimal" : "full";
+  save();
+  if (typeof applyOverviewLayout === "function") applyOverviewLayout();
+  if (typeof renderOverviewLayoutManager === "function") renderOverviewLayoutManager();
+  document.querySelectorAll(".ov-density-btn").forEach(b => b.classList.toggle("btn-primary", b.dataset.density === mode));
+  notify(mode === "minimal" ? "Switched Overview to Minimal View ✨ (3 core cards)" : "Switched Overview to Full Command View 📊");
+};
+
+/* 5. Parked Thoughts Visible Outside Focus Mode + Convert to Mission */
+window.renderParkedThoughtsAll = () => {
+  const list = Array.isArray(data.parkedThoughts) ? data.parkedThoughts : [];
+  const badge = document.getElementById("parkedCountBadge");
+  if (badge) badge.textContent = String(list.length);
+  const htmlList = list.length
+    ? list.map((t, i) => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:5px;font-size:12.5px">
+        <span style="flex:1">${esc(t.text || t)}</span>
+        <button type="button" class="btn btn-small" onclick="convertParkedToMission(${i})" title="Add to Today's Missions">→ Mission</button>
+        <button type="button" class="icon-btn btn-small" onclick="removeParkedThought(${i})" title="Remove">✓</button>
+      </div>`).join("")
+    : '<div class="small muted">No parked thoughts yet.</div>';
+  ["focusParkingList", "timerParkingList"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = htmlList;
+  });
+};
+window.addParkedThought = (inputId = "focusParkingInput") => {
+  const inp = document.getElementById(inputId) || document.getElementById("focusParkingInput");
+  if (!inp) return;
+  const txt = inp.value.trim();
+  if (!txt) return;
+  if (!Array.isArray(data.parkedThoughts)) data.parkedThoughts = [];
+  data.parkedThoughts.unshift({ id: Date.now(), text: txt, date: today() });
+  inp.value = "";
+  save();
+  window.renderParkedThoughtsAll();
+  notify("Thought parked! View it anytime in Study Timer.");
+};
+window.removeParkedThought = (idx) => {
+  if (!Array.isArray(data.parkedThoughts)) return;
+  data.parkedThoughts.splice(idx, 1);
+  save();
+  window.renderParkedThoughtsAll();
+};
+window.convertParkedToMission = (idx) => {
+  if (!Array.isArray(data.parkedThoughts) || !data.parkedThoughts[idx]) return;
+  const item = data.parkedThoughts[idx];
+  const td = today();
+  if (!Array.isArray(data.missions[td])) data.missions[td] = [];
+  data.missions[td].push({ id: Date.now(), name: item.text || item, subject: "Revision", priority: "Normal", done: false });
+  data.parkedThoughts.splice(idx, 1);
+  save();
+  window.renderParkedThoughtsAll();
+  if (typeof renderMissions === "function") renderMissions();
+  if (typeof renderDashboard === "function") renderDashboard();
+  notify("Moved parked thought to Today's Missions!");
+};
+setTimeout(() => { try { window.renderParkedThoughtsAll(); } catch (e) {} }, 900);
+
+/* 6. Box Breathing Fix: Hide Start Button While Active */
+(function patchBoxBreathingUI() {
+  const origStart = window.startBoxBreathing;
+  const origClose = window.closeBoxBreathingModal;
+  if (typeof origStart === "function") {
+    window.startBoxBreathing = () => {
+      const btn = document.getElementById("breathStartBtn");
+      if (btn) btn.style.display = "none";
+      origStart();
+    };
+  }
+  if (typeof origClose === "function") {
+    window.closeBoxBreathingModal = () => {
+      const btn = document.getElementById("breathStartBtn");
+      if (btn) btn.style.display = "inline-flex";
+      origClose();
+    };
+  }
+})();
+
+/* 7. Open Share Report Modal Directly in Daily OR Weekly Mode */
+(function patchShareReportWeekly() {
+  const origOpen = window.openShareParentModal;
+  if (typeof origOpen === "function") {
+    window.openShareParentModal = (mode = "daily") => {
+      origOpen();
+      if (typeof window.setParentReportMode === "function") {
+        window.setParentReportMode(mode === "weekly" ? "weekly" : "daily");
+      }
+    };
+  }
+})();
+
+/* 8. Unified Inbox Hub (Alerts | Friend Requests | Challenges) */
+let _inboxAlerts = [];
+try { _inboxAlerts = JSON.parse(localStorage.getItem("neet_inbox_alerts_v27") || "[]") || []; } catch (e) { _inboxAlerts = []; }
+let _inboxPendingReqs = [];
+let _inboxPendingChals = [];
+function syncInboxBadge() {
+  const unreadAlerts = _inboxAlerts.filter(a => !a.read).length;
+  const total = unreadAlerts + _inboxPendingReqs.length + _inboxPendingChals.length;
+  const badge = document.getElementById("inboxUnreadBadge");
+  if (badge) {
+    badge.textContent = String(total > 99 ? "99+" : total);
+    badge.classList.toggle("show", total > 0);
+  }
+}
+window.recordInboxAlert = (title, message, icon = "🔔") => {
+  _inboxAlerts.unshift({ id: Date.now(), title, message, icon, time: new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }), date: today(), read: false });
+  if (_inboxAlerts.length > 40) _inboxAlerts = _inboxAlerts.slice(0, 40);
+  try { localStorage.setItem("neet_inbox_alerts_v27", JSON.stringify(_inboxAlerts)); } catch (e) {}
+  syncInboxBadge();
+};
+window.renderInboxAlerts = () => {
+  const host = document.getElementById("inboxAlertsList");
+  if (!host) return;
+  if (!_inboxAlerts.length) { host.innerHTML = '<div class="empty">No alerts yet.</div>'; return; }
+  host.innerHTML = _inboxAlerts.map(a => `<div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:8px">
+    <div style="display:flex;justify-content:space-between;gap:8px;font-size:13px"><strong>${esc(a.icon || "🔔")} ${esc(a.title)}</strong><span class="small muted">${esc(a.time || "")}</span></div>
+    <div class="small muted" style="margin-top:4px;line-height:1.45">${esc(a.message)}</div>
+  </div>`).join("");
+};
+window.clearInboxAlerts = () => {
+  _inboxAlerts = [];
+  try { localStorage.setItem("neet_inbox_alerts_v27", "[]"); } catch (e) {}
+  window.renderInboxAlerts();
+  syncInboxBadge();
+};
+window.updateInboxRequestsUI = (pending) => {
+  _inboxPendingReqs = Array.isArray(pending) ? pending : [];
+  const host = document.getElementById("inboxRequestsList");
+  if (host) {
+    host.innerHTML = _inboxPendingReqs.length
+      ? _inboxPendingReqs.map(r => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:6px">
+          <div><strong>${esc(r.fromName || "NEET Aspirant")}</strong><div class="small muted">Wants to be your Study Friend</div></div>
+          <div style="display:flex;gap:5px">
+            <button type="button" class="btn btn-small btn-lime" onclick="acceptFriendRequest('${esc(r.id)}','${esc(r.fromUid)}')">Accept</button>
+            <button type="button" class="btn btn-small btn-danger" onclick="declineFriendRequest('${esc(r.id)}')">Decline</button>
+          </div>
+        </div>`).join("")
+      : '<div class="empty">No pending friend requests.</div>';
+  }
+  syncInboxBadge();
+};
+window.switchInboxTab = (tab) => {
+  document.querySelectorAll("#inboxModal [data-inboxtab]").forEach(b => b.classList.toggle("active", b.dataset.inboxtab === tab));
+  ["alerts", "requests", "challenges"].forEach(t => {
+    const p = document.getElementById("inboxTab-" + t);
+    if (p) p.classList.toggle("active", t === tab);
+  });
+};
+window.openInboxModal = (tab = "alerts") => {
+  _inboxAlerts.forEach(a => a.read = true);
+  try { localStorage.setItem("neet_inbox_alerts_v27", JSON.stringify(_inboxAlerts)); } catch (e) {}
+  window.renderInboxAlerts();
+  syncInboxBadge();
+  window.switchInboxTab(tab);
+  const m = document.getElementById("inboxModal");
+  if (m) m.classList.add("open");
+};
+window.closeInboxModal = () => { const m = document.getElementById("inboxModal"); if (m) m.classList.remove("open"); };
+
+/* 9. Community 3-Tab Switcher */
+window.switchCommunityTab = (tab) => {
+  document.querySelectorAll("[data-commtab]").forEach(b => b.classList.toggle("active", b.dataset.commtab === tab));
+  ["rankings", "friends", "challenges"].forEach(t => {
+    const p = document.getElementById("commPanel-" + t);
+    if (p) p.classList.toggle("active", t === tab);
+  });
+  if (tab === "challenges" && typeof window.refreshChallenges === "function") window.refreshChallenges();
+};
+
+/* 10. OMR 2.0 Engine (10-180 Qs, Timer/Stopwatch, Lock, Vertical Cols, PNG Download, Live Focusing + Study Log) */
+let _omr2Count = 45, _omr2Mode = "stopwatch", _omr2Locked = false, _omr2Answers = {}, _omr2Sec = 0, _omr2LastBubbleSec = 0, _omr2TimerInt = null, _omr2CountdownTotal = 2700;
+function _setOmrLockedUI(locked) {
+  _omr2Locked = locked;
+  const bar = document.getElementById("omrSetupBar");
+  const hint = document.getElementById("omrLockedHint");
+  if (bar) {
+    bar.querySelectorAll("input,select,button").forEach(el => { el.disabled = locked; });
+    bar.style.opacity = locked ? "0.55" : "1";
+  }
+  if (hint) hint.style.display = locked ? "block" : "none";
+}
+window.toggleOmrTimerMode = (mode) => {
+  if (_omr2Locked) return;
+  _omr2Mode = mode === "countdown" ? "countdown" : "stopwatch";
+  const mIn = document.getElementById("omrTimerMinsInput");
+  const mLbl = document.getElementById("omrTimerMinsLbl");
+  if (mIn) mIn.style.display = _omr2Mode === "countdown" ? "inline-block" : "none";
+  if (mLbl) mLbl.style.display = _omr2Mode === "countdown" ? "inline" : "none";
+  _omr2CountdownTotal = Math.max(1, Number(mIn && mIn.value) || _omr2Count) * 60;
+};
+window.initOmrSheet = (n) => {
+  if (_omr2Locked) return notify("Reset OMR first to change question count.");
+  _omr2Count = Math.max(10, Math.min(180, parseInt(n, 10) || 45));
+  const inp = document.getElementById("omrQCountInput");
+  if (inp) inp.value = _omr2Count;
+  document.querySelectorAll(".omr-preset-btn").forEach(b => {
+    b.classList.toggle("btn-primary", Number(b.dataset.omrpreset) === _omr2Count);
+  });
+  _omr2Answers = {}; _omr2Sec = 0; _omr2LastBubbleSec = 0;
+  const host = document.getElementById("omrGridHost");
+  if (!host) return;
+  // Arrange vertical column rows neatly (5 rows per col for <=50 Qs, 10 rows per col for >50 Qs)
+  const rowsPerCol = _omr2Count <= 45 ? 15 : (_omr2Count <= 90 ? 23 : 45);
+  host.style.gridTemplateRows = `repeat(${rowsPerCol}, auto)`;
+  let out = "";
+  for (let q = 1; q <= _omr2Count; q++) {
+    out += `<div class="omr-row"><span class="omr-qnum">${String(q).padStart(2,"0")}.</span>` +
+      ["A","B","C","D"].map(opt => `<button type="button" class="omr-bub" data-q="${q}" data-opt="${opt}" onclick="toggleOmrBubble(${q},'${opt}',this)">${opt}</button>`).join("") +
+      `</div>`;
+  }
+  host.innerHTML = out;
+  const attEl = document.getElementById("omrAttemptedTag");
+  if (attEl) attEl.textContent = `0 / ${_omr2Count} Att`;
+  const clk = document.getElementById("omrClockTag");
+  if (clk) clk.textContent = "00:00";
+};
+window.toggleOmrBubble = (q, opt, btn) => {
+  if (!_omr2Locked) _setOmrLockedUI(true);
+  const row = btn.parentElement;
+  if (_omr2Answers[q] === opt) {
+    delete _omr2Answers[q];
+    btn.classList.remove("filled", "sel");
+  } else {
+    _omr2Answers[q] = opt;
+    row.querySelectorAll(".omr-bub").forEach(b => b.classList.remove("filled", "sel"));
+    btn.classList.add("filled", "sel");
+    _omr2LastBubbleSec = _omr2Sec;
+    const w = document.getElementById("omrPaceWarnTag");
+    if (w) w.style.display = "none";
+  }
+  const attEl = document.getElementById("omrAttemptedTag");
+  if (attEl) attEl.textContent = `${Object.keys(_omr2Answers).length} / ${_omr2Count} Att`;
+};
+window.openOmrSprintModal = () => {
+  const m = document.getElementById("omrSprintModal");
+  if (!m) return;
+  m.classList.add("open");
+  if (!document.querySelector("#omrGridHost .omr-row")) window.initOmrSheet(_omr2Count);
+  if (typeof window.setGlobalSession === "function") window.setGlobalSession(true, 3600, "Filling OMR");
+  clearInterval(_omr2TimerInt);
+  _omr2TimerInt = setInterval(() => {
+    _omr2Sec++;
+    const clk = document.getElementById("omrClockTag");
+    if (_omr2Mode === "countdown") {
+      const mIn = document.getElementById("omrTimerMinsInput");
+      _omr2CountdownTotal = Math.max(1, Number(mIn && mIn.value) || _omr2Count) * 60;
+      const left = Math.max(0, _omr2CountdownTotal - _omr2Sec);
+      if (clk) clk.textContent = `${String(Math.floor(left/60)).padStart(2,"0")}:${String(left%60).padStart(2,"0")}`;
+      if (left <= 0) { clearInterval(_omr2TimerInt); triggerAppAlert("OMR Timer Complete!", `Finished ${_omr2Count}Q OMR practice (${Object.keys(_omr2Answers).length} bubbled).`, "📝"); }
+    } else {
+      if (clk) clk.textContent = `${String(Math.floor(_omr2Sec/60)).padStart(2,"0")}:${String(_omr2Sec%60).padStart(2,"0")}`;
+    }
+    const w = document.getElementById("omrPaceWarnTag");
+    if (w && _omr2Locked && (_omr2Sec - _omr2LastBubbleSec) >= 90) w.style.display = "inline-flex";
+  }, 1000);
+};
+window.closeOmrSprintModal = () => {
+  clearInterval(_omr2TimerInt);
+  const m = document.getElementById("omrSprintModal");
+  if (m) m.classList.remove("open");
+  if (!timerRunning && typeof window.setGlobalSession === "function") window.setGlobalSession(false);
+};
+let _omrResetArmedUntil = 0;
+window.resetOmrSheet = (askConfirm = false) => {
+  const filledCount = Object.keys(_omr2Answers).length;
+  if (askConfirm && filledCount > 0 && Date.now() > _omrResetArmedUntil) {
+    _omrResetArmedUntil = Date.now() + 4000;
+    notify(`Tap "Reset OMR" again within 4s to clear ${filledCount} filled bubble(s) & unlock settings.`);
+    return;
+  }
+  _omrResetArmedUntil = 0;
+  _setOmrLockedUI(false);
+  window.initOmrSheet(_omr2Count);
+  notify("OMR sheet reset & unlocked.");
+};
+window.finishOmrAndLogStudy = () => {
+  const mins = Math.max(1, Math.round(_omr2Sec / 60));
+  const att = Object.keys(_omr2Answers).length;
+  if (typeof completeSession === "function") {
+    data.timer.subject = "Revision";
+    data.timer.topic = `OMR Practice (${att}/${_omr2Count} Qs)`;
+    completeSession(mins, "omr");
+  }
+  clearInterval(_omr2TimerInt);
+  if (!timerRunning && typeof window.setGlobalSession === "function") window.setGlobalSession(false);
+  notify(`Logged ${mins}m of OMR study time (${att}/${_omr2Count} Qs bubbled)!`);
+};
+window.downloadOmrPNG = () => {
+  try {
+    const cols = Math.ceil(_omr2Count / 15);
+    const rows = Math.min(15, _omr2Count);
+    const colW = 215, rowH = 28, padX = 28, headerH = 84;
+    const W = Math.max(540, cols * colW + padX * 2);
+    const H = headerH + rows * rowH + 40;
+    const c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#080e1b"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#c4f36b"; ctx.font = "bold 20px sans-serif";
+    ctx.fillText("NEET COMMAND CENTRE 2027 — DIGITAL OMR SHEET", padX, 36);
+    ctx.fillStyle = "#94a3b8"; ctx.font = "13px monospace";
+    const tStr = `${String(Math.floor(_omr2Sec/60)).padStart(2,"0")}:${String(_omr2Sec%60).padStart(2,"0")}`;
+    ctx.fillText(`Date: ${today()} · Attempted: ${Object.keys(_omr2Answers).length}/${_omr2Count} · Time: ${tStr}`, padX, 60);
+    for (let q = 1; q <= _omr2Count; q++) {
+      const col = Math.floor((q - 1) / rows);
+      const row = (q - 1) % rows;
+      const x = padX + col * colW;
+      const y = headerH + row * rowH;
+      ctx.fillStyle = "#edf4ff"; ctx.font = "bold 12px monospace";
+      ctx.fillText(String(q).padStart(3, " ") + ".", x, y + 14);
+      ["A","B","C","D"].forEach((opt, oi) => {
+        const bx = x + 46 + oi * 34, by = y + 10;
+        ctx.beginPath(); ctx.arc(bx, by, 10, 0, Math.PI * 2);
+        if (_omr2Answers[q] === opt) {
+          const g = ctx.createLinearGradient(bx - 10, by - 10, bx + 10, by + 10);
+          g.addColorStop(0, "#61d9f5"); g.addColorStop(1, "#c4f36b");
+          ctx.fillStyle = g; ctx.fill(); ctx.fillStyle = "#07101f";
+        } else {
+          ctx.strokeStyle = "#475569"; ctx.lineWidth = 1.5; ctx.stroke(); ctx.fillStyle = "#94a3b8";
+        }
+        ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+        ctx.fillText(opt, bx, by + 3.5);
+        ctx.textAlign = "left";
+      });
+    }
+    const fname = `NEET_OMR_${today()}_${_omr2Count}Q.png`;
+    const dataUrl = c.toDataURL("image/png");
+    const triggerAnchor = (href) => {
+      const a = document.createElement("a");
+      a.href = href;
+      a.download = fname;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { try { document.body.removeChild(a); } catch (e) {} }, 300);
+    };
+    if (c.toBlob) {
+      c.toBlob(async (blob) => {
+        if (!blob) { triggerAnchor(dataUrl); return; }
+        // On Android / iOS mobile, use native Share Sheet (Save to Gallery / Files / WhatsApp) when available
+        try {
+          const file = new File([blob], fname, { type: "image/png" });
+          if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+            await navigator.share({ files: [file], title: "NEET Digital OMR Sheet" });
+            return;
+          }
+        } catch (shareErr) {}
+        const url = URL.createObjectURL(blob);
+        triggerAnchor(url);
+        setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 4000);
+      }, "image/png");
+    } else {
+      triggerAnchor(dataUrl);
+    }
+    // Also show inline preview below OMR grid so Canvas / Android WebView users can always view or long-press save!
+    let prev = document.getElementById("omrPngPreviewWrap");
+    if (!prev) {
+      prev = document.createElement("div");
+      prev.id = "omrPngPreviewWrap";
+      prev.style.cssText = "margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);text-align:center";
+      const host = document.getElementById("omrGridHost");
+      if (host && host.parentElement) host.parentElement.insertBefore(prev, host.nextSibling);
+    }
+    prev.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span class="small muted">Generated OMR Image (long-press to save on mobile if download is blocked)</span><button type="button" class="btn btn-small" onclick="this.closest('#omrPngPreviewWrap').remove()">✕</button></div><img src="${dataUrl}" alt="Filled OMR Sheet" draggable="false" style="max-width:100%;border-radius:8px;border:1px solid var(--border);-webkit-user-drag:none">`;
+    notify("OMR PNG ready! Downloaded & shown below.");
+  } catch (e) {
+    notify("Could not generate OMR image.");
+  }
+};
+
+/* 11. Mock Subject / Part-Syllabus Scope Filter */
+window._miAnalysisScope = "full";
+window.setMockAnalysisScope = (scope) => {
+  window._miAnalysisScope = scope || "full";
+  document.querySelectorAll(".mi-scope-btn").forEach(b => b.classList.toggle("btn-primary", b.dataset.scope === window._miAnalysisScope));
+  if (typeof renderMockAnalytics === "function") renderMockAnalytics();
+};
+
+/* 12. Auto-Flagged Weak Chapters (<65%) Visible Inside Revision Intelligence */
+(function patchRevisionWeakChapters() {
+  const origRev = window.renderRevisions;
+  if (typeof origRev !== "function") return;
+  window.renderRevisions = () => {
+    origRev();
+    const host = document.getElementById("revisionList") || document.getElementById("revisionsList");
+    if (!host) return;
+    const weak = (data.chapters || []).filter(c => c.attempted >= 10 && (c.correct / c.attempted) < 0.65);
+    const oldBox = document.getElementById("autoWeakChaptersRevBox");
+    if (oldBox) oldBox.remove();
+    if (!weak.length) return;
+    const box = document.createElement("div");
+    box.id = "autoWeakChaptersRevBox";
+    box.style.cssText = "margin-bottom:12px;padding:12px;border-radius:12px;background:rgba(255,92,138,.08);border:1px solid var(--rose)";
+    box.innerHTML = `<div class="eyebrow" style="color:var(--rose)">AUTO-FLAGGED WEAK CHAPTERS (&lt;65% ACCURACY)</div>
+      <div class="small muted" style="margin:3px 0 8px">These chapters triggered your Smart Revision reminder — tap Schedule to add them to your queue:</div>` +
+      weak.slice(0, 8).map(c => {
+        const acc = Math.round((c.correct / c.attempted) * 100);
+        return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--border);font-size:12.5px">
+          <span><strong>${esc(c.name)}</strong> <span class="small muted">(${esc(c.subject)} · ${acc}%)</span></span>
+          <button type="button" class="btn btn-small btn-lime" onclick="quickScheduleChapterRev('${esc(c.id)}', 1)">+ Schedule Tomorrow</button>
+        </div>`;
+      }).join("");
+    host.parentElement.insertBefore(box, host);
+  };
+})();
+
 /* Startup Reminders, Network Status & Background Reminder Worker */
 updateNetworkBadge();
 startReminderWorker();
@@ -10723,6 +11601,7 @@ function setCloudStatus(msg) {
   };
 
   window.handleLogout = () => {
+    if (typeof resetTimer === "function") resetTimer();
     try { localStorage.removeItem("neet_guest_mode"); } catch (e) {}
     if (typeof window.stopAmbientMusic === "function") window.stopAmbientMusic();
     if (currentUser) window.setGlobalSession(false);
@@ -10779,7 +11658,7 @@ function setCloudStatus(msg) {
     }
   };
 
-  window.setGlobalSession = async (running, remainingSec = 3000) => {
+  window.setGlobalSession = async (running, remainingSec = 3000, activityLabel = "") => {
     if (!currentUser) return;
     try {
       const now = Date.now();
@@ -10797,8 +11676,10 @@ function setCloudStatus(msg) {
       await setDoc(doc(db, "global_sessions", currentUser.uid), {
         uid: currentUser.uid,
         displayName: dispName,
-        subject: running ? subj : "",
-        topic: running ? topic : "",
+        subject: running ? (activityLabel || subj) : "",
+        topic: running ? (activityLabel ? "Digital OMR Sheet" : topic) : "",
+        activity: running ? (activityLabel || "Studying") : "",
+        startedAt: running ? now : 0,
         todayMinutes: todayMins,
         todayDate: tStr,
         running: !!running,
@@ -11207,7 +12088,7 @@ function setCloudStatus(msg) {
         <div style="display:flex;align-items:center;gap:6px">
           <strong style="color:var(--cyan);font-family:'DM Mono',monospace">${mode === "weekly" ? formatStudyTime(r.minutes) : r.minutes + "m"}</strong>
           ${p ? `<button type="button" class="btn btn-small" onclick="openFriendProgressModal('${esc(r.uid)}')" title="View detailed progress">👁</button>` : ""}
-          ${r.isMe ? "" : `<button type="button" class="icon-btn btn-small" onclick="removeStudyFriend('${esc(r.uid)}')" title="Remove friend">×</button>`}
+          ${r.isMe ? "" : `<button type="button" class="btn btn-small" onclick="openFriendChatModal('${esc(r.uid)}','${esc(r.name || "Study Friend").replace(/'/g, "\\'")}')" title="Chat with friend">💬 Chat</button><button type="button" class="icon-btn btn-small" onclick="removeStudyFriend('${esc(r.uid)}')" title="Remove friend">×</button>`}
         </div>
       </div>`;
     }).join("");
@@ -11299,6 +12180,191 @@ function setCloudStatus(msg) {
     }
   };
 
+
+  /* === v2.7 FRIENDS-ONLY TEXT CHAT (ON-DEMAND LISTENER, ZERO BACKGROUND QUOTA) === */
+  let _chatUnsub = null;
+  let _activeChatFriendUid = null;
+  function getChatRoomId(uidA, uidB) { return [uidA, uidB].sort().join("_"); }
+  window.openFriendChatModal = (friendUid, friendName) => {
+    if (!navigator.onLine || !currentUser) return notify("You are offline — sign in online to chat with Study Friends.");
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    if (!appD || !(appD.friends || []).includes(friendUid)) return notify("You can only chat with accepted Study Friends.");
+    _activeChatFriendUid = friendUid;
+    const titleEl = document.getElementById("friendChatTitle");
+    if (titleEl) titleEl.textContent = "💬 " + (friendName || "Study Friend");
+    const box = document.getElementById("friendChatMessages");
+    if (box) box.innerHTML = '<div class="small muted">Connecting to chat...</div>';
+    const modal = document.getElementById("friendChatModal");
+    if (modal) modal.classList.add("open");
+    if (_chatUnsub) { try { _chatUnsub(); } catch (e) {} _chatUnsub = null; }
+    const roomId = getChatRoomId(currentUser.uid, friendUid);
+    try {
+      const qChat = query(collection(db, "friend_chats", roomId, "messages"), orderBy("createdAt", "desc"), limit(30));
+      _chatUnsub = onSnapshot(qChat, (snap) => {
+        const msgs = [];
+        snap.forEach(ds => msgs.push({ id: ds.id, ...ds.data() }));
+        msgs.reverse();
+        if (!box) return;
+        if (!msgs.length) {
+          box.innerHTML = '<div class="small muted" style="text-align:center;margin:auto">No messages yet. Say hi and start a study session!</div>';
+          return;
+        }
+        box.innerHTML = msgs.map(m => {
+          const isMe = m.fromUid === currentUser.uid;
+          const tStr = m.createdAt ? new Date(m.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "";
+          return `<div class="chat-bubble ${isMe ? 'me' : 'them'}"><div>${esc(m.text || "")}</div><div class="chat-meta">${esc(isMe ? "You" : (m.fromName || "Friend"))} · ${tStr}</div></div>`;
+        }).join("");
+        box.scrollTop = box.scrollHeight;
+      }, () => {
+        if (box) box.innerHTML = '<div class="empty">Chat unavailable — make sure you updated Firestore Rules for friend_chats.</div>';
+      });
+    } catch (e) {
+      if (box) box.innerHTML = '<div class="empty">Could not open chat right now.</div>';
+    }
+  };
+  window.unfriendActiveChatUser = () => {
+    if (!_activeChatFriendUid) return;
+    const uidToRm = _activeChatFriendUid;
+    window.closeFriendChatModal();
+    if (typeof window.removeStudyFriend === "function") window.removeStudyFriend(uidToRm);
+  };
+  window.closeFriendChatModal = () => {
+    if (_chatUnsub) { try { _chatUnsub(); } catch (e) {} _chatUnsub = null; }
+    _activeChatFriendUid = null;
+    const modal = document.getElementById("friendChatModal");
+    if (modal) modal.classList.remove("open");
+  };
+  window.sendFriendChatMessage = async () => {
+    if (!navigator.onLine || !currentUser || !_activeChatFriendUid) return notify("You are offline — connect to send messages.");
+    const inp = document.getElementById("friendChatInput");
+    const txt = (inp && inp.value || "").trim().slice(0, 300);
+    if (!txt) return;
+    inp.value = "";
+    const roomId = getChatRoomId(currentUser.uid, _activeChatFriendUid);
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
+    try {
+      await setDoc(doc(db, "friend_chats", roomId, "messages", String(Date.now()) + "_" + currentUser.uid.slice(0, 6)), {
+        fromUid: currentUser.uid,
+        fromName: myName,
+        toUid: _activeChatFriendUid,
+        text: txt,
+        createdAt: Date.now()
+      });
+    } catch (e) {
+      notify("Could not send message — check Firestore Rules for friend_chats.");
+    }
+  };
+
+  /* === v2.7 FRIEND CHALLENGES (FOCUS ARENA & MOCK SCORE IMPROVEMENT) === */
+  window.toggleChallengeDurField = () => {
+    const t = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
+    const w = document.getElementById("chalDurWrap");
+    if (w) w.style.display = t === "focus_arena" ? "block" : "none";
+  };
+  window.createFriendChallenge = async () => {
+    if (!navigator.onLine || !currentUser) return notify("You are offline — sign in online to send a challenge.");
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    const friends = (appD && Array.isArray(appD.friends)) ? appD.friends : [];
+    if (!friends.length) return notify("Add at least one Study Friend first!");
+    const selUid = (document.getElementById("chalFriendSelect") && document.getElementById("chalFriendSelect").value) || "";
+    const targetUids = selUid ? [selUid] : friends.slice(0, 5);
+    const type = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
+    const durMins = Number(document.getElementById("chalDurationSelect") && document.getElementById("chalDurationSelect").value) || 0;
+    const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
+    const fullMocks = (appD && Array.isArray(appD.mocks)) ? appD.mocks.filter(m => !m.isPartTest) : [];
+    const baseScore = fullMocks.length ? Number(fullMocks[fullMocks.length - 1].total) || 0 : 0;
+    const cid = "chal_" + Date.now() + "_" + currentUser.uid.slice(0, 5);
+    const participants = [currentUser.uid, ...targetUids.filter(u => u !== currentUser.uid)];
+    try {
+      await setDoc(doc(db, "friend_challenges", cid), {
+        id: cid,
+        type,
+        durationMins: durMins,
+        creatorUid: currentUser.uid,
+        creatorName: myName,
+        participants,
+        status: "active",
+        scores: { [currentUser.uid]: { name: myName, state: "joined", baseScore, bestJump: 0, joinedAt: Date.now() } },
+        createdAt: Date.now()
+      });
+      notify(type === "focus_arena" ? "🔥 Focus Arena challenge sent!" : "📈 Mock Score Improvement duel sent!");
+      window.refreshChallenges();
+    } catch (e) {
+      notify("Could not create challenge — check Firestore Rules for friend_challenges.");
+    }
+  };
+  window.joinFriendChallenge = async (cid) => {
+    if (!navigator.onLine || !currentUser) return notify("You are offline.");
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
+    const fullMocks = (appD && Array.isArray(appD.mocks)) ? appD.mocks.filter(m => !m.isPartTest) : [];
+    const baseScore = fullMocks.length ? Number(fullMocks[fullMocks.length - 1].total) || 0 : 0;
+    try {
+      await setDoc(doc(db, "friend_challenges", cid), {
+        scores: { [currentUser.uid]: { name: myName, state: "joined", baseScore, bestJump: 0, joinedAt: Date.now() } }
+      }, { merge: true });
+      notify("Joined challenge! Good luck!");
+      window.refreshChallenges();
+    } catch (e) { notify("Could not join challenge."); }
+  };
+  window.refreshChallenges = async () => {
+    const host = document.getElementById("challengesListHost");
+    const sel = document.getElementById("chalFriendSelect");
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    if (sel && appD && Array.isArray(appD.friends)) {
+      const cur = sel.value;
+      sel.innerHTML = `<option value="">All Study Friends (Group Duel)</option>` +
+        appD.friends.map(uid => `<option value="${esc(uid)}">Friend: ${esc(uid.slice(0, 10))}...</option>`).join("");
+      sel.value = cur;
+    }
+    if (!host) return;
+    if (!navigator.onLine || !currentUser) {
+      host.innerHTML = '<div class="empty">You are offline — connect to view Focus Arena &amp; Mock Improvement challenges.</div>';
+      return;
+    }
+    try {
+      const qC = query(collection(db, "friend_challenges"), where("participants", "array-contains", currentUser.uid));
+      const snap = await getDocs(qC);
+      const list = [];
+      snap.forEach(ds => list.push({ id: ds.id, ...ds.data() }));
+      list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      const pending = list.filter(c => c.creatorUid !== currentUser.uid && !(c.scores && c.scores[currentUser.uid]));
+      _inboxPendingChals = pending;
+      syncInboxBadge();
+      const ibHost = document.getElementById("inboxChallengesList");
+      if (ibHost) {
+        ibHost.innerHTML = pending.length
+          ? pending.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:6px">
+              <div><strong>${c.type === "focus_arena" ? "🔥 Focus Arena" : "📈 Mock Improvement"}</strong><div class="small muted">From ${esc(c.creatorName || "Friend")}</div></div>
+              <button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">Accept</button>
+            </div>`).join("")
+          : '<div class="empty">No pending challenge invites.</div>';
+      }
+      if (!list.length) {
+        host.innerHTML = '<div class="empty">No active challenges yet. Send a Focus Arena or Mock Score Improvement duel above!</div>';
+        return;
+      }
+      host.innerHTML = list.slice(0, 10).map(c => {
+        const joined = Boolean(c.scores && c.scores[currentUser.uid]);
+        const label = c.type === "focus_arena"
+          ? `🔥 Focus Arena (${c.durationMins ? c.durationMins + "m Endurance" : "Flowmodoro"})`
+          : "📈 Mock Score Improvement (+Marks Jump)";
+        const members = Object.entries(c.scores || {}).map(([u, st]) => `<span class="tag cyan" style="margin-right:4px">${esc(st.name || "Friend")}: ${esc(st.state || "joined")}</span>`).join("");
+        return `<div style="padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <strong>${label}</strong>
+            ${joined ? '<span class="tag lime">Joined</span>' : `<button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">Accept Duel</button>`}
+          </div>
+          <div class="small muted" style="margin:4px 0 6px">Created by ${esc(c.creatorName || "Friend")}</div>
+          <div>${members}</div>
+        </div>`;
+      }).join("");
+    } catch (e) {
+      host.innerHTML = '<div class="empty">Challenges unavailable — paste the updated v2.7 Firestore Rules in Firebase Console.</div>';
+    }
+  };
+
   onAuthStateChanged(auth, async (user) => {
     if (window.hideAppLoadingScreen) window.hideAppLoadingScreen();
     const loginScreen = document.getElementById("loginScreen");
@@ -11369,20 +12435,129 @@ function setCloudStatus(msg) {
 })();
 </script>
 
+
+<!-- Pure Fullscreen Final Countdown Overlay -->
+<div class="pure-fs-overlay" id="pureFullscreenCountdown" role="dialog" aria-modal="true" aria-label="Fullscreen Final Countdown">
+  <button type="button" class="pure-fs-close" onclick="closeFullscreenCountdown()" aria-label="Close Fullscreen">✕</button>
+  <div class="pure-fs-cd-grid">
+    <div class="pure-fs-cd-unit"><div class="pure-fs-cd-num" id="fsCdDays">---</div><div class="pure-fs-cd-lbl">DAYS</div></div>
+    <div class="pure-fs-cd-unit"><div class="pure-fs-cd-num" id="fsCdHours">--</div><div class="pure-fs-cd-lbl">HOURS</div></div>
+    <div class="pure-fs-cd-unit"><div class="pure-fs-cd-num" id="fsCdMins">--</div><div class="pure-fs-cd-lbl">MINS</div></div>
+    <div class="pure-fs-cd-unit"><div class="pure-fs-cd-num" id="fsCdSecs">--</div><div class="pure-fs-cd-lbl">SECS</div></div>
+  </div>
+</div>
+
+<!-- Unified Inbox / Notifications Hub Modal (Alerts | Friend Requests | Challenges) -->
+<div class="modal-overlay" id="inboxModal" role="dialog" aria-modal="true" style="z-index:295" onclick="if(event.target===this)closeInboxModal()">
+  <div class="modal-card" style="max-width:560px;max-height:86vh;overflow-y:auto">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">COMMAND INBOX</div>
+        <h3 class="modal-title" style="margin:2px 0 0">🔔 Alerts, Requests &amp; Challenges</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closeInboxModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="comm-tabs-bar" style="margin:10px 0">
+      <button type="button" class="comm-tab-btn active" data-inboxtab="alerts" onclick="switchInboxTab('alerts')">🔔 Alerts</button>
+      <button type="button" class="comm-tab-btn" data-inboxtab="requests" onclick="switchInboxTab('requests')">🤝 Requests</button>
+      <button type="button" class="comm-tab-btn" data-inboxtab="challenges" onclick="switchInboxTab('challenges')">⚔️ Challenges</button>
+    </div>
+    <div id="inboxTab-alerts" class="comm-panel active">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+        <button type="button" class="btn btn-small" onclick="clearInboxAlerts()">Clear Alerts</button>
+      </div>
+      <div id="inboxAlertsList"><div class="empty">No recent alerts.</div></div>
+    </div>
+    <div id="inboxTab-requests" class="comm-panel">
+      <div id="inboxRequestsList"><div class="empty">No pending friend requests.</div></div>
+    </div>
+    <div id="inboxTab-challenges" class="comm-panel">
+      <div id="inboxChallengesList"><div class="empty">No pending challenge invites.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Friends-Only Text Chat Modal -->
+<div class="modal-overlay" id="friendChatModal" role="dialog" aria-modal="true" style="z-index:296" onclick="if(event.target===this)closeFriendChatModal()">
+  <div class="modal-card" style="max-width:480px">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">FRIENDS-ONLY TEXT CHAT</div>
+        <h3 class="modal-title" id="friendChatTitle" style="margin:2px 0 0">💬 Chat</h3>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center"><button type="button" class="btn btn-small btn-danger" onclick="unfriendActiveChatUser()" title="Unfriend & stop chatting">🚫 Unfriend</button><button type="button" class="modal-close-x" onclick="closeFriendChatModal()" aria-label="Close">✕</button></div>
+    </div>
+    <div class="small muted" style="margin-top:6px;padding:7px 9px;border-radius:8px;background:rgba(255,189,105,.08);border:1px solid var(--border)">
+      ⚠ Text-only · Not end-to-end encrypted · Never share phone numbers, addresses, school names, or personal details.
+    </div>
+    <div id="friendChatMessages" class="chat-messages-box"><div class="small muted">Loading messages...</div></div>
+    <div style="display:flex;gap:6px">
+      <input type="text" id="friendChatInput" class="field" maxlength="300" placeholder="Type a study message (max 300 chars)..." onkeydown="if(event.key==='Enter')sendFriendChatMessage()">
+      <button type="button" class="btn btn-primary" onclick="sendFriendChatMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy & Student Safety Modal -->
+<div class="modal-overlay" id="privacyPolicyModal" role="dialog" aria-modal="true" style="z-index:298" onclick="if(event.target===this)closePrivacyPolicyModal()">
+  <div class="modal-card" style="max-width:600px;max-height:86vh;overflow-y:auto;line-height:1.6;font-size:13px">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">EFFECTIVE: NOVEMBER 26, 2026</div>
+        <h3 class="modal-title" style="margin:2px 0 0">🔒 Privacy Policy &amp; Community Safety</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closePrivacyPolicyModal()" aria-label="Close">✕</button>
+    </div>
+    <p class="small muted" style="margin:8px 0">NEET Command Centre 2027 is a free, zero-ads personal study tracker built for NEET aspirants. Contact: <strong style="color:var(--cyan)">contactncc2027@gmail.com</strong></p>
+    <h4 style="margin:10px 0 4px">1. Information We Collect</h4>
+    <ul style="margin:0;padding-left:18px;display:grid;gap:5px">
+      <li><strong>Offline / Guest Mode:</strong> Zero personal data is sent to any server — everything stays strictly on your device (<code>localStorage</code>).</li>
+      <li><strong>Optional Cloud Account:</strong> When signed in, Firebase stores your email, chosen Doctor Name, UID, and private synced study data (<code>users/{uid}</code>).</li>
+      <li><strong>Public Leaderboard &amp; Focusing Status:</strong> Only your chosen display name, daily/weekly study minutes, and active focusing status (e.g., Studying or Filling OMR) are visible to other logged-in users. Emails, mock scores, notes, and reflections are never public.</li>
+      <li><strong>Friends-Only Chat &amp; Challenges:</strong> Text messages between accepted friends and challenge statuses are stored in Cloud Firestore and restricted by database rules. <strong>Encryption Notice:</strong> Data is encrypted in transit (HTTPS) and at rest on Firebase, but <strong>chats are NOT end-to-end encrypted (E2EE)</strong> — administrators may review stored messages for safety or abuse prevention.</li>
+    </ul>
+    <h4 style="margin:10px 0 4px">2. Zero Ads &amp; Data Control</h4>
+    <p style="margin:0">We show zero ads and never sell your data. Export a full JSON backup anytime in Settings, or email <strong>contactncc2027@gmail.com</strong> with your registered email or UID to permanently delete your account, cloud data, or chat history.</p>
+    <h4 style="margin:10px 0 4px">3. Student &amp; Minor Safety, Strangers &amp; Chat Limits</h4>
+    <ul style="margin:0;padding-left:18px;display:grid;gap:5px">
+      <li><strong>Strangers &amp; No Liability:</strong> Because users can connect via UIDs or public leaderboards, you may encounter strangers you do not know in real life. NEET Command Centre 2027 cannot verify real-world identities or ages and <strong>takes no responsibility or liability</strong> for user-to-user interactions. Accept only people you trust.</li>
+      <li><strong>Chat Limits:</strong> Strictly mutual friends only, plain text only (no images/files/links), 400-character limit, not end-to-end encrypted, and hidden during Focus/Fullscreen modes.</li>
+      <li><strong>Safety Rules:</strong> Never share your real full name, phone number, home address, school/coaching name, passwords, photos, or social handles. Unfriend anyone anytime and report abuse to <strong>contactncc2027@gmail.com</strong>. Parents may email us anytime to request account deletion.</li>
+    </ul>
+    <p class="small muted" style="margin:10px 0 0">Not affiliated with NTA, NMC, or any government body.</p>
+    <div class="modal-actions" style="justify-content:flex-end;margin-top:12px">
+      <button type="button" class="btn btn-primary" onclick="closePrivacyPolicyModal()">Got It</button>
+    </div>
+  </div>
+</div>
+
 <!-- CHANGELOG MODAL -->
 <div class="modal-overlay" id="changelogModal" role="dialog" aria-modal="true" aria-labelledby="changelogModalTitle" style="z-index:290" onclick="if(event.target===this)closeChangelogModal()">
   <div class="modal-card" style="max-width:560px">
     <div class="panel-head" style="margin-bottom:10px">
       <div>
         <div class="eyebrow">RELEASE NOTES</div>
-        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.6</h2>
+        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.7</h2>
       </div>
       <button type="button" class="icon-btn" onclick="closeChangelogModal()" aria-label="Close">✕</button>
     </div>
     <div id="changelogModalBody" style="max-height:60vh;overflow-y:auto;line-height:1.55;font-size:13.5px">
       <div id="liveGitHubReleaseBox" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.12);border:1px solid var(--lime)"></div>
       <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.08);border:1px solid var(--line)">
-        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.6</strong>
+        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.7</strong>
+        <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
+          <li><strong>Cleaner UI &amp; Unified Inbox (🔔):</strong> Decluttered top bar, moved Focusing Now and Ambient Music right into Study Timer, added a 1-tap <em>Minimal vs. Full</em> Overview preset, organized Community into 3 clean tabs (Leaderboard, Friends &amp; Chat, Challenges), and added a 🔔 Inbox for full-text Alerts, Friend Requests, and Challenges.</li>
+          <li><strong>5 Selectable Splash Screen Animations:</strong> Choose from Classic, Command Lock-In, 720 Score Surge, Aurora Pulse, and Radar Scanner in Settings with a live Preview button.</li>
+          <li><strong>Friends-Only Text Chat &amp; Friend Challenges:</strong> Chat with accepted Study Friends (text-only, hidden in Focus Mode), and challenge friends to <strong>Focus Arena</strong> endurance duels or <strong>Mock Score Improvement</strong> races.</li>
+          <li><strong>Digital OMR 2.0:</strong> Pick any 10–180 questions, choose Countdown or Stopwatch, lock settings while filling, enjoy true vertical NEET columns in landscape, download your filled OMR as PNG, show live <em>Filling OMR</em> status, and log OMR time directly to your study hours.</li>
+          <li><strong>Fullscreen Final Countdown &amp; Study Timer Tick Sound:</strong> Open the Final Countdown in pure fullscreen and toggle the Doomsday tick sound directly in Study Timer and Focus Mode.</li>
+          <li><strong>Subject / Part-Syllabus Mock Analysis &amp; Weekly Report Button:</strong> Filter Mock Analytics by Full Mocks, Subject/Part Tests, or All Tests, and open the 7-Day Weekly Report in one tap.</li>
+          <li><strong>Privacy Policy &amp; Student Safety:</strong> Added a full Privacy &amp; Community Safety guide (including non-E2EE chat and minor safety rules) on Login, Settings, and Footer.</li>
+          <li><strong>Major Notification &amp; Reliability Fixes:</strong> Fixed repeated alerts and next-day Parent Report reminders, added expandable full-text Android notifications and all missing reminder toggles, showed auto-flagged weak chapters inside Revision Queue, made Friend Request acceptance mutual automatically, fixed Daily Habit accumulation (with <em>Read Daily NCERT Facts</em> as a default habit), made Parked Thoughts visible outside Focus Mode, and fixed many bugs across Dark Mode, paused timers, and late-night weekly stats.</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(97,217,245,.08);border:1px solid var(--line)">
+        <strong style="color:var(--cyan);display:block;margin-bottom:6px">Version 2.6</strong>
         <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
           <li><strong>Re-NEET 2026 Rank Predictor:</strong> Estimate your expected All India Rank, category rank, percentile, +20 marks jump, and MBBS/BDS chances right inside Mock Analytics using official Re-NEET 2026 result data.</li>
           <li><strong>Pure Fullscreen Timer Mode:</strong> Open a completely distraction-free fullscreen clock showing nothing except your timer and a close button — available both outside and inside Focus Mode.</li>
@@ -11457,7 +12632,7 @@ window.closeChangelogModal = () => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") window.closeChangelogModal();
 });
-const APP_VERSION = "2.6";
+const APP_VERSION = "2.7";
 const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
 function parseVerParts(v) {
   return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
