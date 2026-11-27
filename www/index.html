@@ -12472,6 +12472,22 @@ function setCloudStatus(msg) {
     if (m) m.classList.remove("open");
   };
 
+  function getActiveLiveSessionsMap(nowMs) {
+    const now = nowMs || Date.now();
+    const map = {};
+    (_lastGlobalDocs || []).forEach(gd => {
+      if (!gd || !gd.uid || !gd.running) return;
+      const alive = (typeof gd.expiresAt === "number" && gd.expiresAt > 0)
+        ? gd.expiresAt > now
+        : (Number(gd.updatedAt) || 0) > (now - 4 * 3600 * 1000);
+      if (!alive) return;
+      const liveStart = Number(gd.startedAt || gd.updatedAt) || 0;
+      const liveMins = liveStart > 0 ? Math.max(0, Math.min(360, Math.floor((now - liveStart) / 60000))) : 0;
+      map[gd.uid] = { doc: gd, liveMins };
+    });
+    return map;
+  }
+
   window.openFocusingNowModal = async () => {
     var m = document.getElementById("focusingNowModal");
     var listEl = document.getElementById("focusingNowList");
@@ -12544,6 +12560,33 @@ function setCloudStatus(msg) {
       }));
     }
 
+    // Merge live focusing users & their active elapsed minutes into Top 20 Study Hours Today
+    var dailyById = {};
+    topDaily.forEach(function(u) { dailyById[u.id] = u; });
+    activeDocs.forEach(function(d) {
+      if (!d || !d.uid) return;
+      var p = profileMap[d.uid] || {};
+      var isMe = currentUser && d.uid === currentUser.uid;
+      var gMins = (d.todayDate === todayStr && typeof d.todayMinutes === "number") ? d.todayMinutes : 0;
+      var pMins = (p.todayDate === todayStr && typeof p.todayMinutes === "number") ? p.todayMinutes : 0;
+      var localMeMins = (isMe && window.getValidatedTodayMinutes) ? window.getValidatedTodayMinutes() : 0;
+      var liveStart = Number(d.startedAt || d.updatedAt) || 0;
+      var liveMins = liveStart > 0 ? Math.max(0, Math.min(360, Math.floor((now - liveStart) / 60000))) : 0;
+      var totalLiveMins = Math.min(1080, Math.max(gMins, pMins, localMeMins) + liveMins);
+      var displayName = d.displayName || p.displayName || "NEET Aspirant";
+      if (dailyById[d.uid]) {
+        dailyById[d.uid].minutes = Math.max(dailyById[d.uid].minutes, totalLiveMins);
+        dailyById[d.uid].liveMins = liveMins;
+        dailyById[d.uid].isFocusing = true;
+      } else {
+        var entry = { id: d.uid, name: displayName, minutes: totalLiveMins, liveMins: liveMins, isFocusing: true };
+        dailyById[d.uid] = entry;
+        topDaily.push(entry);
+      }
+    });
+    topDaily.sort(function(a, b) { return b.minutes - a.minutes; });
+    topDaily = topDaily.slice(0, 20);
+
     function renderActiveRow(d) {
       var p = profileMap[d.uid] || {};
       var name = d.displayName || p.displayName || "NEET Aspirant";
@@ -12589,10 +12632,11 @@ function setCloudStatus(msg) {
       chunks.push('<div class="eyebrow" style="margin:' + (activeDocs.length ? '10px' : '2px') + ' 0 4px">TOP 20 STUDY HOURS TODAY</div>');
       topDaily.forEach(function(u, i) {
         var isMe = currentUser && u.id === currentUser.uid;
-        var isFocusing = activeDocs.some(function(ad) { return ad.uid === u.id; });
+        var isFocusing = Boolean(u.isFocusing) || activeDocs.some(function(ad) { return ad.uid === u.id; });
+        var liveBadgeTxt = isFocusing ? (' <span style="color:var(--lime);font-size:11px">● Live' + (u.liveMins > 0 ? ' (+' + u.liveMins + 'm)' : '') + '</span>') : '';
         chunks.push('<div class="friend-row" style="flex-wrap:wrap">'
           + '<span class="tag ' + (i < 3 ? 'lime' : 'cyan') + '">#' + (i + 1) + '</span>'
-          + '<div class="item-main"><strong>' + esc(u.name) + (isMe ? " (You)" : "") + (isFocusing ? ' <span style="color:var(--lime);font-size:11px">● Live</span>' : '') + '</strong></div>'
+          + '<div class="item-main"><strong>' + esc(u.name) + (isMe ? " (You)" : "") + liveBadgeTxt + '</strong></div>'
           + '<strong style="color:var(--cyan);font-family:\'DM Mono\',monospace">' + formatStudyTime(u.minutes) + '</strong>'
           + '</div>');
       });
@@ -12835,20 +12879,21 @@ function setCloudStatus(msg) {
       d.friends.forEach(fUid => rows.push({ uid: fUid, name: "Friend (" + fUid.slice(0, 6) + ")", minutes: 0, progress: null, isMe: false }));
     }
     const nowMs = Date.now();
-    const activeByUid = {};
-    _lastGlobalDocs.forEach(gd => {
-      if (!gd || !gd.uid || !gd.running) return;
-      const alive = (typeof gd.expiresAt === "number" && gd.expiresAt > 0)
-        ? gd.expiresAt > nowMs
-        : (Number(gd.updatedAt) || 0) > (nowMs - 4 * 3600 * 1000);
-      if (alive) activeByUid[gd.uid] = gd;
+    const activeMap = getActiveLiveSessionsMap(nowMs);
+    rows.forEach(r => {
+      const act = activeMap[r.uid];
+      if (act) {
+        r.minutes = (Number(r.minutes) || 0) + act.liveMins;
+        r.liveMins = act.liveMins;
+      }
     });
     rows.sort((a, b) => b.minutes - a.minutes);
     const html = rows.map((r, i) => {
       const p = r.progress;
-      const liveSession = activeByUid[r.uid];
+      const actInfo = activeMap[r.uid];
+      const liveSession = actInfo ? actInfo.doc : null;
       const liveText = liveSession
-        ? ("● Focusing" + (liveSession.subject ? " · " + liveSession.subject : ""))
+        ? ("● Focusing" + (liveSession.subject ? " · " + liveSession.subject : "") + (actInfo.liveMins > 0 ? " (+" + actInfo.liveMins + "m)" : ""))
         : "";
       const liveBadge = liveSession
         ? `<span class="friend-chip" style="color:var(--lime);border-color:rgba(196,243,107,.5);background:rgba(196,243,107,.1)">${esc(liveText)}</span>`
@@ -12917,21 +12962,54 @@ function setCloudStatus(msg) {
         const snap = await getDocs(qFallback);
         docsList = snap.docs;
       }
-      if (!docsList.length) { host.innerHTML = '<div class="empty">' + (isDaily ? 'No daily study records yet for today.' : 'No weekly study records yet for this week.') + '</div>'; return; }
-      const validatedDocs = docsList.map(docSnap => {
+      const activeMap = getActiveLiveSessionsMap(Date.now());
+      const byId = new Map();
+      docsList.forEach(docSnap => {
         const u = docSnap.data();
         const rawMins = isDaily ? (u.todayMinutes || 0) : (u.weeklyMinutes || 0);
         const v = window.validateIncomingLbMinutes ? window.validateIncomingLbMinutes(rawMins, capMins) : { minutes: Number(rawMins) || 0, flagged: false };
         const pubProg = u.publicProgress || null;
-        return {
+        byId.set(docSnap.id, {
           id: docSnap.id,
           name: u.displayName || "NEET Aspirant",
           minutes: v.minutes,
           flagged: v.flagged,
           manualHeavy: Boolean(u.manualHeavy || (pubProg && pubProg.manualHeavy)),
-          manualPct: Number(u.manualPct != null ? u.manualPct : (pubProg && pubProg.manualPct != null ? pubProg.manualPct : 0)) || 0
-        };
-      }).sort((a, b) => b.minutes - a.minutes).slice(0, 20);
+          manualPct: Number(u.manualPct != null ? u.manualPct : (pubProg && pubProg.manualPct != null ? pubProg.manualPct : 0)) || 0,
+          isLive: false,
+          liveMins: 0
+        });
+      });
+
+      Object.entries(activeMap).forEach(([uid, info]) => {
+        const gd = info.doc;
+        const liveMins = info.liveMins;
+        const isMe = currentUser && uid === currentUser.uid;
+        const gToday = (isDaily && gd.todayDate === todayStr && typeof gd.todayMinutes === "number") ? gd.todayMinutes : 0;
+        const localMe = (isDaily && isMe && window.getValidatedTodayMinutes) ? window.getValidatedTodayMinutes() : 0;
+        if (byId.has(uid)) {
+          const row = byId.get(uid);
+          const baseMins = isDaily ? Math.max(row.minutes, gToday, localMe) : row.minutes;
+          row.minutes = Math.min(capMins, baseMins + liveMins);
+          row.isLive = true;
+          row.liveMins = liveMins;
+        } else {
+          const baseMins = isDaily ? Math.max(gToday, localMe) : 0;
+          byId.set(uid, {
+            id: uid,
+            name: gd.displayName || "NEET Aspirant",
+            minutes: Math.min(capMins, baseMins + liveMins),
+            flagged: false,
+            manualHeavy: false,
+            manualPct: 0,
+            isLive: true,
+            liveMins: liveMins
+          });
+        }
+      });
+
+      if (!byId.size) { host.innerHTML = '<div class="empty">' + (isDaily ? 'No daily study records yet for today.' : 'No weekly study records yet for this week.') + '</div>'; return; }
+      const validatedDocs = Array.from(byId.values()).sort((a, b) => b.minutes - a.minutes).slice(0, 20);
 
       host.innerHTML = validatedDocs.map((u, i) => {
         const idx = i + 1;
@@ -12949,9 +13027,10 @@ function setCloudStatus(msg) {
         const notes = [];
         if (u.flagged) notes.push("⚠ Capped to realistic weekly limit");
         if (u.manualHeavy) notes.push(`⚠ Mostly manual logs (${u.manualPct}%)`);
+        const liveTag = u.isLive ? ` <span style="color:var(--lime);font-size:11px">● Live${u.liveMins > 0 ? ` (+${u.liveMins}m)` : ""}</span>` : "";
         return `<div class="friend-row" style="flex-wrap:wrap">
           <span class="tag ${idx <= 3 ? "lime" : "cyan"}">#${idx}</span>
-          <div class="item-main"><strong>${esc(u.name)}${isMe ? " (You)" : ""}</strong>${notes.length ? `<small style="color:var(--orange)">${esc(notes.join(" · "))}</small>` : ""}</div>
+          <div class="item-main"><strong>${esc(u.name)}${isMe ? " (You)" : ""}${liveTag}</strong>${notes.length ? `<small style="color:var(--orange)">${esc(notes.join(" · "))}</small>` : ""}</div>
           <div style="display:flex;align-items:center;gap:6px">
             ${actionBtn}
             <strong style="color:var(--cyan);font-family:'DM Mono',monospace">${formatStudyTime(u.minutes)}</strong>
