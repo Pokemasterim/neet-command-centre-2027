@@ -11843,32 +11843,16 @@ window.downloadOmrPNG = () => {
     }
     const fname = `NEET_OMR_${today()}_${_omr2Count}Q.png`;
     const dataUrl = c.toDataURL("image/png");
-    const triggerAnchor = (href) => {
-      const a = document.createElement("a");
-      a.href = href;
-      a.download = fname;
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { try { document.body.removeChild(a); } catch (e) {} }, 300);
-    };
-    if (c.toBlob) {
-      c.toBlob(async (blob) => {
-        if (!blob) { triggerAnchor(dataUrl); return; }
-        // On Android / iOS mobile, use native Share Sheet (Save to Gallery / Files / WhatsApp) when available
-        try {
-          const file = new File([blob], fname, { type: "image/png" });
-          if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-            await navigator.share({ files: [file], title: "NEET Digital OMR Sheet" });
-            return;
-          }
-        } catch (shareErr) {}
-        const url = URL.createObjectURL(blob);
-        triggerAnchor(url);
-        setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 4000);
-      }, "image/png");
+    if (typeof window.exportCanvasAsPNG === "function") {
+      window.exportCanvasAsPNG(c, fname, "NEET Digital OMR Sheet", "📝 Digital OMR Sheet PNG");
+      if (typeof getCapFilesystem === "function" && getCapFilesystem()) {
+        window.downloadLastExportedPNG();
+      }
     } else {
-      triggerAnchor(dataUrl);
+      const a = document.createElement("a");
+      a.href = dataUrl; a.download = fname; a.style.display = "none";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { try { document.body.removeChild(a); } catch (e) {} }, 300);
     }
     // Also show inline preview below OMR grid so Canvas / Android WebView users can always view or long-press save!
     let prev = document.getElementById("omrPngPreviewWrap");
@@ -12331,11 +12315,49 @@ function dataURLtoPngBlob(dataUrl) {
     return new Blob([arr], { type: mime });
   } catch (e) { return null; }
 }
-window.downloadLastExportedPNG = () => {
-  const blob = window._lastChalPngBlob || (window._lastChalPngDataUrl ? dataURLtoPngBlob(window._lastChalPngDataUrl) : null);
+window.downloadLastExportedPNG = async () => {
+  const dataUrl = window._lastChalPngDataUrl || "";
   const fname = window._lastChalPngFname || "neet-card.png";
+  const title = window._lastChalPngTitle || "NEET Command Centre Card";
+  const base64Data = dataUrl.includes(",") ? dataUrl.split(",")[1] : "";
+
+  // 1. Native Android APK path via @capacitor/filesystem (same proven path as Parent Report)
+  const fs = typeof getCapFilesystem === "function" ? getCapFilesystem() : null;
+  if (fs && base64Data) {
+    try {
+      await fs.writeFile({
+        path: `NEET-Command-Centre/${fname}`,
+        data: base64Data,
+        directory: "DOCUMENTS",
+        recursive: true
+      });
+      notify(`Saved to Documents/NEET-Command-Centre/${fname}`);
+      return;
+    } catch (e1) {
+      try {
+        const cached = await fs.writeFile({
+          path: fname,
+          data: base64Data,
+          directory: "CACHE",
+          recursive: true
+        });
+        const capShare = typeof getCapShare === "function" ? getCapShare() : null;
+        if (capShare && cached && cached.uri) {
+          await capShare.share({
+            title,
+            files: [cached.uri],
+            dialogTitle: "Save or Share PNG"
+          });
+          return;
+        }
+      } catch (e2) {}
+    }
+  }
+
+  // 2. Web browser path via Blob download
+  const blob = window._lastChalPngBlob || (dataUrl ? dataURLtoPngBlob(dataUrl) : null);
   let blobUrl = "";
-  const href = blob ? (blobUrl = URL.createObjectURL(blob)) : (window._lastChalPngDataUrl || "");
+  const href = blob ? (blobUrl = URL.createObjectURL(blob)) : dataUrl;
   if (!href) return notify("No PNG ready yet.");
   try {
     const a = document.createElement("a");
@@ -12345,15 +12367,41 @@ window.downloadLastExportedPNG = () => {
       try { document.body.removeChild(a); } catch (e) {}
       if (blobUrl) { try { URL.revokeObjectURL(blobUrl); } catch (e) {} }
     }, 3000);
-    notify("PNG download started!");
+    notify("PNG downloaded!");
   } catch (e) {
-    notify("Tap Share/Save or long-press image to save.");
+    notify("Could not save PNG on this device.");
   }
 };
 window.shareLastChallengeResultPNG = async () => {
-  const blob = window._lastChalPngBlob || (window._lastChalPngDataUrl ? dataURLtoPngBlob(window._lastChalPngDataUrl) : null);
+  const dataUrl = window._lastChalPngDataUrl || "";
   const fname = window._lastChalPngFname || "neet-card.png";
   const title = window._lastChalPngTitle || "NEET Command Centre Card";
+  const base64Data = dataUrl.includes(",") ? dataUrl.split(",")[1] : "";
+
+  // 1. Native Android APK Share Sheet via @capacitor/filesystem + @capacitor/share
+  const fs = typeof getCapFilesystem === "function" ? getCapFilesystem() : null;
+  const capShare = typeof getCapShare === "function" ? getCapShare() : null;
+  if (fs && capShare && base64Data) {
+    try {
+      const written = await fs.writeFile({
+        path: fname,
+        data: base64Data,
+        directory: "CACHE",
+        recursive: true
+      });
+      if (written && written.uri) {
+        await capShare.share({
+          title,
+          files: [written.uri],
+          dialogTitle: title
+        });
+        return;
+      }
+    } catch (e) {}
+  }
+
+  // 2. Web Share API fallback
+  const blob = window._lastChalPngBlob || (dataUrl ? dataURLtoPngBlob(dataUrl) : null);
   if (blob) {
     try {
       const file = new File([blob], fname, { type: "image/png" });
@@ -12363,7 +12411,7 @@ window.shareLastChallengeResultPNG = async () => {
       }
     } catch (e) {}
   }
-  window.downloadLastExportedPNG();
+  await window.downloadLastExportedPNG();
 };
 window.exportCanvasAsPNG = (canvas, fname, shareTitle = "NEET Command Centre", modalTitle = "🏆 Scorecard Ready") => {
   const dataUrl = canvas.toDataURL("image/png");
@@ -14106,7 +14154,7 @@ function setCloudStatus(msg) {
       <button type="button" class="btn btn-lime" id="chalResultDownloadBtn" onclick="downloadLastExportedPNG()">⬇ Download PNG</button>
       <button type="button" class="btn" onclick="closeChalResultPreview()">Close</button>
     </div>
-    <div class="small muted" style="margin-top:6px;font-size:11px">Tip: On mobile WebView, tap Share/Save or long-press the image above to save to gallery.</div>
+    <div class="small muted" style="margin-top:6px;font-size:11px">In the Android app, <strong>Download PNG</strong> saves directly to <em>Documents/NEET-Command-Centre</em>, or tap <strong>Share / Save Image</strong> to send to Gallery / WhatsApp.</div>
   </div>
 </div>
 
