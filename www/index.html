@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.7</title>
+<title>NEET COMMAND CENTRE 2027 — v2.7.1</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -2226,6 +2226,69 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
 #splashSvgStage { width: 132px; height: 132px; display: none; align-items: center; justify-content: center; }
 #splashSvgStage svg { width: 100%; height: 100%; }
 
+
+/* === FOCUS ARENA LIVE BANNER & LOCKED TIMER === */
+.arena-live-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 92, 138, .15), rgba(97, 217, 245, .12));
+  border: 1px solid rgba(255, 92, 138, .48);
+  font-size: 12.5px;
+}
+.arena-live-banner.show { display: flex; }
+.arena-locked-dim { opacity: .45; pointer-events: none; }
+.arena-record-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(196, 243, 107, .12);
+  border: 1px solid rgba(196, 243, 107, .35);
+  color: var(--lime);
+  font: 700 11.5px 'DM Mono', monospace;
+}
+.chal-card {
+  padding: 13px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.chal-verdict-bar {
+  margin: 8px 0;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font: 700 12px 'Space Grotesk', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chal-p-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.chal-p-row .tag { max-width: 100%; white-space: normal; text-align: left; }
+/* Ensure #appModal always stacks ABOVE #chapterPracticeModal and all sub-modals */
+#appModal { z-index: 360 !important; }
+
 </style>
 </head>
 <body>
@@ -2347,7 +2410,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.7</div>
+        <div class="brand-sub">NEET 2027 / v2.7.1</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -2666,6 +2729,16 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
           <div class="timer-mode-bar" role="tablist" aria-label="Timer Mode">
             <button type="button" class="timer-mode-btn active" id="modeCountdownBtn" onclick="setTimerMode('countdown')">⏱ Countdown</button>
             <button type="button" class="timer-mode-btn" id="modeFlowmodoroBtn" onclick="setTimerMode('flowmodoro')">∞ Flowmodoro (Count-Up)</button>
+          </div>
+          <div class="arena-live-banner" id="arenaLiveBanner">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <strong style="color:var(--rose)" id="arenaBannerText">⚔️ FOCUS ARENA LIVE</strong>
+              <span class="tag pink" id="arenaBannerStrictTag" style="display:none">🔒 Strict</span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button type="button" class="btn btn-small" onclick="openArenaRulesModal()">📜 Rules</button>
+              <button type="button" class="btn btn-small btn-danger" onclick="forfeitActiveArena('Forfeited duel')">🏳️ Forfeit</button>
+            </div>
           </div>
           <div class="timer-display" id="timerDisplay">50:00</div>
           <div class="flow-hint-pill" id="flowHintPill" style="display:none">Flowmodoro: Open-ended count-up · Tap End &amp; Save when done</div>
@@ -3527,10 +3600,14 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="eyebrow">ZERO-COST FRIEND DUELS</div>
+              <div class="eyebrow">TIMER-ENFORCED FRIEND DUELS</div>
               <div class="panel-title" style="margin-top:3px">⚔️ Focus Arena &amp; Mock Improvement</div>
+              <div style="margin-top:6px"><span class="arena-record-pill" id="arenaRecordBadge">⚔️ Arena Record: 0W · 0L · 0 Co-Surv</span></div>
             </div>
-            <button type="button" class="btn btn-small" onclick="refreshChallenges()">↻ Refresh</button>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button type="button" class="btn btn-small" onclick="openArenaRulesModal()">📜 Arena Rules</button>
+              <button type="button" class="btn btn-small" onclick="refreshChallenges()">↻ Refresh</button>
+            </div>
           </div>
           <div class="form-row" style="margin-bottom:10px">
             <div>
@@ -3548,6 +3625,10 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
                 <option value="180">3 Hour Exam Marathon (180m)</option>
                 <option value="0">∞ Flowmodoro (Last Standing)</option>
               </select>
+              <label style="display:flex;align-items:center;gap:7px;margin-top:8px;font-size:12px;cursor:pointer;color:var(--muted)">
+                <input type="checkbox" id="chalStrictScreen">
+                <span>🔒 Strict Screen-On Mode (leaving app &gt;45s eliminates)</span>
+              </label>
             </div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
@@ -3818,7 +3899,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
               <div style="margin-top:12px">
                 <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.7 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.7.1 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
               </div>
             </div>
@@ -3827,7 +3908,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.7 · Built for personal study tracking. <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color:var(--cyan);margin-left:6px">Privacy &amp; Safety</a> Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.7.1 · Built for personal study tracking. <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color:var(--cyan);margin-left:6px">Privacy &amp; Safety</a> Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -3991,6 +4072,13 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
       <h2 style="font:700 22px 'Space Grotesk',sans-serif;margin:10px 0 6px">One task. Full attention.</h2>
       <div class="small muted"><span id="focusSubject">Biology</span> · <span id="focusTopic">Study session</span></div>
       <div class="flow-hint-pill" id="focusModeTag" style="margin:6px 0 0;display:none">∞ FLOWMODORO COUNT-UP</div>
+      <div class="arena-live-banner" id="focusArenaLiveBanner" style="margin-top:8px">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <strong style="color:var(--rose)" id="focusArenaBannerText">⚔️ FOCUS ARENA LIVE</strong>
+          <span class="tag pink" id="focusArenaBannerStrictTag" style="display:none">🔒 Strict</span>
+        </div>
+        <button type="button" class="btn btn-small btn-danger" onclick="forfeitActiveArena('Forfeited duel')">🏳️ Forfeit</button>
+      </div>
       <div class="focus-time" id="focusDisplay">50:00</div>
       <div class="progress-track"><div class="progress-fill" id="focusProgress" style="width:0%"></div></div>
       <div class="timer-controls" style="margin-top:20px">
@@ -4781,6 +4869,7 @@ function defaultDataObject() {
     mocks: [],
     questions: [],
     friends: [],
+    chatSeen: {},
     dailyReviews: [],
     studyHistory: { taskEvents: [], chapterEvents: [] },
     timer: { remaining: 3000, total: 3000, running: false, endAt: null, completedSaved: false, subject: "Biology", topic: "Study session" },
@@ -4861,6 +4950,7 @@ function normalizeData(raw) {
   d.mocks = Array.isArray(d.mocks) ? d.mocks : [];
   d.questions = Array.isArray(d.questions) ? d.questions : [];
   d.friends = Array.isArray(d.friends) ? d.friends.slice(0, 10) : [];
+  d.chatSeen = (d.chatSeen && typeof d.chatSeen === "object" && !Array.isArray(d.chatSeen)) ? d.chatSeen : {};
   d.dailyReviews = Array.isArray(d.dailyReviews) ? d.dailyReviews : [];
   d.studyHistory = d.studyHistory && typeof d.studyHistory === "object" ? d.studyHistory : { taskEvents: [], chapterEvents: [] };
   d.studyHistory.taskEvents = Array.isArray(d.studyHistory.taskEvents) ? d.studyHistory.taskEvents : [];
@@ -4871,8 +4961,10 @@ function normalizeData(raw) {
 
 window.hasLocalStudyData = (d) => {
   if (!d) return false;
-  const hasMissions = Object.values(d.missions || {}).some(arr => Array.isArray(arr) && arr.length > 0);
-  return (d.sessions && d.sessions.length > 0) || (d.mocks && d.mocks.length > 0) || (d.breaks && d.breaks.length > 0) || (d.revisions && d.revisions.length > 0) || (d.dailyReviews && d.dailyReviews.length > 0) || hasMissions;
+  const hasUserMissions = Object.values(d.missions || {}).some(arr =>
+    Array.isArray(arr) && arr.some(m => m && !(m.dailyHabit && !m.done && (m.name || "").trim().toLowerCase() === "read daily ncert facts"))
+  );
+  return (d.sessions && d.sessions.length > 0) || (d.mocks && d.mocks.length > 0) || (d.breaks && d.breaks.length > 0) || (d.revisions && d.revisions.length > 0) || (d.dailyReviews && d.dailyReviews.length > 0) || hasUserMissions;
 };
 
 window.mergeAppData = (localRaw, cloudRaw) => {
@@ -4926,14 +5018,25 @@ window.mergeAppData = (localRaw, cloudRaw) => {
   ((primary.studyHistory && primary.studyHistory.taskEvents) || []).forEach(e => { if (e && e.key) teMap.set(e.key, e); });
 
   const mergedSettings = { ...secondary.settings, ...primary.settings };
+  if ((secondary.settings && secondary.settings.onboardingV25Done) || (primary.settings && primary.settings.onboardingV25Done)) mergedSettings.onboardingV25Done = true;
+  if ((secondary.settings && secondary.settings.hideArenaRulesPrompt) || (primary.settings && primary.settings.hideArenaRulesPrompt)) mergedSettings.hideArenaRulesPrompt = true;
+  if ((!primary.settings || !primary.settings.mockTargetScore || primary.settings.mockTargetScore === 600) && secondary.settings && secondary.settings.mockTargetScore && secondary.settings.mockTargetScore !== 600) {
+    mergedSettings.mockTargetScore = secondary.settings.mockTargetScore;
+  }
   if ((!mergedSettings.name || mergedSettings.name === "Dr. Xyz") && (secondary.settings && secondary.settings.name) && secondary.settings.name !== "Dr. Xyz") {
     mergedSettings.name = secondary.settings.name;
   }
+
+  const mergedChatSeen = { ...(secondary.chatSeen || {}) };
+  Object.entries(primary.chatSeen || {}).forEach(([rk, ts]) => {
+    mergedChatSeen[rk] = Math.max(Number(mergedChatSeen[rk]) || 0, Number(ts) || 0);
+  });
 
   return normalizeData({
     ...secondary,
     ...primary,
     settings: mergedSettings,
+    chatSeen: mergedChatSeen,
     missions: mergedMissions,
     sessions: mergeById(primary.sessions, secondary.sessions),
     breaks: mergeById(primary.breaks, secondary.breaks),
@@ -6423,6 +6526,7 @@ function syncTimerModeUI() {
   if (focusTag) focusTag.style.display = isFlow ? "block" : "none";
 }
 window.setTimerMode = (mode) => {
+  if (window.getActiveArena && window.getActiveArena() && !window._arenaBypassGuard) { notify("Timer settings are locked during Focus Arena!"); return; }
   const target = mode === "flowmodoro" ? "flowmodoro" : "countdown";
   if (target === timerMode) return;
   if (timerRunning) {
@@ -6502,6 +6606,7 @@ function tickTimer() {
       }
     }
     showTimer();
+    if (typeof window.tickFocusArenaHooks === "function") window.tickFocusArenaHooks();
     return;
   }
   if (!data.timer.endAt) return;
@@ -6512,6 +6617,7 @@ function tickTimer() {
     if (timerRemaining <= 300 && !window._examBell5) { window._examBell5 = true; triggerAppAlert("Exam Bell: 5 Mins Left (OMR Check)", "Final 5 minutes — double-check all OMR bubbles!", "🔔"); }
   }
   showTimer();
+  if (typeof window.tickFocusArenaHooks === "function") window.tickFocusArenaHooks();
   if (timerRemaining <= 0) {
     if (data.timer.completedSaved) { stopTimer(); return; }
     stopTimer();
@@ -6611,9 +6717,21 @@ function completeSession(minutes, sourceOverride) {
   data.timer.completedSaved = true;
   save(); renderSessions(); renderDashboard(); renderConsistency(); renderDailyTargetProgress();
   checkDailyGoalCompletion();
+  if (typeof window.onSessionCompletedCheckArena === "function") window.onSessionCompletedCheckArena(mins, sourceOverride);
   if (typeof syncCapacitorDailyAlarms === "function") syncCapacitorDailyAlarms();
 }
 window.finishFocusSession = () => {
+  if (window.getActiveArena && window.getActiveArena() && !window._arenaBypassGuard) {
+    const ar = window.getActiveArena();
+    const elapsedSecs = timerMode === "flowmodoro" ? flowElapsed : Math.max(0, timerTotal - timerRemaining);
+    if (ar.targetMins === 0 || elapsedSecs < ar.targetMins * 60) {
+      window.forfeitActiveArena("Stopped session early", () => {
+        window._arenaBypassGuard = true;
+        try { finishFocusSession(); } finally { window._arenaBypassGuard = false; }
+      });
+      return;
+    }
+  }
   if (data.timer.completedSaved) return notify("Session already saved.");
   if (timerRunning) pauseTimer();
   if (timerMode === "flowmodoro") {
@@ -6671,6 +6789,7 @@ function checkBreak15Alert() {
   }
 }
 window.startBreakStopwatch = () => {
+  if (window.getActiveArena && window.getActiveArena() && !window._arenaBypassGuard) { window.forfeitActiveArena("Took a break", () => { window._arenaBypassGuard = true; try { startBreakStopwatch(); } finally { window._arenaBypassGuard = false; } }); return; }
   if (timerRunning) pauseTimer();
   breakSeconds = 0; breakStartAt = Date.now(); breakAlert15Sent = false;
   document.getElementById("focusTimerPanel").style.display = "none";
@@ -6737,6 +6856,7 @@ window.endBreakStopwatch = () => {
 
 /* Background / Foreground Reconciliation so timers & notifications stay exact */
 function syncTimersOnWake() {
+  setTimeout(() => { if (typeof window.reconcileArenaIntegrity === "function") window.reconcileArenaIntegrity(); }, 200);
   if (timerRunning && data.timer && (data.timer.endAt || data.timer.startedAt)) {
     tickTimer();
     if (timerRunning) acquireTimerWakeLock();
@@ -6774,6 +6894,7 @@ window.addEventListener("focus", syncTimersOnWake);
 window.addEventListener("pageshow", syncTimersOnWake);
 
 function handleTimerDurationEdit(m) {
+  if (window.getActiveArena && window.getActiveArena() && !window._arenaBypassGuard) { notify("Timer settings are locked during Focus Arena!"); return; }
   const n = Math.max(1, Math.min(300, Number(m) || 50));
   document.getElementById("timerMinutes").value = n;
   document.getElementById("timerMinutesSlider").value = Math.min(180, n);
@@ -6807,6 +6928,7 @@ window.openFocus = () => document.getElementById("focusOverlay").classList.add("
 window.closeFocus = () => document.getElementById("focusOverlay").classList.remove("open");
 document.getElementById("startTimer").onclick = startTimer;
 document.getElementById("resetTimer").onclick = () => {
+  if (window.getActiveArena && window.getActiveArena() && !window._arenaBypassGuard) { window.forfeitActiveArena("Reset timer", () => { window._arenaBypassGuard = true; try { const w = document.getElementById("pendingTimerApplyWrap"); if (w) w.style.display = "none"; resetTimer(); } finally { window._arenaBypassGuard = false; } }); return; }
   const wrap = document.getElementById("pendingTimerApplyWrap");
   if (wrap) wrap.style.display = "none";
   resetTimer();
@@ -7047,12 +7169,27 @@ window.saveChapterDetail = () => {
   c.notes = document.getElementById("chDetailNotes").value.trim();
   save(); closeChapterDetailModal(); renderChapters(); notify("Chapter details saved!");
 };
-window.quickScheduleChapterRev = () => {
-  const id = Number(document.getElementById("chDetailId").value);
-  const c = data.chapters.find(x => x.id === id); if (!c) return;
-  const dt = new Date(); dt.setDate(dt.getDate() + 3);
-  data.revisions.push({ id: Date.now(), topic: c.name, subject: c.subject, date: dateKey(dt), done: false, confidence: c.confidence === "Weak" ? "Weak" : "Medium", notes: c.notes || "", stage: (c.revisionCount || 0) + 1 });
-  save(); renderRevisions(); notify(`Scheduled revision for "${c.name}" on ${dateKey(dt)}!`);
+window.quickScheduleChapterRev = (chapterId = null, daysAhead = 3) => {
+  const id = (chapterId !== null && chapterId !== undefined && chapterId !== "")
+    ? String(chapterId)
+    : String((document.getElementById("chDetailId") && document.getElementById("chDetailId").value) || "");
+  const c = data.chapters.find(x => String(x.id) === id); if (!c) return;
+  const dt = studyNow(); dt.setDate(dt.getDate() + (Number(daysAhead) || 1));
+  const targetDate = localDateString(dt);
+  data.revisions.push({ id: Date.now(), topic: c.name, subject: c.subject, date: targetDate, done: false, confidence: c.confidence === "Weak" ? "Weak" : "Medium", notes: c.notes || "", stage: (c.revisionCount || 0) + 1 });
+  save();
+  if (typeof window.renderRevisions === "function") window.renderRevisions();
+  else renderRevisions();
+  notify(`Scheduled revision for "${c.name}" on ${targetDate}!`);
+};
+window.dismissWeakChapterFlag = (chId) => {
+  if (!data.settings) data.settings = {};
+  if (!Array.isArray(data.settings.dismissedWeakChapters)) data.settings.dismissedWeakChapters = [];
+  const k = String(chId);
+  if (!data.settings.dismissedWeakChapters.includes(k)) data.settings.dismissedWeakChapters.push(k);
+  save();
+  if (typeof window.renderRevisions === "function") window.renderRevisions();
+  notify("Dismissed weak chapter alert.");
 };
 window.recordChapterPractice = (id) => {
   const c = data.chapters.find(x => x.id === id); if (!c) return;
@@ -7340,9 +7477,11 @@ window.setRevisionDateOffset = (days) => {
   if (el) el.value = dateKey(d);
 };
 window.addRevision = () => {
-  const topic = document.getElementById("revisionTopic").value.trim();
-  const date = document.getElementById("revisionDate").value;
-  if (!topic || !date) return notify("Enter topic and date.");
+  const topicEl = document.getElementById("revisionTopic");
+  const dateEl = document.getElementById("revisionDate");
+  const topic = topicEl ? topicEl.value.trim() : "";
+  const date = (dateEl && dateEl.value) ? dateEl.value : today();
+  if (!topic) return notify("Enter a chapter or topic name to schedule.");
   const subj = document.getElementById("revisionSubject").value;
   const conf = (document.getElementById("revisionConfidence") && document.getElementById("revisionConfidence").value) || "Medium";
   const notes = ((document.getElementById("revisionNotes") && document.getElementById("revisionNotes").value) || "").trim();
@@ -7420,7 +7559,7 @@ window.rescheduleRevision = (id, days = 3) => {
   save(); renderRevisions(); notify(`Scheduled next revision for ${dateKey(nxt)}!`);
 };
 window.deleteRevision = (id) => {
-  data.revisions = data.revisions.filter(x => x.id !== id);
+  data.revisions = data.revisions.filter(x => String(x.id) !== String(id));
   save(); renderRevisions();
 };
 window.fillSmartRevision = (chapterId) => {
@@ -7474,7 +7613,7 @@ function renderRevisions() {
       ${r.done
         ? `<button type="button" class="btn btn-small" onclick="rescheduleRevision(${r.id}, getSpacedRepInterval('${esc(r.confidence || "Medium")}', ${(Number(r.stage) || 1) + 1}))" title="Auto-schedule next spaced interval">+${getSpacedRepInterval(r.confidence || "Medium", (Number(r.stage) || 1) + 1)}d Auto</button>`
         : `<div class="sr-rate-group">
-            <button type="button" class="btn btn-small btn-sr-weak" onclick="completeRevision(${r.id},-1,'Weak')" title="Done — Weak recall: auto-schedule in +${getSpacedRepInterval('Weak', (Number(r.stage) || 1) + 1)}d">Weak +${getSpacedRepInterval('Weak', (Number(r.stage) || 1) + 1)}d</button>
+            <button type="button" class="btn btn-small btn-sr-weak" onclick="completeRevision(${r.id},-1,'Weak')" title="Done — Weak recall: auto-schedule in +${getSpacedRepInterval('Weak', (Number(r.stage) || 1) + 1)}d">Weak +${getSpacedRepInterval('Weak', (Number(r.stage) || 1) + 1)}d</button> <button type="button" class="btn btn-small btn-danger" onclick="deleteRevision(${r.id})" title="Cancel revision">✕ Cancel</button>
             <button type="button" class="btn btn-small btn-sr-med" onclick="completeRevision(${r.id},-1,'Medium')" title="Done — Medium recall: auto-schedule in +${getSpacedRepInterval('Medium', (Number(r.stage) || 1) + 1)}d">Med +${getSpacedRepInterval('Medium', (Number(r.stage) || 1) + 1)}d</button>
             <button type="button" class="btn btn-small btn-sr-str" onclick="completeRevision(${r.id},-1,'Strong')" title="Done — Strong recall: auto-schedule in +${getSpacedRepInterval('Strong', (Number(r.stage) || 1) + 1)}d">Strong +${getSpacedRepInterval('Strong', (Number(r.stage) || 1) + 1)}d</button>
             <button type="button" class="btn btn-small btn-lime" onclick="completeRevision(${r.id},0)" title="Mark done without scheduling next">Done</button>
@@ -8024,34 +8163,57 @@ function renderMocks() {
   const targetScore = Math.max(100, Math.min(720, Number(data.settings.mockTargetScore) || 600));
   const tInp = document.getElementById("mockTargetScoreInput"); if (tInp) tInp.value = targetScore;
 
-  // 1. Primary Overview Stats (Full Mocks strictly separated from Part/Subject tests)
+  // 1. Primary Overview Stats (Smart Percentage Normalization for Subject/Part/Mixed Tests!)
+  const isMixedScope = (window._miAnalysisScope && window._miAnalysisScope !== "full") || full.some(m => (Number(m.maxMarks) || 720) !== 720);
+  const pctOf = (m) => { const mx = Math.max(1, Number(m.maxMarks) || 720); return Number(((Number(m.total) || 0) / mx * 100).toFixed(1)); };
   const scores = full.map(m => Number(m.total) || 0);
+  const pcts = full.map(pctOf);
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+  const avgPct = pcts.length ? Number((pcts.reduce((a, b) => a + b, 0) / pcts.length).toFixed(1)) : null;
   const best = scores.length ? Math.max(...scores) : null;
-  const bestMock = best !== null ? full.find(m => m.total === best) : null;
+  const bestPct = pcts.length ? Math.max(...pcts) : null;
+  const bestMock = isMixedScope
+    ? (bestPct !== null ? full.find(m => pctOf(m) === bestPct) : null)
+    : (best !== null ? full.find(m => m.total === best) : null);
   const latest = full.length ? full[full.length - 1] : null;
   const prev = full.length >= 2 ? full[full.length - 2] : null;
+  const latestMax = latest ? (Number(latest.maxMarks) || 720) : 720;
+  const targetPctNorm = Number((targetScore / 720 * 100).toFixed(1));
 
   const wAcc = MockCalc.weightedAccuracy(full.length ? full : all);
-  const attemptRates = full.map(m => MockCalc.attemptRate(m.attempted, m.totalQ || 180)).filter(v => v !== null);
+  const attemptRates = full.map(m => MockCalc.attemptRate(m.attempted, m.totalQ || Math.round((Number(m.maxMarks) || 720) / 4))).filter(v => v !== null);
   const avgAttemptRate = attemptRates.length ? (attemptRates.reduce((a, b) => a + b, 0) / attemptRates.length).toFixed(1) + "%" : "--";
-  const targetPct = latest ? Math.round((latest.total / targetScore) * 100) + "%" : "--";
-  const targetGap = latest ? (latest.total - targetScore) : null;
+  const targetPct = latest
+    ? (isMixedScope ? Math.round((pctOf(latest) / Math.max(1, targetPctNorm)) * 100) + "%" : Math.round((latest.total / targetScore) * 100) + "%")
+    : "--";
+  const targetGap = latest
+    ? (isMixedScope ? Number((pctOf(latest) - targetPctNorm).toFixed(1)) : (latest.total - targetScore))
+    : null;
 
   document.getElementById("mockCount").textContent = full.length;
   document.getElementById("otherMockCount").textContent = other.length;
-  document.getElementById("mockAvg").textContent = avg !== null ? avg : "--";
-  document.getElementById("mockBest").textContent = best !== null ? best : "--";
-  if (document.getElementById("miBestDateSub")) document.getElementById("miBestDateSub").textContent = bestMock ? `${bestMock.name} (${bestMock.date})` : "No full mock yet";
-  if (document.getElementById("miLatestScore")) document.getElementById("miLatestScore").textContent = latest ? `${latest.total}/720` : "--";
+  document.getElementById("mockAvg").textContent = isMixedScope ? (avgPct !== null ? avgPct + "%" : "--") : (avg !== null ? avg : "--");
+  document.getElementById("mockBest").textContent = isMixedScope ? (bestPct !== null ? bestPct + "%" : "--") : (best !== null ? best : "--");
+  if (document.getElementById("miBestDateSub")) document.getElementById("miBestDateSub").textContent = bestMock ? `${bestMock.name} (${bestMock.total}/${bestMock.maxMarks || 720} · ${bestMock.date})` : "No test yet";
+  if (document.getElementById("miLatestScore")) document.getElementById("miLatestScore").textContent = latest ? `${latest.total}/${latestMax}` : "--";
   if (document.getElementById("miLatestDeltaSub")) {
-    const d = (latest && prev) ? (latest.total - prev.total) : null;
-    document.getElementById("miLatestDeltaSub").textContent = d !== null ? `${d >= 0 ? "▲ +" : "▼ "}${d} vs previous` : (latest ? latest.date : "—");
+    let deltaTxt = latest ? `${pctOf(latest)}% · ${latest.date}` : "—";
+    if (latest && prev) {
+      const sameMax = (Number(latest.maxMarks) || 720) === (Number(prev.maxMarks) || 720);
+      if (sameMax) {
+        const d = latest.total - prev.total;
+        deltaTxt = `${d >= 0 ? "▲ +" : "▼ "}${d} marks vs previous`;
+      } else {
+        const dp = Number((pctOf(latest) - pctOf(prev)).toFixed(1));
+        deltaTxt = `${dp >= 0 ? "▲ +" : "▼ "}${dp}% pts vs previous (${prev.total}/${prev.maxMarks || 720})`;
+      }
+    }
+    document.getElementById("miLatestDeltaSub").textContent = deltaTxt;
   }
   if (document.getElementById("miWeightedAcc")) document.getElementById("miWeightedAcc").textContent = wAcc !== null ? wAcc + "%" : "--";
   if (document.getElementById("miAvgAttemptRate")) document.getElementById("miAvgAttemptRate").textContent = avgAttemptRate;
   if (document.getElementById("miTargetPct")) document.getElementById("miTargetPct").textContent = targetPct;
-  if (document.getElementById("miTargetLabel")) document.getElementById("miTargetLabel").textContent = `Target: ${targetScore}/720`;
+  if (document.getElementById("miTargetLabel")) document.getElementById("miTargetLabel").textContent = isMixedScope ? `Target pace: ${targetPctNorm}%` : `Target: ${targetScore}/720`;
   if (document.getElementById("miTargetGap")) {
     const gEl = document.getElementById("miTargetGap");
     gEl.textContent = targetGap !== null ? (targetGap >= 0 ? `+${targetGap}` : `${targetGap}`) : "--";
@@ -8315,7 +8477,7 @@ function renderChapterPracticeModalBody(c) {
   }
   const logs = Array.isArray(c.practiceLogs) ? c.practiceLogs : [];
   const host = document.getElementById("cpLogsList");
-  host.innerHTML = logs.length ? logs.slice().reverse().map(l => {
+  host.innerHTML = logs.length ? `<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button type="button" class="btn btn-small btn-danger" onclick="clearAllChapterPracticeLogs(${c.id})">🗑 Clear All Logs</button></div>` + logs.slice().reverse().map(l => {
     const la = MockCalc.accuracy(l.correct, l.attempted);
     return `<div class="revision-item" style="flex-wrap:wrap">
       <div class="item-main">
@@ -8357,16 +8519,30 @@ window.editChapterPracticeLog = (chId, logId) => {
   });
 };
 window.deleteChapterPracticeLog = (chId, logId) => {
-  const c = data.chapters.find(x => x.id === chId); if (!c || !c.practiceLogs) return;
+  const c = data.chapters.find(x => String(x.id) === String(chId)); if (!c || !c.practiceLogs) return;
   openModal({
     title: "Delete Practice Log?",
     message: `Remove this question log from "${c.name}"?`,
     confirmText: "Delete",
     onConfirm: () => {
-      c.practiceLogs = c.practiceLogs.filter(x => x.id !== logId);
+      c.practiceLogs = c.practiceLogs.filter(x => String(x.id) !== String(logId));
       recalcChapterTotalsFromLogs(c);
       save(); renderChapterPracticeModalBody(c); renderMockChapters(); renderChapters(); renderIntelligence();
       notify("Practice log deleted.");
+    }
+  });
+};
+window.clearAllChapterPracticeLogs = (chId) => {
+  const c = data.chapters.find(x => String(x.id) === String(chId)); if (!c) return;
+  openModal({
+    title: "Clear All Chapter Logs?",
+    message: `Delete ALL logged question sessions for "${c.name}" and reset its practice accuracy?`,
+    confirmText: "Clear All",
+    onConfirm: () => {
+      c.practiceLogs = [];
+      recalcChapterTotalsFromLogs(c);
+      save(); renderChapterPracticeModalBody(c); renderMockChapters(); renderChapters(); renderIntelligence();
+      notify(`Cleared all practice logs for ${c.name}.`);
     }
   });
 };
@@ -8529,8 +8705,10 @@ function renderCompareSection(all) {
     tableHost.innerHTML = '<div class="empty">Select at least 2 tests above to compare.</div>';
     return;
   }
+  const sameMaxAcross = chosen.every(m => (Number(m.maxMarks) || 720) === (Number(chosen[0].maxMarks) || 720));
   const metrics = [
-    ["Total Marks", m => `${m.total}/${m.maxMarks || 720}`, m => m.total, true],
+    ["Score %", m => `${Number(((Number(m.total) || 0) / Math.max(1, Number(m.maxMarks) || 720) * 100).toFixed(1))}%`, m => Number(((Number(m.total) || 0) / Math.max(1, Number(m.maxMarks) || 720) * 100).toFixed(1)), true],
+    ["Total Marks", m => `${m.total}/${m.maxMarks || 720}`, m => sameMaxAcross ? m.total : null, true],
     ["Physics", m => isFullMock(m) ? `${m.phy}/180` : "—", m => isFullMock(m) ? m.phy : null, true],
     ["Chemistry", m => isFullMock(m) ? `${m.chem}/180` : "—", m => isFullMock(m) ? m.chem : null, true],
     ["Botany", m => isFullMock(m) ? `${m.bot}/180` : "—", m => isFullMock(m) ? m.bot : null, true],
@@ -9798,7 +9976,16 @@ window.goOnboardingStep = (step) => {
   if (ey) ey.textContent = is1 ? "QUICK SETUP · STEP 1 OF 2" : "QUICK SETUP · STEP 2 OF 2";
 };
 window.openOnboardingWizard = (force = false) => {
-  if (!force && data && data.settings && data.settings.onboardingV25Done) return;
+  if (!force && data && data.settings) {
+    const alreadyConfigured = Boolean(data.settings.onboardingV25Done) ||
+      (data.settings.name && data.settings.name !== "Dr. Xyz") ||
+      (Array.isArray(data.sessions) && data.sessions.length > 0) ||
+      (Array.isArray(data.mocks) && data.mocks.length > 0);
+    if (alreadyConfigured) {
+      if (!data.settings.onboardingV25Done) { data.settings.onboardingV25Done = true; save(true); }
+      return;
+    }
+  }
   const m = document.getElementById("onboardingSetupModal");
   if (!m) return;
   document.getElementById("obName").value = (data.settings.name && data.settings.name !== "Dr. Xyz") ? data.settings.name : "";
@@ -9813,7 +10000,7 @@ window.openOnboardingWizard = (force = false) => {
 };
 window.skipOnboardingWizard = () => {
   data.settings.onboardingV25Done = true;
-  save();
+  save(true); scheduleCloudSync(true);
   const m = document.getElementById("onboardingSetupModal");
   if (m) m.classList.remove("open");
 };
@@ -10241,6 +10428,7 @@ function refreshAllViews() {
   renderOverviewLayoutManager();
   updateAmbientUI();
   rotateDynamicTip();
+  if (typeof loadSettings === "function") loadSettings();
   syncReminderSettingsUI();
   applyLiteModeUI();
 }
@@ -11138,7 +11326,8 @@ let _inboxPendingReqs = [];
 let _inboxPendingChals = [];
 function syncInboxBadge() {
   const unreadAlerts = _inboxAlerts.filter(a => !a.read).length;
-  const total = unreadAlerts + _inboxPendingReqs.length + _inboxPendingChals.length;
+  const unreadChats = Array.isArray(window._unreadChatAlerts) ? window._unreadChatAlerts.length : 0;
+  const total = unreadAlerts + unreadChats + _inboxPendingReqs.length + _inboxPendingChals.length;
   const badge = document.getElementById("inboxUnreadBadge");
   if (badge) {
     badge.textContent = String(total > 99 ? "99+" : total);
@@ -11154,8 +11343,13 @@ window.recordInboxAlert = (title, message, icon = "🔔") => {
 window.renderInboxAlerts = () => {
   const host = document.getElementById("inboxAlertsList");
   if (!host) return;
-  if (!_inboxAlerts.length) { host.innerHTML = '<div class="empty">No alerts yet.</div>'; return; }
-  host.innerHTML = _inboxAlerts.map(a => `<div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:8px">
+  const chatAlerts = Array.isArray(window._unreadChatAlerts) ? window._unreadChatAlerts : [];
+  if (!_inboxAlerts.length && !chatAlerts.length) { host.innerHTML = '<div class="empty">No alerts yet.</div>'; return; }
+  const chatHtml = chatAlerts.map(c => `<div style="padding:10px 12px;border-radius:10px;background:rgba(97,217,245,.1);border:1px solid var(--cyan);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <div style="flex:1;min-width:160px"><strong style="font-size:13px">💬 ${esc(c.fromName)}</strong><div class="small muted" style="margin-top:2px">${esc(c.text.slice(0, 90))}</div></div>
+    <button type="button" class="btn btn-small btn-primary" onclick="closeInboxModal();openFriendChatModal('${esc(c.fromUid)}','${esc(c.fromName).replace(/'/g, "\\'")}')">Reply</button>
+  </div>`).join("");
+  host.innerHTML = chatHtml + _inboxAlerts.map(a => `<div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:8px">
     <div style="display:flex;justify-content:space-between;gap:8px;font-size:13px"><strong>${esc(a.icon || "🔔")} ${esc(a.title)}</strong><span class="small muted">${esc(a.time || "")}</span></div>
     <div class="small muted" style="margin-top:4px;line-height:1.45">${esc(a.message)}</div>
   </div>`).join("");
@@ -11163,8 +11357,27 @@ window.renderInboxAlerts = () => {
 window.clearInboxAlerts = () => {
   _inboxAlerts = [];
   try { localStorage.setItem("neet_inbox_alerts_v27", "[]"); } catch (e) {}
+  if (Array.isArray(window._unreadChatAlerts) && window._unreadChatAlerts.length) {
+    const myUid = (document.getElementById("settingsUidField") && document.getElementById("settingsUidField").value) || "";
+    const nowTs = Date.now();
+    let updatedCloudSeen = false;
+    if (data && (!data.chatSeen || typeof data.chatSeen !== "object")) data.chatSeen = {};
+    window._unreadChatAlerts.forEach(c => {
+      if (myUid && c && c.fromUid) {
+        const roomId = [myUid, c.fromUid].sort().join("_");
+        try { localStorage.setItem("neet_chat_seen_" + roomId, String(nowTs)); } catch (e) {}
+        if (data && data.chatSeen) {
+          data.chatSeen[roomId] = Math.max(Number(data.chatSeen[roomId]) || 0, nowTs);
+          updatedCloudSeen = true;
+        }
+      }
+    });
+    window._unreadChatAlerts = [];
+    if (updatedCloudSeen && typeof save === "function") save(true);
+  }
   window.renderInboxAlerts();
   syncInboxBadge();
+  notify("All alerts cleared.");
 };
 window.updateInboxRequestsUI = (pending) => {
   _inboxPendingReqs = Array.isArray(pending) ? pending : [];
@@ -11190,6 +11403,7 @@ window.switchInboxTab = (tab) => {
   });
 };
 window.openInboxModal = (tab = "alerts") => {
+  if (typeof window.checkUnreadFriendChats === "function") window.checkUnreadFriendChats();
   _inboxAlerts.forEach(a => a.read = true);
   try { localStorage.setItem("neet_inbox_alerts_v27", JSON.stringify(_inboxAlerts)); } catch (e) {}
   window.renderInboxAlerts();
@@ -11416,7 +11630,7 @@ window._miAnalysisScope = "full";
 window.setMockAnalysisScope = (scope) => {
   window._miAnalysisScope = scope || "full";
   document.querySelectorAll(".mi-scope-btn").forEach(b => b.classList.toggle("btn-primary", b.dataset.scope === window._miAnalysisScope));
-  if (typeof renderMockAnalytics === "function") renderMockAnalytics();
+  if (typeof renderMocks === "function") renderMocks();
 };
 
 /* 12. Auto-Flagged Weak Chapters (<65%) Visible Inside Revision Intelligence */
@@ -11427,7 +11641,9 @@ window.setMockAnalysisScope = (scope) => {
     origRev();
     const host = document.getElementById("revisionList") || document.getElementById("revisionsList");
     if (!host) return;
-    const weak = (data.chapters || []).filter(c => c.attempted >= 10 && (c.correct / c.attempted) < 0.65);
+    const dismissed = Array.isArray(data.settings && data.settings.dismissedWeakChapters) ? data.settings.dismissedWeakChapters : [];
+    const pendingTopics = new Set((data.revisions || []).filter(r => !r.done).map(r => (r.topic || "").trim().toLowerCase()));
+    const weak = (data.chapters || []).filter(c => c.attempted >= 10 && (c.correct / c.attempted) < 0.65 && !dismissed.includes(String(c.id)) && !pendingTopics.has((c.name || "").trim().toLowerCase()));
     const oldBox = document.getElementById("autoWeakChaptersRevBox");
     if (oldBox) oldBox.remove();
     if (!weak.length) return;
@@ -11440,12 +11656,574 @@ window.setMockAnalysisScope = (scope) => {
         const acc = Math.round((c.correct / c.attempted) * 100);
         return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--border);font-size:12.5px">
           <span><strong>${esc(c.name)}</strong> <span class="small muted">(${esc(c.subject)} · ${acc}%)</span></span>
-          <button type="button" class="btn btn-small btn-lime" onclick="quickScheduleChapterRev('${esc(c.id)}', 1)">+ Schedule Tomorrow</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-small btn-lime" onclick="quickScheduleChapterRev('${esc(c.id)}', 1)">+ Schedule Tomorrow</button><button type="button" class="btn btn-small btn-danger" onclick="dismissWeakChapterFlag('${esc(c.id)}')" title="Dismiss weak chapter alert">✕ Dismiss</button></div>
         </div>`;
       }).join("");
     host.parentElement.insertBefore(box, host);
   };
 })();
+
+
+/* ============================================================================
+   FOCUS ARENA CORE ENGINE (LOCAL STATE, LOCKS, ELIMINATION, STRICT MODE,
+   FLOWMODORO ANTI-AFK, INTEGRITY RECONCILIATION, LIVE BANNERS & RESULT PNG)
+   ============================================================================ */
+const ARENA_KEY = "neet_active_focus_arena_v1";
+window._arenaBypassGuard = false;
+let _arenaLastBannerUpdate = 0;
+let _arenaHiddenAt = 0;
+let _arenaAfkTimeout = null;
+let _arenaAfkPending = false;
+window._lastChallengesMap = {};
+window._lastChalPngBlob = null;
+window._lastChalPngFname = "neet-challenge-result.png";
+
+let _arenaRulesOnConfirm = null;
+window.openArenaRulesModal = (onConfirm = null, confirmLabel = "⚔️ I Understand — Start Duel") => {
+  _arenaRulesOnConfirm = typeof onConfirm === "function" ? onConfirm : null;
+  const skipWrap = document.getElementById("arenaRulesSkipWrap");
+  const confirmBtn = document.getElementById("arenaRulesConfirmBtn");
+  const cancelBtn = document.getElementById("arenaRulesCancelBtn");
+  const chk = document.getElementById("arenaRulesDontShowAgain");
+  if (chk) chk.checked = false;
+  if (skipWrap) skipWrap.style.display = _arenaRulesOnConfirm ? "flex" : "none";
+  if (confirmBtn) {
+    confirmBtn.style.display = _arenaRulesOnConfirm ? "inline-flex" : "none";
+    confirmBtn.textContent = confirmLabel;
+  }
+  if (cancelBtn) cancelBtn.textContent = _arenaRulesOnConfirm ? "Cancel" : "Got It";
+  const m = document.getElementById("arenaRulesModal");
+  if (m) m.classList.add("open");
+};
+window.confirmArenaRulesAction = () => {
+  const chk = document.getElementById("arenaRulesDontShowAgain");
+  if (chk && chk.checked && data && data.settings) {
+    data.settings.hideArenaRulesPrompt = true;
+    save(true);
+  }
+  const cb = _arenaRulesOnConfirm;
+  _arenaRulesOnConfirm = null;
+  window.closeArenaRulesModal();
+  if (typeof cb === "function") cb();
+};
+window.closeArenaRulesModal = () => { const m = document.getElementById("arenaRulesModal"); if (m) m.classList.remove("open"); };
+window.closeChalResultPreview = () => { const m = document.getElementById("chalResultPreviewModal"); if (m) m.classList.remove("open"); };
+
+window.getActiveArena = () => {
+  try {
+    const raw = localStorage.getItem(ARENA_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    return (obj && obj.challengeId) ? obj : null;
+  } catch (e) { return null; }
+};
+window.setActiveArena = (obj) => {
+  try {
+    if (!obj) localStorage.removeItem(ARENA_KEY);
+    else localStorage.setItem(ARENA_KEY, JSON.stringify(obj));
+  } catch (e) {}
+  window.syncArenaBannerUI(true);
+};
+function getArenaElapsedMins(ar) {
+  if (!ar) return 0;
+  if (typeof timerRunning !== "undefined" && timerRunning) {
+    if (ar.targetMins === 0) return Math.max(0, Math.floor((Number(flowElapsed) || 0) / 60));
+    return Math.max(0, Math.floor(Math.max(0, (Number(timerTotal) || 0) - (Number(timerRemaining) || 0)) / 60));
+  }
+  return Math.max(0, Math.floor((Date.now() - (Number(ar.startedAt) || Date.now())) / 60000));
+}
+window.syncArenaBannerUI = (force = false) => {
+  const ar = window.getActiveArena();
+  const b1 = document.getElementById("arenaLiveBanner");
+  const b2 = document.getElementById("focusArenaLiveBanner");
+  const cfg = document.getElementById("countdownConfigWrap");
+  const m1 = document.getElementById("modeCountdownBtn");
+  const m2 = document.getElementById("modeFlowmodoroBtn");
+  if (!ar) {
+    if (b1) b1.classList.remove("show");
+    if (b2) b2.classList.remove("show");
+    if (cfg) cfg.classList.remove("arena-locked-dim");
+    if (m1) m1.disabled = false;
+    if (m2) m2.disabled = false;
+    return;
+  }
+  if (!force && Date.now() - _arenaLastBannerUpdate < 15000) return;
+  _arenaLastBannerUpdate = Date.now();
+  const mins = getArenaElapsedMins(ar);
+  const progressTxt = ar.targetMins > 0 ? `${Math.min(ar.targetMins, mins)} / ${ar.targetMins}m` : `${mins}m · Last Standing`;
+  const txt = `⚔️ FOCUS ARENA LIVE · ${ar.title || "Endurance Duel"} · ${progressTxt}`;
+  const t1 = document.getElementById("arenaBannerText"); if (t1) t1.textContent = txt;
+  const t2 = document.getElementById("focusArenaBannerText"); if (t2) t2.textContent = txt;
+  const s1 = document.getElementById("arenaBannerStrictTag"); if (s1) s1.style.display = ar.strictScreen ? "inline-flex" : "none";
+  const s2 = document.getElementById("focusArenaBannerStrictTag"); if (s2) s2.style.display = ar.strictScreen ? "inline-flex" : "none";
+  if (b1) b1.classList.add("show");
+  if (b2) b2.classList.add("show");
+  if (cfg) cfg.classList.add("arena-locked-dim");
+  if (m1) m1.disabled = true;
+  if (m2) m2.disabled = true;
+};
+
+window.enterFocusArenaAndStart = (challengeId, title, targetMins, strictScreen) => {
+  const tMins = Math.max(0, Number(targetMins) || 0);
+  window._arenaBypassGuard = true;
+  try {
+    if (tMins === 0) {
+      if (typeof setTimerMode === "function") setTimerMode("flowmodoro");
+      resetTimer();
+    } else {
+      if (typeof setTimerMode === "function") setTimerMode("countdown");
+      const mIn = document.getElementById("timerMinutes");
+      if (mIn) mIn.value = tMins;
+      if (typeof handleTimerDurationEdit === "function") handleTimerDurationEdit(tMins);
+    }
+    const topicEl = document.getElementById("timerTopic");
+    if (topicEl && !topicEl.value.trim()) topicEl.value = `Focus Arena: ${title || "Endurance Duel"}`;
+    const now = Date.now();
+    window.setActiveArena({
+      challengeId,
+      title: title || (tMins ? `${tMins}m Endurance` : "∞ Flowmodoro"),
+      targetMins: tMins,
+      strictScreen: Boolean(strictScreen),
+      startedAt: now,
+      lastAfkCheck: now,
+      lastConfirmedMins: 0
+    });
+    navigate("study");
+    startTimer();
+  } finally {
+    window._arenaBypassGuard = false;
+  }
+  window.syncArenaBannerUI(true);
+  notify(`⚔️ Focus Arena LIVE! ${tMins ? tMins + "m Countdown" : "∞ Flowmodoro"} started.`);
+};
+
+window.forfeitActiveArena = (reason = "Forfeited duel", afterCb = null) => {
+  const ar = window.getActiveArena();
+  if (!ar) { if (typeof afterCb === "function") afterCb(); return; }
+  const mins = getArenaElapsedMins(ar);
+  const isFlow = ar.targetMins === 0;
+  openModal({
+    title: isFlow ? "Lock In Flowmodoro Score?" : "⚠ Forfeit Focus Arena?",
+    message: isFlow
+      ? `Lock in your Flowmodoro score at ${mins} min? Opponents must beat ${mins} min to win.`
+      : `You have survived ${mins} / ${ar.targetMins} min. "${reason}" will ELIMINATE you from this duel.`,
+    confirmText: isFlow ? `Lock ${mins}m` : "Confirm Elimination",
+    onConfirm: async () => {
+      clearTimeout(_arenaAfkTimeout); _arenaAfkPending = false;
+      window.setActiveArena(null);
+      const patch = isFlow
+        ? { status: "finished", state: "finished", endedAt: Date.now(), survivedMins: mins, reason: "Locked run" }
+        : { status: "eliminated", state: "eliminated", endedAt: Date.now(), survivedMins: mins, reason };
+      if (typeof window.updateArenaParticipantStatus === "function") {
+        await window.updateArenaParticipantStatus(ar.challengeId, patch);
+      }
+      if (typeof afterCb === "function") {
+        window._arenaBypassGuard = true;
+        try { afterCb(); } finally { window._arenaBypassGuard = false; }
+      } else if (typeof pauseTimer === "function") {
+        window._arenaBypassGuard = true;
+        try { pauseTimer(); } finally { window._arenaBypassGuard = false; }
+      }
+      notify(isFlow ? `⏱ Locked Flowmodoro Arena run at ${mins} min!` : `💀 Eliminated from Focus Arena at ${mins}m (${reason}).`);
+      if (typeof window.refreshChallenges === "function") window.refreshChallenges();
+    }
+  });
+};
+
+window.onSessionCompletedCheckArena = async (minutes) => {
+  const ar = window.getActiveArena();
+  if (!ar || ar.targetMins <= 0) return;
+  if (minutes >= ar.targetMins) {
+    clearTimeout(_arenaAfkTimeout); _arenaAfkPending = false;
+    window.setActiveArena(null);
+    if (typeof window.updateArenaParticipantStatus === "function") {
+      await window.updateArenaParticipantStatus(ar.challengeId, {
+        status: "completed",
+        state: "completed",
+        endedAt: Date.now(),
+        survivedMins: ar.targetMins,
+        reason: "Survived full target"
+      });
+    }
+    notify(`🏆 Focus Arena Survived! ${ar.targetMins}m completed!`);
+    if (typeof window.refreshChallenges === "function") window.refreshChallenges();
+  }
+};
+
+window.tickFocusArenaHooks = () => {
+  const ar = window.getActiveArena();
+  if (!ar) return;
+  window.syncArenaBannerUI(false);
+  // Flowmodoro Anti-AFK Check every 60 minutes of flowElapsed
+  if (ar.targetMins === 0 && timerMode === "flowmodoro" && !_arenaAfkPending) {
+    const minsNow = Math.floor((Number(flowElapsed) || 0) / 60);
+    const lastConf = Number(ar.lastConfirmedMins) || 0;
+    if (minsNow >= lastConf + 60) {
+      _arenaAfkPending = true;
+      triggerAppAlert("Focus Arena Check-In ⚔️", "Still Studying? Tap within 5 mins to keep your Flowmodoro Arena run alive.", "⚔️");
+      openModal({
+        title: "⚔️ Focus Arena Check-In",
+        message: `You hit ${minsNow}m in Flowmodoro! Tap "Still Studying" within 5 minutes to keep your Arena run alive.`,
+        confirmText: "✓ Still Studying",
+        onConfirm: () => {
+          clearTimeout(_arenaAfkTimeout);
+          _arenaAfkPending = false;
+          const cur = window.getActiveArena();
+          if (cur) {
+            cur.lastAfkCheck = Date.now();
+            cur.lastConfirmedMins = minsNow;
+            window.setActiveArena(cur);
+          }
+          notify("Check-in confirmed! Keep flowing!");
+        }
+      });
+      clearTimeout(_arenaAfkTimeout);
+      _arenaAfkTimeout = setTimeout(async () => {
+        if (!_arenaAfkPending) return;
+        _arenaAfkPending = false;
+        const cur = window.getActiveArena();
+        if (!cur) return;
+        const lockedMins = Number(cur.lastConfirmedMins) || Math.max(0, minsNow - 5);
+        window.setActiveArena(null);
+        window._arenaBypassGuard = true;
+        try { if (typeof pauseTimer === "function") pauseTimer(); } finally { window._arenaBypassGuard = false; }
+        if (typeof window.updateArenaParticipantStatus === "function") {
+          await window.updateArenaParticipantStatus(cur.challengeId, {
+            status: "finished",
+            state: "finished",
+            endedAt: Date.now(),
+            survivedMins: lockedMins,
+            reason: "AFK check missed"
+          });
+        }
+        triggerAppAlert("Focus Arena Auto-Locked", `AFK check missed — run locked at ${lockedMins}m.`, "⏱");
+        if (typeof window.refreshChallenges === "function") window.refreshChallenges();
+      }, 5 * 60 * 1000);
+    }
+  }
+};
+
+window.reconcileArenaIntegrity = async () => {
+  const ar = window.getActiveArena();
+  if (!ar) { window.syncArenaBannerUI(true); return; }
+  const isLive = Boolean((typeof timerRunning !== "undefined" && timerRunning) || (data && data.timer && data.timer.running));
+  if (isLive) { window.syncArenaBannerUI(true); return; }
+  const survivedMins = Math.max(0, Math.floor((Date.now() - (Number(ar.startedAt) || Date.now())) / 60000));
+  window.setActiveArena(null);
+  const completed = ar.targetMins > 0 && survivedMins >= ar.targetMins;
+  const patch = completed
+    ? { status: "completed", state: "completed", endedAt: Date.now(), survivedMins: ar.targetMins, reason: "Survived full target" }
+    : { status: "eliminated", state: "eliminated", endedAt: Date.now(), survivedMins, reason: "Timer stopped / disconnected" };
+  if (typeof window.updateArenaParticipantStatus === "function") {
+    await window.updateArenaParticipantStatus(ar.challengeId, patch);
+  }
+  notify(completed ? `🏆 Focus Arena Survived (${ar.targetMins}m)!` : `Focus Arena ended (${patch.reason}).`);
+  if (typeof window.refreshChallenges === "function") window.refreshChallenges();
+};
+
+// Strict Screen-On Mode (>45s away eliminates)
+document.addEventListener("visibilitychange", async () => {
+  const ar = window.getActiveArena();
+  if (!ar || !ar.strictScreen) return;
+  if (document.hidden) {
+    _arenaHiddenAt = Date.now();
+  } else if (_arenaHiddenAt > 0) {
+    const awayMs = Date.now() - _arenaHiddenAt;
+    _arenaHiddenAt = 0;
+    if (awayMs > 45000) {
+      const survivedMins = getArenaElapsedMins(ar);
+      window.setActiveArena(null);
+      window._arenaBypassGuard = true;
+      try { if (typeof pauseTimer === "function") pauseTimer(); } finally { window._arenaBypassGuard = false; }
+      if (typeof window.updateArenaParticipantStatus === "function") {
+        await window.updateArenaParticipantStatus(ar.challengeId, {
+          status: "eliminated",
+          state: "eliminated",
+          endedAt: Date.now(),
+          survivedMins,
+          reason: "Left app (>45s in Strict Mode)"
+        });
+      }
+      triggerAppAlert("Eliminated (Strict Mode) 💀", "You left the app for over 45 seconds during Strict Screen-On Focus Arena.", "💀");
+      if (typeof window.refreshChallenges === "function") window.refreshChallenges();
+    }
+  }
+});
+
+// Verdict Computation Engine (Shared by Challenge Cards & Result PNG Generator)
+window.computeChallengeVerdict = (c) => {
+  const now = Date.now();
+  const isArena = c.type === "focus_arena";
+  const targetMins = Number(c.durationMins) || 0;
+  const scoresMap = c.scores || {};
+  const uids = Array.from(new Set([...(c.participants || []), ...Object.keys(scoresMap)]));
+  const rows = uids.map(uid => {
+    const p = scoresMap[uid] || {};
+    const rawName = p.name || (window._friendNameMap && window._friendNameMap[uid]) || "Aspirant";
+    // Strip any accidental email/UID lookalike
+    const safeName = String(rawName).includes("@") ? ("Dr. " + String(rawName).split("@")[0]) : String(rawName);
+    let st = p.status || p.state || "invited";
+    if (st === "joined") st = isArena ? "invited" : "joined";
+    let mins = Number(p.survivedMins) || 0;
+    let live = false;
+    let timedOut = false;
+    if (isArena && st === "focusing") {
+      live = true;
+      const elapsed = Math.max(0, Math.floor((now - (Number(p.startedAt) || now)) / 60000));
+      if (targetMins > 0) mins = Math.min(targetMins, elapsed);
+      else {
+        mins = elapsed;
+        if (elapsed > 720) { timedOut = true; live = false; st = "eliminated"; }
+      }
+    }
+    const jump = Number(p.bestJump) || 0;
+    return { uid, name: safeName, status: st, mins, jump, baseScore: Number(p.baseScore) || 0, reason: p.reason || "", live, timedOut };
+  });
+
+  if (isArena) {
+    // Rank: completed > focusing > finished > eliminated > invited, then highest mins
+    const order = { completed: 5, focusing: 4, finished: 3, eliminated: 2, invited: 1 };
+    rows.sort((a, b) => (order[b.status] - order[a.status]) || (b.mins - a.mins));
+    const accepted = rows.filter(r => r.status !== "invited");
+    const anyFocusing = accepted.some(r => r.status === "focusing");
+    const completedList = accepted.filter(r => r.status === "completed");
+    const resolved = accepted.length > 0 && !anyFocusing;
+    let verdictType = "live", verdictTitle = "🔥 LIVE STANDINGS", verdictSub = "Duel in progress", color = "#61d9f5", winnerUids = [];
+    if (resolved) {
+      if (targetMins > 0 && completedList.length === 1) {
+        verdictType = "win"; winnerUids = [completedList[0].uid];
+        verdictTitle = `🏆 WINNER: ${completedList[0].name}`;
+        verdictSub = `Survived full ${targetMins}m target`;
+        color = "#c4f36b";
+      } else if (targetMins > 0 && completedList.length > 1) {
+        verdictType = "cosurv"; winnerUids = completedList.map(x => x.uid);
+        verdictTitle = "🤝 CO-SURVIVORS";
+        verdictSub = `${completedList.length} aspirants survived the full ${targetMins}m`;
+        color = "#61d9f5";
+      } else if (accepted.length) {
+        const topM = accepted[0].mins;
+        const tied = accepted.filter(x => x.mins === topM);
+        if (tied.length === 1) {
+          const lead = accepted.length > 1 ? ` (+${topM - accepted[1].mins}m lead)` : "";
+          verdictType = "win"; winnerUids = [tied[0].uid];
+          verdictTitle = `🏆 WINNER: ${tied[0].name}`;
+          verdictSub = `Held ${topM}m${lead}`;
+          color = "#c4f36b";
+        } else {
+          verdictType = "tie"; winnerUids = tied.map(x => x.uid);
+          verdictTitle = "⚖️ TIE";
+          verdictSub = `Tied at ${topM}m`;
+          color = "#ffbd69";
+        }
+      }
+    }
+    return { rows, resolved, verdictType, verdictTitle, verdictSub, color, winnerUids };
+  } else {
+    // Mock Improvement (mock_jump)
+    rows.sort((a, b) => b.jump - a.jump);
+    const topJ = rows.length ? rows[0].jump : 0;
+    const tied = rows.filter(r => r.jump === topJ && topJ > 0);
+    let verdictType = "live", verdictTitle = "📈 MOCK IMPROVEMENT RACE", verdictSub = "Log your next mock to beat your baseline", color = "#61d9f5", winnerUids = [];
+    if (topJ > 0) {
+      if (tied.length === 1) {
+        verdictType = "win"; winnerUids = [tied[0].uid];
+        verdictTitle = `🏆 LEADER: ${tied[0].name}`;
+        verdictSub = `+${topJ} Marks Jump`;
+        color = "#c4f36b";
+      } else {
+        verdictType = "tie"; winnerUids = tied.map(x => x.uid);
+        verdictTitle = "⚖️ TIE";
+        verdictSub = `Tied at +${topJ} Marks Jump`;
+        color = "#ffbd69";
+      }
+    }
+    return { rows, resolved: (Date.now() - (Number(c.createdAt) || 0)) > 14 * 86400000, verdictType, verdictTitle, verdictSub, color, winnerUids };
+  }
+};
+
+// Section 7: "⬇ Download Result" Challenge Card (Native HTML5 Canvas PNG Export)
+window.shareLastChallengeResultPNG = async () => {
+  if (!window._lastChalPngBlob) return;
+  try {
+    const file = new File([window._lastChalPngBlob], window._lastChalPngFname, { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+      await navigator.share({ files: [file], title: "NEET Challenge Result" });
+      return;
+    }
+  } catch (e) {}
+  const url = URL.createObjectURL(window._lastChalPngBlob);
+  const a = document.createElement("a");
+  a.href = url; a.download = window._lastChalPngFname; a.style.display = "none";
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { try { document.body.removeChild(a); URL.revokeObjectURL(url); } catch (e) {} }, 2500);
+};
+
+window.downloadChallengeResultPNG = (challengeId) => {
+  const c = window._lastChallengesMap && window._lastChallengesMap[challengeId];
+  if (!c) return notify("Challenge data not loaded yet.");
+  try {
+    const v = window.computeChallengeVerdict(c);
+    const isArena = c.type === "focus_arena";
+    const targetMins = Number(c.durationMins) || 0;
+    const rows = v.rows.slice(0, 8);
+    const dpr = 2;
+    const W = 900;
+    const H = Math.max(560, 310 + rows.length * 60);
+    const canvas = document.createElement("canvas");
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    // 1. Dark background with radial cyan/lime glow
+    ctx.fillStyle = "#080e1b";
+    ctx.fillRect(0, 0, W, H);
+    const g1 = ctx.createRadialGradient(W * 0.82, 40, 10, W * 0.82, 40, 380);
+    g1.addColorStop(0, "rgba(97,217,245,0.20)"); g1.addColorStop(1, "rgba(8,14,27,0)");
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+    const g2 = ctx.createRadialGradient(80, H - 60, 10, 80, H - 60, 340);
+    g2.addColorStop(0, "rgba(196,243,107,0.14)"); g2.addColorStop(1, "rgba(8,14,27,0)");
+    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+
+    // Rounded card helper
+    const rrect = (x, y, w, h, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+    };
+
+    // Main card container
+    rrect(28, 28, W - 56, H - 56, 22);
+    ctx.fillStyle = "#101a2c"; ctx.fill();
+    ctx.strokeStyle = "rgba(160,190,230,0.22)"; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // 2. Top Header Bar — Brand 720 gradient pill
+    const bg720 = ctx.createLinearGradient(56, 54, 118, 106);
+    bg720.addColorStop(0, "#c4f36b"); bg720.addColorStop(1, "#61d9f5");
+    rrect(56, 54, 62, 50, 14);
+    ctx.fillStyle = bg720; ctx.fill();
+    ctx.fillStyle = "#080e1b"; ctx.font = "800 22px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("720", 87, 87);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "#edf4ff"; ctx.font = "800 21px sans-serif";
+    ctx.fillText("NEET COMMAND CENTRE 2027", 134, 75);
+    ctx.fillStyle = "#61d9f5"; ctx.font = "700 13px monospace";
+    ctx.fillText(isArena ? "⚔ FOCUS ARENA RESULT" : "📈 MOCK IMPROVEMENT RESULT", 134, 98);
+
+    const dtObj = new Date(Number(c.createdAt) || Date.now());
+    const dateFmt = dtObj.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+    const modeLabel = isArena ? (targetMins > 0 ? `${targetMins} MIN ENDURANCE` : "∞ LAST STANDING") : "MOCK SCORE JUMP";
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#94a3b8"; ctx.font = "600 12px monospace";
+    ctx.fillText(dateFmt, W - 56, 72);
+    ctx.fillStyle = "#c4f36b"; ctx.font = "700 12px monospace";
+    ctx.fillText(modeLabel + (c.strictScreen ? " · STRICT MODE" : ""), W - 56, 96);
+    ctx.textAlign = "left";
+
+    // 3. Winner / Verdict Highlight Banner
+    rrect(56, 126, W - 112, 74, 14);
+    ctx.fillStyle = "rgba(255,255,255,0.04)"; ctx.fill();
+    ctx.strokeStyle = v.color; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = v.color; ctx.font = "800 22px sans-serif";
+    ctx.fillText(v.verdictTitle, 78, 160);
+    ctx.fillStyle = "#cbd5e1"; ctx.font = "600 14px sans-serif";
+    ctx.fillText(v.verdictSub, 78, 184);
+
+    // 4. Standings Table
+    ctx.fillStyle = "#8292ad"; ctx.font = "700 11px monospace";
+    ctx.fillText("RANK", 64, 232);
+    ctx.fillText("ASPIRANT", 132, 232);
+    ctx.fillText("STATUS", 410, 232);
+    ctx.fillText("PROGRESS", 660, 232);
+
+    const maxMetric = Math.max(1, isArena ? (targetMins || Math.max(...rows.map(r => r.mins), 1)) : Math.max(...rows.map(r => r.jump), 1));
+    rows.forEach((r, idx) => {
+      const y = 248 + idx * 56;
+      rrect(56, y, W - 112, 46, 10);
+      ctx.fillStyle = idx === 0 ? "rgba(196,243,107,0.07)" : "rgba(255,255,255,0.03)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(160,190,230,0.12)"; ctx.lineWidth = 1; ctx.stroke();
+
+      ctx.fillStyle = idx === 0 ? "#c4f36b" : "#94a3b8"; ctx.font = "800 16px monospace";
+      ctx.fillText("#" + (idx + 1), 70, y + 29);
+
+      ctx.fillStyle = "#edf4ff"; ctx.font = "700 15px sans-serif";
+      ctx.fillText(r.name.slice(0, 26), 132, y + 29);
+
+      let stTxt = "", stCol = "#94a3b8";
+      if (isArena) {
+        if (r.status === "completed") { stTxt = `Survived ${r.mins}m`; stCol = "#c4f36b"; }
+        else if (r.status === "finished") { stTxt = `Locked ${r.mins}m`; stCol = "#61d9f5"; }
+        else if (r.status === "focusing") { stTxt = `Focusing · ${r.mins}m`; stCol = "#61d9f5"; }
+        else if (r.status === "eliminated") { stTxt = `Broke ${r.mins}m${r.reason ? " · " + r.reason.slice(0, 16) : ""}`; stCol = "#ff5c8a"; }
+        else { stTxt = "Pending"; stCol = "#8292ad"; }
+      } else {
+        stTxt = r.jump > 0 ? `+${r.jump} Marks` : `Base ${r.baseScore}`;
+        stCol = r.jump > 0 ? "#c4f36b" : "#94a3b8";
+      }
+      ctx.fillStyle = stCol; ctx.font = "700 13px monospace";
+      ctx.fillText(stTxt.slice(0, 28), 410, y + 29);
+
+      // Progress bar
+      const pct = Math.max(0.04, Math.min(1, (isArena ? r.mins : Math.max(0, r.jump)) / maxMetric));
+      rrect(660, y + 17, 168, 12, 6);
+      ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.fill();
+      rrect(660, y + 17, Math.round(168 * pct), 12, 6);
+      ctx.fillStyle = stCol; ctx.fill();
+    });
+
+    // 5. Footer
+    ctx.fillStyle = "#64748b"; ctx.font = "600 11.5px monospace"; ctx.textAlign = "center";
+    ctx.fillText("Generated offline · NEET Command Centre 2027 · Mission 720/720", W / 2, H - 46);
+    ctx.textAlign = "left";
+
+    const ymd = dtObj.toISOString().slice(0, 10);
+    const fname = `neet-challenge-result-${ymd}.png`;
+    window._lastChalPngFname = fname;
+    const dataUrl = canvas.toDataURL("image/png");
+
+    const showPreviewModal = () => {
+      const img = document.getElementById("chalResultPreviewImg");
+      if (img) img.src = dataUrl;
+      const m = document.getElementById("chalResultPreviewModal");
+      if (m) m.classList.add("open");
+    };
+
+    if (canvas.toBlob) {
+      canvas.toBlob(async (blob) => {
+        window._lastChalPngBlob = blob;
+        if (blob && window.Capacitor) {
+          try {
+            const file = new File([blob], fname, { type: "image/png" });
+            if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+              await navigator.share({ files: [file], title: "NEET Challenge Result" });
+              notify("Challenge result PNG saved!");
+              return;
+            }
+          } catch (e) {}
+          showPreviewModal();
+          notify("Challenge result PNG ready!");
+          return;
+        }
+        const url = blob ? URL.createObjectURL(blob) : dataUrl;
+        const a = document.createElement("a");
+        a.href = url; a.download = fname; a.style.display = "none";
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { try { document.body.removeChild(a); if (blob) URL.revokeObjectURL(url); } catch (e) {} }, 2500);
+        showPreviewModal();
+        notify("Challenge result PNG saved!");
+      }, "image/png");
+    } else {
+      showPreviewModal();
+      notify("Challenge result PNG saved!");
+    }
+  } catch (e) {
+    notify("Could not generate challenge result PNG.");
+  }
+};
+setTimeout(() => { try { window.reconcileArenaIntegrity(); } catch (e) {} }, 900);
 
 /* Startup Reminders, Network Status & Background Reminder Worker */
 updateNetworkBadge();
@@ -11775,15 +12553,20 @@ function setCloudStatus(msg) {
       var pMins = (p.todayDate === todayStr && typeof p.todayMinutes === "number") ? p.todayMinutes : 0;
       var localMeMins = (isMe && window.getValidatedTodayMinutes) ? window.getValidatedTodayMinutes() : 0;
       var minsToday = Math.max(gMins, pMins, localMeMins);
+      var liveStart = Number(d.startedAt || d.updatedAt) || 0;
+      var liveMins = liveStart > 0 ? Math.max(0, Math.min(360, Math.floor((now - liveStart) / 60000))) : 0;
+      var totalLiveMins = minsToday + liveMins;
       var metaParts = [];
-      if (d.subject) metaParts.push(d.subject + (d.topic ? " · " + d.topic : ""));
-      if (minsToday > 0) metaParts.push("Today: " + formatStudyTime(minsToday));
+      if (d.activity === "Filling OMR") metaParts.push("📝 Filling OMR");
+      else if (d.subject) metaParts.push(d.subject + (d.topic ? " · " + d.topic : ""));
+      if (liveMins > 0) metaParts.push("+" + liveMins + "m live session");
+      else metaParts.push("Just started");
       return '<div class="friend-row" style="flex-wrap:wrap">'
-        + '<span class="tag lime">● Focusing</span>'
+        + '<span class="tag lime">● ' + (d.activity === "Filling OMR" ? 'OMR' : 'Focusing') + '</span>'
         + '<div class="item-main"><strong>' + esc(name) + (isMe ? " (You)" : "") + (isFr ? ' <span class="tag cyan" style="margin-left:4px;font-size:10px">Friend</span>' : '') + '</strong>'
         + (metaParts.length ? '<small class="muted">' + esc(metaParts.join(" · ")) + '</small>' : '')
         + '</div>'
-        + '<strong style="color:var(--lime);font-family:\'DM Mono\',monospace">' + formatStudyTime(minsToday) + '</strong>'
+        + '<strong style="color:var(--lime);font-family:\'DM Mono\',monospace">' + formatStudyTime(totalLiveMins) + '</strong>'
         + '</div>';
     }
 
@@ -12198,6 +12981,14 @@ function setCloudStatus(msg) {
     if (modal) modal.classList.add("open");
     if (_chatUnsub) { try { _chatUnsub(); } catch (e) {} _chatUnsub = null; }
     const roomId = getChatRoomId(currentUser.uid, friendUid);
+    const seenNow = Date.now();
+    try { localStorage.setItem("neet_chat_seen_" + roomId, String(seenNow)); } catch (e) {}
+    if (appD) {
+      if (!appD.chatSeen || typeof appD.chatSeen !== "object") appD.chatSeen = {};
+      appD.chatSeen[roomId] = Math.max(Number(appD.chatSeen[roomId]) || 0, seenNow);
+      if (typeof save === "function") save(true);
+    }
+    if (typeof window.clearUnreadChatFromInbox === "function") window.clearUnreadChatFromInbox(friendUid);
     try {
       const qChat = query(collection(db, "friend_chats", roomId, "messages"), orderBy("createdAt", "desc"), limit(30));
       _chatUnsub = onSnapshot(qChat, (snap) => {
@@ -12256,57 +13047,183 @@ function setCloudStatus(msg) {
     }
   };
 
-  /* === v2.7 FRIEND CHALLENGES (FOCUS ARENA & MOCK SCORE IMPROVEMENT) === */
+
+  /* Spark-plan safe Unread Friend Chat Alert checker (runs on login & Inbox open, 0 extra listeners) */
+  window._unreadChatAlerts = [];
+  window.clearUnreadChatFromInbox = (fUid) => {
+    window._unreadChatAlerts = (window._unreadChatAlerts || []).filter(x => x.fromUid !== fUid);
+    if (typeof window.renderInboxAlerts === "function") window.renderInboxAlerts();
+    syncInboxBadge();
+  };
+  window.checkUnreadFriendChats = async () => {
+    if (!currentUser || !navigator.onLine) return;
+    const appD = window.appDataRef ? window.appDataRef() : null;
+    const friends = (appD && Array.isArray(appD.friends)) ? appD.friends.slice(0, 10) : [];
+    if (!friends.length) return;
+    const unread = [];
+    await Promise.all(friends.map(async (fUid) => {
+      try {
+        const roomId = getChatRoomId(currentUser.uid, fUid);
+        const localSeen = Number(localStorage.getItem("neet_chat_seen_" + roomId) || 0);
+        const cloudSeen = Number((appD && appD.chatSeen && appD.chatSeen[roomId]) || 0);
+        const lastSeen = Math.max(localSeen, cloudSeen);
+        if (cloudSeen > localSeen) {
+          try { localStorage.setItem("neet_chat_seen_" + roomId, String(cloudSeen)); } catch (e) {}
+        }
+        const qLast = query(collection(db, "friend_chats", roomId, "messages"), orderBy("createdAt", "desc"), limit(1));
+        const snap = await getDocs(qLast);
+        snap.forEach(ds => {
+          const m = ds.data();
+          if (m && m.fromUid !== currentUser.uid && Number(m.createdAt || 0) > lastSeen) {
+            unread.push({ fromUid: fUid, fromName: m.fromName || (window._friendNameMap && window._friendNameMap[fUid]) || "Study Friend", text: m.text || "", createdAt: Number(m.createdAt) || Date.now() });
+          }
+        });
+      } catch (e) {}
+    }));
+    window._unreadChatAlerts = unread;
+    if (typeof window.renderInboxAlerts === "function") window.renderInboxAlerts();
+    syncInboxBadge();
+  };
+
+  /* === v2.7 TIMER-ENFORCED FOCUS ARENA & MOCK SCORE IMPROVEMENT CHALLENGES === */
+  window.updateArenaParticipantStatus = async (challengeId, patch) => {
+    if (!currentUser || !challengeId || !navigator.onLine) return;
+    try {
+      const appD = window.appDataRef ? window.appDataRef() : null;
+      const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
+      const safePatch = { name: myName, ...patch, updatedAt: Date.now() };
+      await setDoc(doc(db, "friend_challenges", challengeId), {
+        scores: { [currentUser.uid]: safePatch }
+      }, { merge: true });
+    } catch (e) {}
+  };
+  window.endOrLeaveChallenge = async (cid, isHost) => {
+    if (!currentUser || !navigator.onLine) return notify("You are offline.");
+    openModal({
+      title: isHost ? "End / Delete Challenge?" : "Leave This Challenge?",
+      message: isHost
+        ? "This will permanently end and remove this challenge for all participants."
+        : "Mark your entry as ended so you are no longer stuck in this challenge?",
+      confirmText: isHost ? "End Duel" : "Leave",
+      onConfirm: async () => {
+        const ar = window.getActiveArena && window.getActiveArena();
+        if (ar && ar.challengeId === cid) window.setActiveArena(null);
+        try {
+          if (isHost && typeof fsMod !== "undefined" && typeof fsMod.deleteDoc === "function") {
+            await fsMod.deleteDoc(doc(db, "friend_challenges", cid));
+            notify("Challenge ended & removed.");
+          } else {
+            await window.updateArenaParticipantStatus(cid, {
+              status: "eliminated", state: "eliminated", endedAt: Date.now(), survivedMins: 0, reason: "Ended / left challenge"
+            });
+            notify(isHost ? "Challenge ended." : "Left challenge.");
+          }
+          window.refreshChallenges();
+        } catch (e) { notify("Could not update challenge."); }
+      }
+    });
+  };
   window.toggleChallengeDurField = () => {
     const t = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
     const w = document.getElementById("chalDurWrap");
     if (w) w.style.display = t === "focus_arena" ? "block" : "none";
   };
-  window.createFriendChallenge = async () => {
+  window.createFriendChallenge = async (bypassRules = false) => {
+    const _t = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
+    const _appD = window.appDataRef ? window.appDataRef() : null;
+    if (!bypassRules && _t === "focus_arena" && !(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt) && typeof window.openArenaRulesModal === "function") {
+      window.openArenaRulesModal(() => window.createFriendChallenge(true), "⚔️ Confirm & Start Duel");
+      return;
+    }
     if (!navigator.onLine || !currentUser) return notify("You are offline — sign in online to send a challenge.");
     const appD = window.appDataRef ? window.appDataRef() : null;
     const friends = (appD && Array.isArray(appD.friends)) ? appD.friends : [];
     if (!friends.length) return notify("Add at least one Study Friend first!");
+    const type = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
+    if (type === "focus_arena") {
+      if (window.getActiveArena && window.getActiveArena()) return notify("Finish or forfeit your current Focus Arena duel first.");
+      if (typeof timerRunning !== "undefined" && timerRunning) return notify("End your current Study Timer session before starting a Focus Arena duel.");
+    }
     const selUid = (document.getElementById("chalFriendSelect") && document.getElementById("chalFriendSelect").value) || "";
     const targetUids = selUid ? [selUid] : friends.slice(0, 5);
-    const type = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
     const durMins = Number(document.getElementById("chalDurationSelect") && document.getElementById("chalDurationSelect").value) || 0;
+    const strictScreen = Boolean(document.getElementById("chalStrictScreen") && document.getElementById("chalStrictScreen").checked);
     const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
     const fullMocks = (appD && Array.isArray(appD.mocks)) ? appD.mocks.filter(m => !m.isPartTest) : [];
     const baseScore = fullMocks.length ? Number(fullMocks[fullMocks.length - 1].total) || 0 : 0;
-    const cid = "chal_" + Date.now() + "_" + currentUser.uid.slice(0, 5);
+    const now = Date.now();
+    const cid = "chal_" + now + "_" + currentUser.uid.slice(0, 5);
     const participants = [currentUser.uid, ...targetUids.filter(u => u !== currentUser.uid)];
+    const scores = {};
+    if (type === "focus_arena") {
+      scores[currentUser.uid] = { name: myName, status: "focusing", state: "focusing", startedAt: now, survivedMins: 0, reason: "" };
+      targetUids.filter(u => u !== currentUser.uid).forEach(u => {
+        scores[u] = { name: (window._friendNameMap && window._friendNameMap[u]) || "Study Friend", status: "invited", state: "invited", startedAt: null, survivedMins: 0, reason: "" };
+      });
+    } else {
+      scores[currentUser.uid] = { name: myName, status: "joined", state: "joined", baseScore, bestJump: 0, joinedAt: now };
+    }
+    const title = type === "focus_arena" ? (durMins ? `${durMins}m Endurance` : "∞ Flowmodoro") : "Mock Score Jump";
     try {
       await setDoc(doc(db, "friend_challenges", cid), {
         id: cid,
         type,
+        title,
         durationMins: durMins,
+        strictScreen: type === "focus_arena" ? strictScreen : false,
         creatorUid: currentUser.uid,
         creatorName: myName,
         participants,
         status: "active",
-        scores: { [currentUser.uid]: { name: myName, state: "joined", baseScore, bestJump: 0, joinedAt: Date.now() } },
-        createdAt: Date.now()
+        scores,
+        createdAt: now
       });
-      notify(type === "focus_arena" ? "🔥 Focus Arena challenge sent!" : "📈 Mock Score Improvement duel sent!");
+      if (type === "focus_arena" && typeof window.enterFocusArenaAndStart === "function") {
+        window.enterFocusArenaAndStart(cid, title, durMins, strictScreen);
+      } else {
+        notify("📈 Mock Score Improvement duel sent!");
+      }
       window.refreshChallenges();
     } catch (e) {
       notify("Could not create challenge — check Firestore Rules for friend_challenges.");
     }
   };
-  window.joinFriendChallenge = async (cid) => {
+  window.joinFriendChallenge = async (cid, bypassRules = false) => {
+    const _c = window._lastChallengesMap && window._lastChallengesMap[cid];
+    const _isAr = !_c || _c.type === "focus_arena";
+    const _appD = window.appDataRef ? window.appDataRef() : null;
+    if (!bypassRules && _isAr && !(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt) && typeof window.openArenaRulesModal === "function") {
+      window.openArenaRulesModal(() => window.joinFriendChallenge(cid, true), "⚔️ Accept & Start Timer");
+      return;
+    }
     if (!navigator.onLine || !currentUser) return notify("You are offline.");
+    const c = window._lastChallengesMap && window._lastChallengesMap[cid];
+    const isArena = !c || c.type === "focus_arena";
+    if (isArena) {
+      if (window.getActiveArena && window.getActiveArena()) return notify("Finish or forfeit your current Focus Arena duel first.");
+      if (typeof timerRunning !== "undefined" && timerRunning) return notify("End your current Study Timer session before accepting a Focus Arena duel.");
+    }
     const appD = window.appDataRef ? window.appDataRef() : null;
     const myName = (appD && appD.settings && appD.settings.name) || currentUser.displayName || "Aspirant";
     const fullMocks = (appD && Array.isArray(appD.mocks)) ? appD.mocks.filter(m => !m.isPartTest) : [];
     const baseScore = fullMocks.length ? Number(fullMocks[fullMocks.length - 1].total) || 0 : 0;
+    const now = Date.now();
     try {
-      await setDoc(doc(db, "friend_challenges", cid), {
-        scores: { [currentUser.uid]: { name: myName, state: "joined", baseScore, bestJump: 0, joinedAt: Date.now() } }
-      }, { merge: true });
-      notify("Joined challenge! Good luck!");
+      if (isArena) {
+        await window.updateArenaParticipantStatus(cid, {
+          name: myName, status: "focusing", state: "focusing", startedAt: now, survivedMins: 0, reason: ""
+        });
+        if (typeof window.enterFocusArenaAndStart === "function") {
+          window.enterFocusArenaAndStart(cid, (c && c.title) || "Endurance Duel", (c && c.durationMins) || 0, Boolean(c && c.strictScreen));
+        }
+      } else {
+        await setDoc(doc(db, "friend_challenges", cid), {
+          scores: { [currentUser.uid]: { name: myName, status: "joined", state: "joined", baseScore, bestJump: 0, joinedAt: now } }
+        }, { merge: true });
+        notify("Joined Mock Improvement duel!");
+      }
       window.refreshChallenges();
-    } catch (e) { notify("Could not join challenge."); }
+    } catch (e) { notify("Could not accept challenge."); }
   };
   window.refreshChallenges = async () => {
     const host = document.getElementById("challengesListHost");
@@ -12314,8 +13231,18 @@ function setCloudStatus(msg) {
     const appD = window.appDataRef ? window.appDataRef() : null;
     if (sel && appD && Array.isArray(appD.friends)) {
       const cur = sel.value;
+      window._friendNameMap = window._friendNameMap || {};
+      const missingUids = appD.friends.filter(uid => !window._friendNameMap[uid]);
+      if (missingUids.length && navigator.onLine && currentUser) {
+        await Promise.all(missingUids.map(async (uid) => {
+          try {
+            const ps = await getDoc(doc(db, "public_profiles", uid));
+            if (ps.exists() && ps.data().displayName) window._friendNameMap[uid] = ps.data().displayName;
+          } catch (e) {}
+        }));
+      }
       sel.innerHTML = `<option value="">All Study Friends (Group Duel)</option>` +
-        appD.friends.map(uid => `<option value="${esc(uid)}">Friend: ${esc(uid.slice(0, 10))}...</option>`).join("");
+        appD.friends.map(uid => `<option value="${esc(uid)}">${esc(window._friendNameMap[uid] || ("Friend (" + uid.slice(0, 6) + ")"))}</option>`).join("");
       sel.value = cur;
     }
     if (!host) return;
@@ -12327,41 +13254,114 @@ function setCloudStatus(msg) {
       const qC = query(collection(db, "friend_challenges"), where("participants", "array-contains", currentUser.uid));
       const snap = await getDocs(qC);
       const list = [];
-      snap.forEach(ds => list.push({ id: ds.id, ...ds.data() }));
+      window._lastChallengesMap = {};
+      snap.forEach(ds => {
+        const obj = { id: ds.id, ...ds.data() };
+        list.push(obj);
+        window._lastChallengesMap[obj.id] = obj;
+      });
       list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      const pending = list.filter(c => c.creatorUid !== currentUser.uid && !(c.scores && c.scores[currentUser.uid]));
+
+      // Pending invites for Inbox
+      const pending = list.filter(c => {
+        const myP = c.scores && c.scores[currentUser.uid];
+        const st = myP && (myP.status || myP.state);
+        return c.creatorUid !== currentUser.uid && (!myP || st === "invited");
+      });
       _inboxPendingChals = pending;
       syncInboxBadge();
       const ibHost = document.getElementById("inboxChallengesList");
       if (ibHost) {
         ibHost.innerHTML = pending.length
           ? pending.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:6px">
-              <div><strong>${c.type === "focus_arena" ? "🔥 Focus Arena" : "📈 Mock Improvement"}</strong><div class="small muted">From ${esc(c.creatorName || "Friend")}</div></div>
-              <button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">Accept</button>
+              <div><strong>${c.type === "focus_arena" ? "⚔️ Focus Arena" : "📈 Mock Improvement"}</strong><div class="small muted">From ${esc(c.creatorName || "Friend")}${c.strictScreen ? " · 🔒 Strict" : ""}</div></div>
+              <button type="button" class="btn btn-small btn-lime" onclick="closeInboxModal();joinFriendChallenge('${esc(c.id)}')">${c.type === "focus_arena" ? "⚔️ Accept & Start" : "Accept"}</button>
             </div>`).join("")
           : '<div class="empty">No pending challenge invites.</div>';
       }
+
+      // Compute Arena Record (XW · YL · Z Co-Surv)
+      let wins = 0, losses = 0, cosurv = 0;
+      const now = Date.now();
+      const activeList = [], historyList = [];
+      list.forEach(c => {
+        const v = window.computeChallengeVerdict(c);
+        c._verdict = v;
+        if (c.type === "focus_arena" && v.resolved) {
+          const myRow = v.rows.find(r => r.uid === currentUser.uid);
+          if (myRow && myRow.status !== "invited") {
+            if (v.verdictType === "cosurv" && v.winnerUids.includes(currentUser.uid)) cosurv++;
+            else if (v.verdictType === "win" && v.winnerUids.includes(currentUser.uid)) wins++;
+            else if (v.verdictType !== "tie") losses++;
+          }
+        }
+        const older24h = (now - (Number(c.createdAt) || 0)) > 86400000;
+        if (v.resolved || older24h) historyList.push(c);
+        else activeList.push(c);
+      });
+      const recBadge = document.getElementById("arenaRecordBadge");
+      if (recBadge) recBadge.textContent = `⚔️ Arena Record: ${wins}W · ${losses}L · ${cosurv} Co-Surv`;
+
+      const renderChalCard = (c) => {
+        const v = c._verdict;
+        const isArena = c.type === "focus_arena";
+        const myP = c.scores && c.scores[currentUser.uid];
+        const mySt = myP && (myP.status || myP.state);
+        const isPendingMe = c.creatorUid !== currentUser.uid && (!myP || mySt === "invited");
+        const targetMins = Number(c.durationMins) || 0;
+        const label = isArena
+          ? `⚔️ Focus Arena (${targetMins ? targetMins + "m Endurance" : "∞ Flowmodoro"})`
+          : "📈 Mock Score Improvement (+Marks Jump)";
+        const canDownload = v.resolved || v.rows.some(r => ["completed","finished","eliminated"].includes(r.status)) || (!isArena && v.rows.some(r => r.jump > 0));
+        const dlLabel = v.resolved ? "⬇ Download Result" : "⬇ Save Card";
+        const rowsHtml = v.rows.map((r, i) => {
+          let bHtml = "";
+          if (isArena) {
+            if (r.status === "invited") bHtml = `<span class="tag" style="opacity:.7">⏳ Pending (Not Started)</span>`;
+            else if (r.timedOut) bHtml = `<span class="tag pink">⚠ Timed Out</span>`;
+            else if (r.status === "focusing") bHtml = `<span class="tag cyan">🔥 Focusing · ${r.mins}m${targetMins ? " / " + targetMins + "m" : ""}</span>`;
+            else if (r.status === "completed") bHtml = `<span class="tag lime">🏆 Survived ${r.mins}m</span>`;
+            else if (r.status === "finished") bHtml = `<span class="tag cyan">⏱ Locked ${r.mins}m</span>`;
+            else bHtml = `<span class="tag pink">💀 Broke at ${r.mins}m${r.reason ? " (" + esc(r.reason) + ")" : ""}</span>`;
+          } else {
+            bHtml = r.jump > 0 ? `<span class="tag lime">+${r.jump} Marks</span>` : `<span class="tag cyan">Base: ${r.baseScore}</span>`;
+          }
+          return `<div class="chal-p-row"><span><strong>#${i+1} ${esc(r.name)}</strong></span>${bHtml}</div>`;
+        }).join("");
+        return `<div class="chal-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <div>
+              <strong>${label}</strong>
+              ${c.strictScreen ? '<span class="tag pink" style="margin-left:6px">🔒 Strict</span>' : ''}
+              <div class="small muted">Host: ${esc(c.creatorName || "Friend")} · ${new Date(Number(c.createdAt) || Date.now()).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              ${isPendingMe ? `<button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">${isArena ? "⚔️ Accept & Start Timer" : "Accept Duel"}</button>` : ""}
+              ${canDownload ? `<button type="button" class="btn btn-small" onclick="downloadChallengeResultPNG('${esc(c.id)}')">${dlLabel}</button>` : ""}
+              ${!v.resolved ? `<button type="button" class="btn btn-small btn-danger" onclick="endOrLeaveChallenge('${esc(c.id)}', ${c.creatorUid === currentUser.uid})" title="${c.creatorUid === currentUser.uid ? 'End / delete this challenge' : 'Leave this challenge'}">${c.creatorUid === currentUser.uid ? "🗑 End" : "🚪 Leave"}</button>` : ""}
+            </div>
+          </div>
+          <div class="chal-verdict-bar" style="border:1px solid ${v.color};background:rgba(255,255,255,.03);color:${v.color}">
+            <span>${esc(v.verdictTitle)}</span>
+            <span class="small muted">${esc(v.verdictSub)}</span>
+          </div>
+          <div>${rowsHtml}</div>
+        </div>`;
+      };
+
       if (!list.length) {
-        host.innerHTML = '<div class="empty">No active challenges yet. Send a Focus Arena or Mock Score Improvement duel above!</div>';
+        host.innerHTML = '<div class="empty">No challenges yet. Pick a friend and launch a Focus Arena or Mock Score Improvement duel!</div>';
         return;
       }
-      host.innerHTML = list.slice(0, 10).map(c => {
-        const joined = Boolean(c.scores && c.scores[currentUser.uid]);
-        const label = c.type === "focus_arena"
-          ? `🔥 Focus Arena (${c.durationMins ? c.durationMins + "m Endurance" : "Flowmodoro"})`
-          : "📈 Mock Score Improvement (+Marks Jump)";
-        const members = Object.entries(c.scores || {}).map(([u, st]) => `<span class="tag cyan" style="margin-right:4px">${esc(st.name || "Friend")}: ${esc(st.state || "joined")}</span>`).join("");
-        return `<div style="padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-            <strong>${label}</strong>
-            ${joined ? '<span class="tag lime">Joined</span>' : `<button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">Accept Duel</button>`}
-          </div>
-          <div class="small muted" style="margin:4px 0 6px">Created by ${esc(c.creatorName || "Friend")}</div>
-          <div>${members}</div>
-        </div>`;
-      }).join("");
+      let outHtml = activeList.length
+        ? `<div class="eyebrow" style="margin-bottom:6px">ACTIVE DUELS (${activeList.length})</div>` + activeList.map(renderChalCard).join("")
+        : '<div class="small muted" style="margin-bottom:10px">No active duels right now.</div>';
+      if (historyList.length) {
+        outHtml += `<details class="v27-acc" style="margin-top:10px"><summary>📜 Completed History (${historyList.length})</summary><div class="v27-acc-body">${historyList.slice(0, 15).map(renderChalCard).join("")}</div></details>`;
+      }
+      host.innerHTML = outHtml;
     } catch (e) {
-      host.innerHTML = '<div class="empty">Challenges unavailable — paste the updated v2.7 Firestore Rules in Firebase Console.</div>';
+      host.innerHTML = '<div class="empty">Challenges unavailable — make sure you published the v2.7 Firestore Rules in Firebase Console.</div>';
     }
   };
 
@@ -12423,6 +13423,8 @@ function setCloudStatus(msg) {
       await window.refreshFriendRequests();
       window.refreshFriendsLeaderboard();
       window.refreshWeeklyLeaderboard();
+      if (typeof window.checkUnreadFriendChats === "function") window.checkUnreadFriendChats();
+      if (typeof window.refreshChallenges === "function") window.refreshChallenges();
     } else {
       if (window.isOfflineGuestMode && window.isOfflineGuestMode()) {
         window.enterOfflineGuestMode(true);
@@ -12494,6 +13496,66 @@ function setCloudStatus(msg) {
     <div style="display:flex;gap:6px">
       <input type="text" id="friendChatInput" class="field" maxlength="300" placeholder="Type a study message (max 300 chars)..." onkeydown="if(event.key==='Enter')sendFriendChatMessage()">
       <button type="button" class="btn btn-primary" onclick="sendFriendChatMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Focus Arena Rules Modal -->
+<div class="modal-overlay" id="arenaRulesModal" role="dialog" aria-modal="true" style="z-index:300" onclick="if(event.target===this)closeArenaRulesModal()">
+  <div class="modal-card" style="max-width:540px;max-height:86vh;overflow-y:auto;line-height:1.6;font-size:13px">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">FAIR PLAY · ZERO FORMALITY</div>
+        <h3 class="modal-title" style="margin:2px 0 0">📜 Focus Arena Rules</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closeArenaRulesModal()" aria-label="Close">✕</button>
+    </div>
+    <ul style="margin:10px 0 0;padding-left:18px;display:grid;gap:8px">
+      <li><strong>Instant Timer Lock-In:</strong> Creating or tapping <em>⚔️ Accept &amp; Start Timer</em> immediately starts your Study Timer for the duel's exact duration (or ∞ Flowmodoro). Nobody can appear as "Focusing" with a stopped timer.</li>
+      <li><strong>No Double-Entry:</strong> You can only run one Focus Arena duel at a time, and any existing study session must be finished first.</li>
+      <li><strong>Locked Timer Controls:</strong> Switching between Countdown/Flowmodoro or changing session duration is locked while an Arena duel is live.</li>
+      <li><strong>Elimination vs. Flowmodoro Lock-In:</strong>
+        <ul style="margin:4px 0 0;padding-left:16px">
+          <li><strong>Countdown Duels (60 / 120 / 180m):</strong> Taking a break, resetting, or stopping early <strong>eliminates</strong> you at your current survived minutes. Reaching <code>00:00</code> automatically marks you <strong>🏆 Survived</strong>!</li>
+          <li><strong>Flowmodoro Duels (∞ Last Standing):</strong> Stopping locks in your final elapsed minutes — opponents must beat your time to win.</li>
+        </ul>
+      </li>
+      <li><strong>Standard vs. Strict Screen-On Mode:</strong>
+        <ul style="margin:4px 0 0;padding-left:16px">
+          <li><strong>Standard (Default):</strong> Locking your phone screen to study from physical NCERT books is 100% allowed.</li>
+          <li><strong>🔒 Strict Screen-On:</strong> Leaving the app or turning off the screen for more than <strong>45 seconds</strong> automatically eliminates you.</li>
+        </ul>
+      </li>
+      <li><strong>Flowmodoro Anti-AFK:</strong> Every 60 minutes during a Flowmodoro duel, tap <em>Still Studying</em> within 5 minutes so nobody can leave a phone idle overnight to win.</li>
+      <li><strong>Verdicts &amp; Result Cards:</strong> Single survivor wins; multiple full survivors earn <strong>🤝 Co-Survivors</strong>; if everyone breaks early, the longest survivor wins. Tap <strong>⬇ Download Result</strong> anytime to export a clean PNG scorecard!</li>
+    </ul>
+    <label id="arenaRulesSkipWrap" style="display:none;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:12.5px;cursor:pointer">
+      <input type="checkbox" id="arenaRulesDontShowAgain">
+      <span>Don't show this rules popup again</span>
+    </label>
+    <div class="modal-actions" style="justify-content:flex-end;gap:8px;margin-top:12px">
+      <button type="button" class="btn" id="arenaRulesCancelBtn" onclick="closeArenaRulesModal()">Close</button>
+      <button type="button" class="btn btn-lime" id="arenaRulesConfirmBtn" style="display:none" onclick="confirmArenaRulesAction()">⚔️ I Understand — Start Duel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Challenge Result PNG Preview Modal (Android WebView / Mobile Save Fallback) -->
+<div class="modal-overlay" id="chalResultPreviewModal" role="dialog" aria-modal="true" style="z-index:305" onclick="if(event.target===this)closeChalResultPreview()">
+  <div class="modal-card" style="max-width:640px;text-align:center">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">CHALLENGE RESULT CARD</div>
+        <h3 class="modal-title" style="margin:2px 0 0">🏆 Scorecard Ready</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closeChalResultPreview()" aria-label="Close">✕</button>
+    </div>
+    <p class="small muted" style="margin:6px 0">Your result PNG has been generated. Use Share/Save below (or tap Download on desktop).</p>
+    <img id="chalResultPreviewImg" alt="Challenge Result Card" draggable="false" style="max-width:100%;border-radius:12px;border:1px solid var(--border);margin:6px 0">
+    <div class="modal-actions" style="justify-content:center;flex-wrap:wrap">
+      <button type="button" class="btn btn-primary" id="chalResultShareBtn" onclick="shareLastChallengeResultPNG()">📤 Share / Save Image</button>
+      <button type="button" class="btn" onclick="closeChalResultPreview()">Close</button>
     </div>
   </div>
 </div>
@@ -12632,7 +13694,7 @@ window.closeChangelogModal = () => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") window.closeChangelogModal();
 });
-const APP_VERSION = "2.7";
+const APP_VERSION = "2.7.1";
 const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
 function parseVerParts(v) {
   return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
