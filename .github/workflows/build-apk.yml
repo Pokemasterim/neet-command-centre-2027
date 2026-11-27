@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release version tag (e.g. v2.7)'
+        description: 'Release version tag (e.g. v2.7.1)'
         required: true
-        default: 'v2.7'
+        default: 'v2.7.1'
 
 permissions:
   contents: write
@@ -37,7 +37,7 @@ jobs:
         run: |
           TAG="${{ github.event.inputs.release_tag }}"
           if [ -z "$TAG" ]; then
-            TAG="v2.7"
+            TAG="v2.7.1"
           fi
           VER_NAME="${TAG#v}"
           echo "value=$TAG" >> $GITHUB_OUTPUT
@@ -84,7 +84,7 @@ jobs:
 
           # 1. Auto-increment versionCode and set versionName
           vcode = 100 + int(os.environ.get("RUN_NUM", "1"))
-          vname = os.environ.get("VER_NAME", "2.7")
+          vname = os.environ.get("VER_NAME", "2.7.1")
           txt = re.sub(r"versionCode\s+\d+", f"versionCode {vcode}", txt, count=1)
           txt = re.sub(r"versionName\s+\"[^\"]+\"", f"versionName \"{vname}\"", txt, count=1)
 
@@ -118,6 +118,7 @@ jobs:
           perms = [
             "<uses-permission android:name=\"android.permission.POST_NOTIFICATIONS\" />",
             "<uses-permission android:name=\"android.permission.SCHEDULE_EXACT_ALARM\" />",
+            "<uses-permission android:name=\"android.permission.USE_EXACT_ALARM\" />",
             "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
             "<uses-permission android:name=\"android.permission.VIBRATE\" />"
           ]
