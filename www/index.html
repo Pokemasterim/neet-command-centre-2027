@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("neet-command-theme")||"dark";}catch(e){document.documentElement.dataset.theme="dark";}</script>
-<title>NEET COMMAND CENTRE 2027 — v2.7.1</title>
+<title>NEET COMMAND CENTRE 2027 — v2.7.2</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 
@@ -2295,17 +2295,50 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
 
 <!-- APP STARTUP LOADING SCREEN WITH LOGO -->
 <div id="appLoadingScreen" aria-label="Loading NEET Command Centre">
-  <div class="loader-logo-wrap" id="splashClassicWrap">
+  <div class="loader-logo-wrap" id="splashClassicWrap" style="display:none">
     <div class="loader-ring"></div>
     <div class="loader-badge">720</div>
   </div>
-  <div id="splashSvgStage" aria-hidden="true"></div>
+  <div id="splashSvgStage" aria-hidden="true" style="display:none"></div>
   <div style="text-align:center">
     <div style="font:700 17px 'Space Grotesk',sans-serif;letter-spacing:.8px">NEET COMMAND CENTRE</div>
     <div class="small muted" style="font-family:'DM Mono',monospace;margin-top:3px">2027 EDITION · LOADING WORKSPACE</div>
   </div>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
 </div>
+<script>
+(function(){
+  try {
+    var st = localStorage.getItem("neet_splash_style") || "classic";
+    var cl = document.getElementById("splashClassicWrap");
+    var sg = document.getElementById("splashSvgStage");
+    var SVGS = {
+      reveal: '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spSq{transform-origin:200px 200px;animation:spPop 1.4s cubic-bezier(.34,1.35,.64,1) infinite alternate}.spSon{transform-origin:200px 200px;animation:spRing 1.6s ease-out infinite}@keyframes spPop{0%{transform:scale(.86)}100%{transform:scale(1)}}@keyframes spRing{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(1.22)}}</style><rect class="spSon" x="56" y="56" width="288" height="288" rx="58" fill="none" stroke="url(#spG1)" stroke-width="5"/><g class="spSq"><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG1)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></g></svg>',
+      counter: '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG2)"/><text id="spSurgeTxt" x="200" y="236" text-anchor="middle" fill="#172437" font-family="Space Grotesk,sans-serif" font-weight="800" font-size="108">000</text></svg>',
+      pulse: '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spBr{transform-origin:200px 200px;animation:spB 2.2s ease-in-out infinite}@keyframes spB{0%,100%{transform:scale(.97)}50%{transform:scale(1.04)}}</style><g class="spBr"><rect x="56" y="56" width="288" height="288" rx="58" fill="url(#spG3)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></g></svg>',
+      radar: '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spG4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CCF452"/><stop offset="50%" stop-color="#8AE8BD"/><stop offset="100%" stop-color="#54DAF9"/></linearGradient></defs><style>.spOrb{stroke-dasharray:90 220;animation:spO 2s linear infinite}@keyframes spO{from{stroke-dashoffset:0}to{stroke-dashoffset:-1240}}</style><rect class="spOrb" x="38" y="38" width="324" height="324" rx="68" fill="none" stroke="url(#spG4)" stroke-width="5" stroke-linecap="round"/><g stroke="url(#spG4)" stroke-width="5" stroke-linecap="round" fill="none"><path d="M 32 88 L 32 48 Q 32 32 48 32 L 88 32"/><path d="M 312 32 L 352 32 Q 368 32 368 48 L 368 88"/><path d="M 368 312 L 368 352 Q 368 368 352 368 L 312 368"/><path d="M 88 368 L 48 368 Q 32 368 32 352 L 32 312"/></g><rect x="64" y="64" width="272" height="272" rx="54" fill="url(#spG4)"/><g fill="#172437"><path d="M 96 155 L 160 155 L 160 169 L 125.5 245 L 106.5 245 L 140.5 170 L 96 170 Z"/><path d="M 169.5 245 L 169.5 232.5 L 201 198.5 C 209.5 189.2 213.5 184 213.5 177.8 C 213.5 170.5 207.8 166.2 199.5 166.2 C 190.8 166.2 185.4 171.2 185.2 179.8 L 168.5 179.8 C 168.8 163 181.2 153 200 153 C 218.5 153 230.8 162.8 230.8 177.2 C 230.8 187.5 225.2 195.5 212 208.5 L 191.5 229.5 L 231.5 229.5 L 231.5 245 Z"/><path fill-rule="evenodd" d="M 272.5 153 C 292.2 153 304 166.8 304 199.5 C 304 232.2 292.2 246 272.5 246 C 252.8 246 241 232.2 241 199.5 C 241 166.8 252.8 153 272.5 153 Z M 272.5 166.8 C 262.4 166.8 257.5 175.8 257.5 199.5 C 257.5 223.2 262.4 232.2 272.5 232.2 C 282.6 232.2 287.5 223.2 287.5 199.5 C 287.5 175.8 282.6 166.8 272.5 166.8 Z"/></g></svg>'
+    };
+    if (st !== "classic" && SVGS[st] && sg) {
+      sg.style.display = "flex";
+      sg.innerHTML = SVGS[st];
+      if (st === "counter") {
+        var v = 0;
+        window._earlySplashSurge = setInterval(function(){
+          v = Math.min(720, v + 36);
+          var t = document.getElementById("spSurgeTxt");
+          if (t) t.textContent = String(v).padStart(3, "0");
+          if (v >= 720) clearInterval(window._earlySplashSurge);
+        }, 45);
+      }
+    } else if (cl) {
+      cl.style.display = "";
+    }
+  } catch (e) {
+    var cl2 = document.getElementById("splashClassicWrap");
+    if (cl2) cl2.style.display = "";
+  }
+})();
+</script>
 
 <!-- LOGIN SCREEN OVERLAY (SEPARATED LOG IN / SIGN UP TABS + FORGOT PASSWORD) -->
 <div id="loginScreen">
@@ -2410,7 +2443,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
       <div class="brand-mark">720</div>
       <div>
         <div class="brand-name">COMMAND CENTRE</div>
-        <div class="brand-sub">NEET 2027 / v2.7.1</div>
+        <div class="brand-sub">NEET 2027 / v2.7.2</div>
       </div>
       <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close menu">✕</button>
     </div>
@@ -2782,6 +2815,10 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
               <button type="button" class="topic-toggle-btn" id="timerTopicToggleBtn" onclick="toggleTimerTopicDropdown()" aria-label="Show chapter suggestions">▾</button>
             </div>
             <div class="topic-dropdown" id="timerTopicDropdown" role="listbox"></div>
+          </div>
+          <div id="midSessionSwitchBar" style="display:none;margin-top:8px;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 10px;border-radius:10px;background:rgba(97,217,245,.08);border:1px solid rgba(97,217,245,.28)">
+            <span class="small" id="timerSegmentSummary" style="color:var(--cyan);font-size:11.5px">Live session active — switch subject without stopping timer</span>
+            <button type="button" class="btn btn-small btn-primary" onclick="openSwitchSubjectModal()">↻ Switch Subject / Topic</button>
           </div>
 
           <!-- Parked Thoughts Card (Visible Outside Focus Mode) -->
@@ -3560,6 +3597,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
                 <button type="button" class="seg-btn global-mode-btn" data-mode="weekly" onclick="setGlobalLbMode('weekly')">This Week</button>
               </div>
               <button type="button" class="btn btn-small" onclick="refreshWeeklyLeaderboard()">↻ Refresh</button>
+              <button type="button" class="btn btn-small" onclick="downloadLeaderboardPNG()" title="Download Leaderboard as PNG">⬇ PNG</button>
             </div>
           </div>
           <div id="weeklyLeaderboardList"><div class="empty">Loading daily rankings...</div></div>
@@ -3899,7 +3937,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
               <div style="margin-top:12px">
                 <div class="section-title">System Information</div>
           <div class="metric-line"><span>Application</span><strong>NEET COMMAND CENTRE 2027</strong></div>
-          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.7.1 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
+          <div class="metric-line"><span>Version</span><strong style="display:inline-flex;align-items:center;gap:8px">Version 2.7.2 <button type="button" class="btn btn-small" onclick="openChangelogModal()">Changelog</button> <button type="button" class="btn btn-small" onclick="checkAppUpdate(true)">↻ Check Update</button></strong></div>
           <div class="metric-line"><span>Active Profile</span><strong id="settingsProfilePreview">Dr. Xyz</strong></div>
               </div>
             </div>
@@ -3908,7 +3946,7 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
       </div>
     </section>
 
-    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.7.1 · Built for personal study tracking. <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color:var(--cyan);margin-left:6px">Privacy &amp; Safety</a> Not affiliated with NTA.</p>
+    <p class="footer-note">NEET COMMAND CENTRE 2027 · Version 2.7.2 · Built for personal study tracking. <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color:var(--cyan);margin-left:6px">Privacy &amp; Safety</a> Not affiliated with NTA.</p>
   </main>
 </div>
 
@@ -4068,9 +4106,15 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
 <div class="focus-overlay" id="focusOverlay" role="dialog" aria-modal="true">
   <div class="focus-shell">
     <div id="focusMainView">
-      <div class="eyebrow">FOCUS MODE / DISTRACTION-FREE</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="eyebrow">FOCUS MODE / DISTRACTION-FREE</div>
+        <button type="button" id="focusMutedBellBtn" onclick="openInboxModal()" title="Muted Inbox Alerts" style="display:none;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;border:1px solid rgba(255,92,138,.45);background:rgba(255,92,138,.12);color:var(--rose);font-size:11px;font-weight:700;cursor:pointer">🔔 <span id="focusMutedBellCount">0</span></button>
+      </div>
       <h2 style="font:700 22px 'Space Grotesk',sans-serif;margin:10px 0 6px">One task. Full attention.</h2>
-      <div class="small muted"><span id="focusSubject">Biology</span> · <span id="focusTopic">Study session</span></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">
+        <div class="small muted"><span id="focusSubject">Biology</span> · <span id="focusTopic">Study session</span></div>
+        <button type="button" class="btn btn-small" id="focusSwitchSubjectBtn" onclick="openSwitchSubjectModal()" style="padding:3px 8px;font-size:11px">↻ Switch</button>
+      </div>
       <div class="flow-hint-pill" id="focusModeTag" style="margin:6px 0 0;display:none">∞ FLOWMODORO COUNT-UP</div>
       <div class="arena-live-banner" id="focusArenaLiveBanner" style="margin-top:8px">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -4280,7 +4324,8 @@ details.v27-acc .v27-acc-body { margin-top: 12px; padding-top: 10px; border-top:
 
       <label class="field-label" for="obNightReminder" style="margin-top:10px">NIGHT REPORT REMINDER TIME</label>
       <select class="field" id="obNightReminder">
-        <option value="22:30">10:30 PM (Default)</option>
+        <option value="auto">Default (30 mins before Day Reset)</option>
+        <option value="22:30">10:30 PM</option>
         <option value="23:30">11:30 PM</option>
         <option value="00:30">12:30 AM</option>
         <option value="01:30">1:30 AM</option>
@@ -4843,7 +4888,7 @@ function defaultDataObject() {
         smartRevision: true,
         consistency: true,
         nightReport: true,
-        nightReportTime: "22:30"
+        nightReportTime: ""
       },
       reminderLog: {
         targetDoneDate: "",
@@ -4896,9 +4941,10 @@ function normalizeData(raw) {
     smartRevision: true,
     consistency: true,
     nightReport: true,
-    nightReportTime: "22:30",
+    nightReportTime: "",
     ...(d.settings.reminders || {})
   };
+  if (d.settings.reminders.nightReportTime === "auto") d.settings.reminders.nightReportTime = "";
   d.settings.reminderLog = {
     targetDoneDate: "",
     targetPopupDate: "",
@@ -5338,14 +5384,16 @@ async function syncCapacitorDailyAlarms() {
     });
   };
 
-  // 1. Night Parent Report
+  // 1. Night Parent Report (default: 30 mins before Day Reset)
   if (rem.nightReport !== false) {
-    const [hh, mm] = (rem.nightReportTime || "22:30").split(":").map(Number);
+    const defTime = typeof getDefaultNightReportTime === "function" ? getDefaultNightReportTime() : "23:30";
+    const [hh, mm] = (rem.nightReportTime || defTime).split(":").map(Number);
+    const [dhh, dmm] = defTime.split(":").map(Number);
     pushAtTodayOrTomorrow(
       CAP_NOTIF_IDS.NIGHT_REPORT,
       "Time for Night Parent Report 📤",
       "Close your day and share today's NEET study report with your parents.",
-      Number.isFinite(hh) ? hh : 22, Number.isFinite(mm) ? mm : 30, true
+      Number.isFinite(hh) ? hh : dhh, Number.isFinite(mm) ? mm : dmm, true
     );
   }
 
@@ -5388,17 +5436,23 @@ async function syncCapacitorDailyAlarms() {
     }
   }
 
-  // 5. Custom dayResetHour Streak Rescue (90 mins before configured reset hour)
-  if (rem.streakRescue !== false) {
+  // 5. Custom dayResetHour Streak Rescue (90 mins before configured reset hour — ONLY if user hasn't maintained streak today!)
+  if (rem.streakRescue !== false && loggedToday <= 0) {
     const resetHr = Math.max(0, Math.min(6, Number(data.settings.dayResetHour) || 0));
     const rescueTotalMins = ((resetHr * 60) - 90 + 1440) % 1440;
     const rH = Math.floor(rescueTotalMins / 60), rM = rescueTotalMins % 60;
-    pushAtTodayOrTomorrow(
-      CAP_NOTIF_IDS.STREAK_RESCUE,
-      "Streak Rescue Alert 🔥",
-      "90 mins before your study day resets — log a quick session to keep your streak alive!",
-      rH, rM, true
-    );
+    const nextRescue = new Date(now.getFullYear(), now.getMonth(), now.getDate(), rH, rM, 0, 0);
+    if (nextRescue.getTime() <= Date.now()) nextRescue.setDate(nextRescue.getDate() + 1);
+    const rescueBody = "90 mins before your study day resets — log a quick session to keep your streak alive!";
+    toSchedule.push({
+      id: CAP_NOTIF_IDS.STREAK_RESCUE,
+      title: "Streak Rescue Alert 🔥",
+      body: rescueBody,
+      largeBody: rescueBody,
+      summaryText: "NEET Command Centre 2027",
+      channelId: "neet_alerts",
+      schedule: { allowWhileIdle: true, at: nextRescue }
+    });
   }
 
   // 6. High-Weightage Morning Brief (8:00 AM)
@@ -6548,8 +6602,100 @@ window.setTimerMode = (mode) => {
   save();
   showTimer();
 };
+let _lastTargetRingLiveMin = -1;
+function getLiveTimerElapsedSec() {
+  if (!timerRunning) return 0;
+  if (timerMode === "flowmodoro") return Math.max(0, Number(flowElapsed) || 0);
+  return Math.max(0, (Number(timerTotal) || 0) - (Number(timerRemaining) || 0));
+}
+window.getLiveTimerElapsedMins = () => Math.floor(getLiveTimerElapsedSec() / 60);
+
+function syncMidSessionSwitchUI() {
+  const bar = document.getElementById("midSessionSwitchBar");
+  const sum = document.getElementById("timerSegmentSummary");
+  if (bar) bar.style.display = timerRunning ? "flex" : "none";
+  if (sum && timerRunning) {
+    const segs = (data.timer && Array.isArray(data.timer.segments)) ? data.timer.segments : [];
+    if (segs.length > 1) {
+      const doneParts = segs.slice(0, -1).map(s => {
+        const m = Math.max(1, Math.round(((s.endElapsedSec || 0) - (s.startElapsedSec || 0)) / 60));
+        return `${s.subject} (${m}m)`;
+      });
+      const cur = segs[segs.length - 1];
+      sum.textContent = `Segments: ${doneParts.join(" → ")} → ${cur.subject} (live)`;
+    } else {
+      sum.textContent = `Active: ${(data.timer && data.timer.subject) || "Biology"} · Switch subject mid-session to split history`;
+    }
+  }
+}
+
+window.openSwitchSubjectModal = () => {
+  if (!timerRunning) return notify("Start the timer first to switch subject mid-session.");
+  const m = document.getElementById("switchSubjectModal");
+  const sEl = document.getElementById("switchSubjSelect");
+  const tEl = document.getElementById("switchTopicInput");
+  if (sEl) sEl.value = (data.timer && data.timer.subject) || (document.getElementById("timerSubject") && document.getElementById("timerSubject").value) || "Biology";
+  if (tEl) tEl.value = "";
+  if (m) m.classList.add("open");
+};
+window.closeSwitchSubjectModal = () => {
+  const m = document.getElementById("switchSubjectModal");
+  if (m) m.classList.remove("open");
+};
+window.applyMidSessionSubjectSwitch = () => {
+  if (!timerRunning || !data.timer) return window.closeSwitchSubjectModal();
+  const sEl = document.getElementById("switchSubjSelect");
+  const tEl = document.getElementById("switchTopicInput");
+  const newSubj = (sEl && sEl.value) || "Biology";
+  const newTopic = ((tEl && tEl.value) || "").trim() || "Study session";
+  const elapsedSec = getLiveTimerElapsedSec();
+  if (!Array.isArray(data.timer.segments) || !data.timer.segments.length) {
+    data.timer.segments = [{
+      subject: data.timer.subject || (document.getElementById("timerSubject") && document.getElementById("timerSubject").value) || "Biology",
+      topic: data.timer.topic || (document.getElementById("timerTopic") && document.getElementById("timerTopic").value.trim()) || "Study session",
+      startElapsedSec: 0,
+      endElapsedSec: null
+    }];
+  }
+  const curSeg = data.timer.segments[data.timer.segments.length - 1];
+  if (curSeg.subject === newSubj && curSeg.topic === newTopic) {
+    window.closeSwitchSubjectModal();
+    return notify("Already studying that subject & topic.");
+  }
+  const curSegSecs = Math.max(0, elapsedSec - (Number(curSeg.startElapsedSec) || 0));
+  if (curSegSecs < 30 && data.timer.segments.length === 1) {
+    // Switched within first 30 seconds — just replace initial segment cleanly
+    curSeg.subject = newSubj;
+    curSeg.topic = newTopic;
+  } else {
+    curSeg.endElapsedSec = elapsedSec;
+    data.timer.segments.push({
+      subject: newSubj,
+      topic: newTopic,
+      startElapsedSec: elapsedSec,
+      endElapsedSec: null
+    });
+  }
+  data.timer.subject = newSubj;
+  data.timer.topic = newTopic;
+  const ts = document.getElementById("timerSubject"); if (ts) ts.value = newSubj;
+  const tt = document.getElementById("timerTopic"); if (tt) tt.value = newTopic;
+  const fs = document.getElementById("focusSubject"); if (fs) fs.textContent = newSubj;
+  const ft = document.getElementById("focusTopic"); if (ft) ft.textContent = newTopic;
+  save();
+  syncMidSessionSwitchUI();
+  if (typeof window.setGlobalSession === "function") {
+    const remSec = timerMode === "flowmodoro" ? 0 : timerRemaining;
+    window.setGlobalSession(true, remSec, "", true);
+  }
+  window.closeSwitchSubjectModal();
+  const prevMins = Math.round(curSegSecs / 60);
+  notify(prevMins >= 1 ? `Switched to ${newSubj}! (${prevMins}m ${curSeg.subject} kept in this session)` : `Switched to ${newSubj}!`);
+};
+
 function showTimer() {
   syncTimerModeUI();
+  syncMidSessionSwitchUI();
   if (timerMode === "flowmodoro") {
     const txt = formatFlowClock(flowElapsed);
     const pct = ((flowElapsed % 3600) / 3600) * 100;
@@ -6606,6 +6752,8 @@ function tickTimer() {
       }
     }
     showTimer();
+    const _lm1 = window.getLiveTimerElapsedMins();
+    if (_lm1 !== _lastTargetRingLiveMin) { _lastTargetRingLiveMin = _lm1; if (typeof renderDailyTargetProgress === "function") renderDailyTargetProgress(); }
     if (typeof window.tickFocusArenaHooks === "function") window.tickFocusArenaHooks();
     return;
   }
@@ -6617,6 +6765,8 @@ function tickTimer() {
     if (timerRemaining <= 300 && !window._examBell5) { window._examBell5 = true; triggerAppAlert("Exam Bell: 5 Mins Left (OMR Check)", "Final 5 minutes — double-check all OMR bubbles!", "🔔"); }
   }
   showTimer();
+  const _lm2 = window.getLiveTimerElapsedMins();
+  if (_lm2 !== _lastTargetRingLiveMin) { _lastTargetRingLiveMin = _lm2; if (typeof renderDailyTargetProgress === "function") renderDailyTargetProgress(); }
   if (typeof window.tickFocusArenaHooks === "function") window.tickFocusArenaHooks();
   if (timerRemaining <= 0) {
     if (data.timer.completedSaved) { stopTimer(); return; }
@@ -6639,17 +6789,23 @@ window.startTimer = () => {
   document.getElementById("focusSubject").textContent = subj;
   document.getElementById("focusTopic").textContent = topic;
 
+  const existingSegs = (data.timer && Array.isArray(data.timer.segments) && data.timer.segments.length && (flowElapsed > 0 || timerRemaining < timerTotal))
+    ? data.timer.segments
+    : [{ subject: subj, topic, startElapsedSec: 0, endElapsedSec: null }];
+  _lastTargetRingLiveMin = -1;
+
   if (timerMode === "flowmodoro") {
     timerRunning = true;
     document.getElementById("timerStatus").textContent = "FLOWING ∞";
     const startedAt = Date.now() - flowElapsed * 1000;
-    data.timer = { mode: "flowmodoro", flowElapsed, startedAt, running: true, endAt: null, remaining: timerRemaining, total: timerTotal, completedSaved: false, subject: subj, topic };
+    data.timer = { mode: "flowmodoro", flowElapsed, startedAt, running: true, endAt: null, remaining: timerRemaining, total: timerTotal, completedSaved: false, subject: subj, topic, segments: existingSegs };
     save();
     if (window.setGlobalSession) window.setGlobalSession(true, 0);
     clearInterval(timerInterval);
     timerInterval = setInterval(tickTimer, 250);
     acquireTimerWakeLock();
     showTimer();
+    if (typeof renderDailyTargetProgress === "function") renderDailyTargetProgress();
     return;
   }
 
@@ -6657,9 +6813,10 @@ window.startTimer = () => {
   timerRunning = true;
   document.getElementById("timerStatus").textContent = "FOCUSING";
   const endAt = Date.now() + timerRemaining * 1000;
-  data.timer = { mode: "countdown", remaining: timerRemaining, total: timerTotal, running: true, endAt, startedAt: null, flowElapsed: 0, completedSaved: false, subject: subj, topic };
+  data.timer = { mode: "countdown", remaining: timerRemaining, total: timerTotal, running: true, endAt, startedAt: null, flowElapsed: 0, completedSaved: false, subject: subj, topic, segments: existingSegs };
   save();
   if (window.setGlobalSession) window.setGlobalSession(true, timerRemaining);
+  if (typeof renderDailyTargetProgress === "function") renderDailyTargetProgress();
   clearInterval(timerInterval);
   timerInterval = setInterval(tickTimer, 250);
   startBgWorker(endAt);
@@ -6707,13 +6864,48 @@ window.resetTimer = () => {
 function completeSession(minutes, sourceOverride) {
   const mins = Math.max(1, Math.round(minutes));
   const now = Date.now();
-  data.sessions.push({
-    id: now, timestamp: now, date: today(), minutes: mins,
-    subject: data.timer.subject || document.getElementById("timerSubject").value,
-    topic: data.timer.topic || document.getElementById("timerTopic").value.trim() || "Study session",
-    time: new Date(now).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
-    source: sourceOverride || (timerMode === "flowmodoro" ? "flowmodoro" : "timer"), createdAt: new Date(now).toISOString()
-  });
+  const srcTag = sourceOverride || (timerMode === "flowmodoro" ? "flowmodoro" : "timer");
+  const segs = (data.timer && Array.isArray(data.timer.segments)) ? data.timer.segments : [];
+  const totalElapsedSec = Math.max(mins * 60, (timerMode === "flowmodoro" ? Number(flowElapsed) : (Number(timerTotal) - Number(timerRemaining))) || (mins * 60));
+
+  if (segs.length >= 2) {
+    const rawParts = segs.map((s, idx) => {
+      const st = Number(s.startElapsedSec) || 0;
+      const en = (idx === segs.length - 1 || s.endElapsedSec == null) ? totalElapsedSec : Number(s.endElapsedSec);
+      return { subject: s.subject || "Biology", topic: s.topic || "Study session", secs: Math.max(0, en - st) };
+    }).filter(p => p.secs > 0);
+    const sumSecs = rawParts.reduce((a, b) => a + b.secs, 0) || 1;
+    let allocated = 0;
+    const finalParts = rawParts.map((p, idx) => {
+      let m = idx === rawParts.length - 1 ? Math.max(0, mins - allocated) : Math.round((p.secs / sumSecs) * mins);
+      if (idx < rawParts.length - 1 && allocated + m > mins) m = Math.max(0, mins - allocated);
+      allocated += m;
+      return { ...p, minutes: m };
+    }).filter(p => p.minutes > 0);
+    if (!finalParts.length) {
+      finalParts.push({ subject: data.timer.subject || "Biology", topic: data.timer.topic || "Study session", minutes: mins });
+    }
+    let cursorMs = now - mins * 60000;
+    finalParts.forEach((p, idx) => {
+      cursorMs += p.minutes * 60000;
+      const ts = idx === finalParts.length - 1 ? now : cursorMs;
+      data.sessions.push({
+        id: now + idx, timestamp: ts, date: today(), minutes: p.minutes,
+        subject: p.subject, topic: p.topic,
+        time: new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
+        source: srcTag, createdAt: new Date(ts).toISOString()
+      });
+    });
+  } else {
+    data.sessions.push({
+      id: now, timestamp: now, date: today(), minutes: mins,
+      subject: data.timer.subject || document.getElementById("timerSubject").value,
+      topic: data.timer.topic || document.getElementById("timerTopic").value.trim() || "Study session",
+      time: new Date(now).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
+      source: srcTag, createdAt: new Date(now).toISOString()
+    });
+  }
+  data.timer.segments = [];
   data.timer.completedSaved = true;
   save(); renderSessions(); renderDashboard(); renderConsistency(); renderDailyTargetProgress();
   checkDailyGoalCompletion();
@@ -6939,7 +7131,8 @@ document.getElementById("timerMinutes").onchange = () => handleTimerDurationEdit
 /* Daily Reading Target Setup & Circular Progress (Overview, Missions, Study Timer) */
 function renderDailyTargetProgress() {
   const targetMins = Math.max(15, Math.min(1440, Number(data.settings.dailyTargetMinutes) || 360));
-  const loggedMins = minsToday();
+  const liveMins = typeof window.getLiveTimerElapsedMins === "function" ? window.getLiveTimerElapsedMins() : 0;
+  const loggedMins = minsToday() + liveMins;
   const pct = Math.round((loggedMins / targetMins) * 100);
   const clampedPct = Math.min(100, Math.max(0, pct));
   const goalMet = pct >= 100;
@@ -6970,7 +7163,7 @@ function renderDailyTargetProgress() {
           <div class="eyebrow">DAILY READING TARGET</div>
           <div class="daily-target-hours"><span>${loggedHrs}h</span> / ${targetHrs}h</div>
           <div class="daily-target-meta">
-            <span>${formatStudyTime(loggedMins)} / ${formatStudyTime(targetMins)}</span>
+            <span>${formatStudyTime(loggedMins)} / ${formatStudyTime(targetMins)}${liveMins > 0 ? ` <span style="color:var(--lime)">(+${liveMins}m live)</span>` : ""}</span>
             <span>·</span>
             <span style="color:${goalMet ? "var(--lime)" : "var(--muted)"}">${remLabel}</span>
           </div>
@@ -9994,7 +10187,10 @@ window.openOnboardingWizard = (force = false) => {
   document.getElementById("obExamDate").value = data.settings.examDate || "2027-05-02";
   document.getElementById("obDayResetHour").value = String(Number(data.settings.dayResetHour) || 0);
   document.getElementById("obWeakSubject").value = data.settings.weakestSubject || "Balanced";
-  document.getElementById("obNightReminder").value = (data.settings.reminders && data.settings.reminders.nightReport === false) ? "off" : ((data.settings.reminders && data.settings.reminders.nightReportTime) || "22:30");
+  const _obNt = (data.settings.reminders && data.settings.reminders.nightReportTime) || "";
+  const _obSel = document.getElementById("obNightReminder");
+  const _obOpts = _obSel ? Array.from(_obSel.options).map(o => o.value) : [];
+  if (_obSel) _obSel.value = (data.settings.reminders && data.settings.reminders.nightReport === false) ? "off" : (_obNt && _obOpts.includes(_obNt) ? _obNt : "auto");
   goOnboardingStep(1);
   m.classList.add("open");
 };
@@ -10024,7 +10220,7 @@ window.finishOnboardingWizard = () => {
     data.settings.reminders.nightReport = false;
   } else {
     data.settings.reminders.nightReport = true;
-    data.settings.reminders.nightReportTime = nRem;
+    data.settings.reminders.nightReportTime = (nRem === "auto") ? "" : nRem;
   }
   data.settings.onboardingV25Done = true;
   save();
@@ -10668,11 +10864,15 @@ function checkScheduledReminders() {
     triggerAppAlert("5:00 PM Progress Check 🔥", `You're at ${pctToday}% of today's study target (${formatStudyTime(minsToday())}). Lock in a focused sprint now!`, "🔥");
   }
 
-  // 4. Night Parent Report reminder — fires ONLY within the last 90 mins before dayResetHour (default 30m before reset) & NEVER after reset!
-  const defaultRepMin = ((resetHr * 60 - 30) + 1440) % 1440;
-  const defHH = String(Math.floor(defaultRepMin / 60)).padStart(2, "0");
-  const defMM = String(defaultRepMin % 60).padStart(2, "0");
-  const reportTime = (rem.nightReportTime || `${defHH}:${defMM}`).slice(0, 5);
+  // 3b. Streak Rescue reminder (web) — 90 mins before dayResetHour ONLY if user hasn't maintained streak today
+  if (rem.streakRescue !== false && log.streakRescueDate !== t && minsToday() === 0 && !timerRunning && studyMinOfDay >= 1350 && studyMinOfDay <= 1435) {
+    log.streakRescueDate = t;
+    setLocalReminderLog(log);
+    triggerAppAlert("Streak Rescue Alert 🔥", "90 mins left before your study day resets — log a quick session to keep your streak alive!", "🔥");
+  }
+
+  // 4. Night Parent Report reminder — default 30m before dayResetHour & NEVER after reset!
+  const reportTime = (rem.nightReportTime || getDefaultNightReportTime(resetHr)).slice(0, 5);
   const [rH, rM] = reportTime.split(":").map(n => parseInt(n, 10) || 0);
   const targetStudyMin = (((rH * 60 + rM) - resetHr * 60) + 1440) % 1440;
   const hasClosedToday = (data.dailyReviews || []).some(r => r.date === t);
@@ -10682,8 +10882,15 @@ function checkScheduledReminders() {
     triggerAppAlert("Time for Night Parent Report 📤", `You studied ${formatStudyTime(minsToday())} today. Close your day & share your report with parents.`, "📤");
   }
 }
+function getDefaultNightReportTime(resetHrOverride) {
+  const rh = Math.max(0, Math.min(6, Number(resetHrOverride != null ? resetHrOverride : (data && data.settings ? data.settings.dayResetHour : 0)) || 0));
+  const mins = ((rh * 60 - 30) + 1440) % 1440;
+  return `${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`;
+}
 window.saveReminderSettings = () => {
   const chk = (id) => (!document.getElementById(id) || document.getElementById(id).checked !== false);
+  const defTime = getDefaultNightReportTime();
+  const rawVal = (document.getElementById("remNightReportTime") && document.getElementById("remNightReportTime").value) || "";
   data.settings.reminders = {
     targetDone: chk("remTargetDone"),
     smartRevision: chk("remSmartRevision"),
@@ -10695,7 +10902,7 @@ window.saveReminderSettings = () => {
     flowEyeRest: chk("remFlowEyeRest"),
     mockWeekly: chk("remMockWeekly"),
     nightReport: chk("remNightReport"),
-    nightReportTime: (document.getElementById("remNightReportTime") && document.getElementById("remNightReportTime").value) || "23:30"
+    nightReportTime: (!rawVal || rawVal === defTime) ? "" : rawVal
   };
   save();
   syncCapacitorDailyAlarms();
@@ -10715,10 +10922,10 @@ function syncReminderSettingsUI() {
   setChk("remMockWeekly", r.mockWeekly);
   setChk("remNightReport", r.nightReport);
   const tEl = document.getElementById("remNightReportTime");
-  if (tEl) tEl.value = r.nightReportTime || "23:30";
+  if (tEl) tEl.value = (r.nightReportTime && r.nightReportTime !== "auto") ? r.nightReportTime : getDefaultNightReportTime();
 }
 window.downloadDailyReminderICS = () => {
-  const tStr = ((data.settings.reminders && data.settings.reminders.nightReportTime) || "22:30").replace(":", "") + "00";
+  const tStr = ((data.settings.reminders && data.settings.reminders.nightReportTime) || getDefaultNightReportTime()).replace(":", "") + "00";
   const dStr = today().replace(/-/g, "");
   const ics = [
     "BEGIN:VCALENDAR",
@@ -10928,6 +11135,52 @@ window.toggleStarCurrentFlashcard = () => {
   renderFlashcard();
 };
 
+/* Method 2 Circadian Bio-Clock Calculator (Rolling 14-day exact 2:00-5:00 PM overlap) */
+function computeCircadianBioClock(sessions, nowMs = Date.now()) {
+  const timed = (sessions || []).filter(s => s && s.timestamp && !s.manual && Number(s.minutes) > 0);
+  if (!timed.length) return { hasTimed: false, pct: 0, avgDailyMins: 0, consistentDays: 0, bestBlockMins: 0 };
+  const nowDt = new Date(nowMs);
+  const dayWindows = [];
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(nowDt.getFullYear(), nowDt.getMonth(), nowDt.getDate() - i, 0, 0, 0, 0);
+    const wStart = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 14, 0, 0, 0).getTime();
+    const wEnd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 17, 0, 0, 0).getTime();
+    dayWindows.push({ wStart, wEnd, mins: 0 });
+  }
+  const oldestStart = dayWindows[dayWindows.length - 1].wStart - 6 * 3600000;
+  let bestBlockMins = 0;
+  timed.forEach(s => {
+    const endMs = Number(s.timestamp) || 0;
+    if (endMs < oldestStart) return;
+    const durMins = Math.min(360, Math.max(1, Number(s.minutes) || 0));
+    const startMs = endMs - durMins * 60000;
+    dayWindows.forEach(dw => {
+      const ovStart = Math.max(startMs, dw.wStart);
+      const ovEnd = Math.min(endMs, dw.wEnd);
+      if (ovEnd > ovStart) {
+        const ovMins = (ovEnd - ovStart) / 60000;
+        dw.mins = Math.min(180, dw.mins + ovMins);
+        if (ovMins > bestBlockMins) bestBlockMins = Math.min(180, ovMins);
+      }
+    });
+  });
+  const totalWindowMins = dayWindows.reduce((a, dw) => a + dw.mins, 0);
+  const avgDailyMins = totalWindowMins / 14;
+  const consistentDays = dayWindows.filter(dw => dw.mins >= 60).length;
+  const coverageScore = Math.min(1, avgDailyMins / 180);
+  const consistencyScore = consistentDays / 14;
+  const staminaScore = Math.min(1, bestBlockMins / 180);
+  const pct = Math.min(100, Math.round((coverageScore * 0.5 + consistencyScore * 0.3 + staminaScore * 0.2) * 100));
+  return {
+    hasTimed: true,
+    pct,
+    avgDailyMins: Math.round(avgDailyMins),
+    consistentDays,
+    bestBlockMins: Math.round(bestBlockMins)
+  };
+}
+window.computeCircadianBioClock = computeCircadianBioClock;
+
 /* Weekly Subject Balance Pill + NEET Bio-Clock Readiness (2:00 PM - 5:00 PM) */
 function renderStudyTimerInsights() {
   // 1. Weekly Subject Balance
@@ -10953,16 +11206,17 @@ function renderStudyTimerInsights() {
         <div class="subj-bal-legend"><span style="color:var(--lime)">Bio ${bp}%</span><span style="color:var(--orange)">Chem ${cp}%</span><span style="color:var(--cyan)">Phy ${pp}%</span></div>`;
     }
   }
-  // 2. Bio-Clock Readiness (2:00 PM - 5:00 PM IST window)
+  // 2. Bio-Clock Readiness — Method 2: Circadian Composite % (Rolling 14-day exact 2:00–5:00 PM overlap)
+  // 50% Window Coverage (avg daily 2-5 PM mins / 180) + 30% Consistency (days >=60m / 14) + 20% Peak Stamina (longest 2-5 PM block / 180)
   const bcEl = document.getElementById("bioClockStatusText");
   if (bcEl) {
-    const timed = (data.sessions || []).filter(s => s.timestamp && !s.manual);
-    if (!timed.length) {
+    const res = computeCircadianBioClock(data.sessions || [], Date.now());
+    if (!res.hasTimed) {
       bcEl.innerHTML = 'Readiness: <strong>--</strong> <span class="muted">(study between 2–5 PM to build exam stamina)</span>';
     } else {
-      const inWindow = timed.filter(s => { const h = new Date(s.timestamp).getHours(); return h >= 14 && h < 17; });
-      const pct = Math.round((inWindow.length / timed.length) * 100);
-      bcEl.innerHTML = `Readiness: <strong style="color:${pct >= 30 ? "var(--lime)" : "var(--cyan)"}">${pct}%</strong> <span class="muted">(${inWindow.length}/${timed.length} timed sessions in 2–5 PM window)</span>`;
+      const tierCol = res.pct >= 75 ? "var(--lime)" : (res.pct >= 40 ? "var(--cyan)" : "var(--orange)");
+      const tierLabel = res.pct >= 75 ? "Locked In" : (res.pct >= 40 ? "Adapting" : "Off-Peak");
+      bcEl.innerHTML = `Readiness: <strong style="color:${tierCol}">${res.pct}% · ${tierLabel}</strong> <span class="muted">(Avg ${formatStudyTime(res.avgDailyMins)}/3h · ${res.consistentDays}/14d · Best ${formatStudyTime(res.bestBlockMins)})</span>`;
     }
   }
 }
@@ -11155,6 +11409,7 @@ function applySplashStyle(style) {
   const sel = document.getElementById("splashAnimSelect");
   if (sel) sel.value = style || "classic";
   clearInterval(_splashSurgeTimer);
+  if (window._earlySplashSurge) { clearInterval(window._earlySplashSurge); window._earlySplashSurge = null; }
   if (!classic || !svgHost) return;
   if (!style || style === "classic" || !SPLASH_SVGS[style]) {
     classic.style.display = "";
@@ -11332,6 +11587,12 @@ function syncInboxBadge() {
   if (badge) {
     badge.textContent = String(total > 99 ? "99+" : total);
     badge.classList.toggle("show", total > 0);
+  }
+  const fBell = document.getElementById("focusMutedBellBtn");
+  const fCnt = document.getElementById("focusMutedBellCount");
+  if (fBell && fCnt) {
+    fCnt.textContent = String(total > 99 ? "99+" : total);
+    fBell.style.display = total > 0 ? "inline-flex" : "none";
   }
 }
 window.recordInboxAlert = (title, message, icon = "🔔") => {
@@ -11679,23 +11940,41 @@ window._lastChalPngBlob = null;
 window._lastChalPngFname = "neet-challenge-result.png";
 
 let _arenaRulesOnConfirm = null;
-window.openArenaRulesModal = (onConfirm = null, confirmLabel = "⚔️ I Understand — Start Duel") => {
+window.openArenaRulesModal = (onConfirm = null, confirmLabel = "⚔️ I Understand — Start Duel", hideRulesBody = false) => {
   _arenaRulesOnConfirm = typeof onConfirm === "function" ? onConfirm : null;
   const skipWrap = document.getElementById("arenaRulesSkipWrap");
+  const rulesList = document.getElementById("arenaRulesListBody");
+  const titleEl = document.getElementById("arenaRulesModalTitle");
+  const pickerWrap = document.getElementById("arenaLaunchPickerWrap");
+  const subjEl = document.getElementById("arenaLaunchSubject");
+  const topicEl = document.getElementById("arenaLaunchTopic");
   const confirmBtn = document.getElementById("arenaRulesConfirmBtn");
   const cancelBtn = document.getElementById("arenaRulesCancelBtn");
   const chk = document.getElementById("arenaRulesDontShowAgain");
   if (chk) chk.checked = false;
-  if (skipWrap) skipWrap.style.display = _arenaRulesOnConfirm ? "flex" : "none";
+  const isLaunch = Boolean(_arenaRulesOnConfirm);
+  if (pickerWrap) pickerWrap.style.display = isLaunch ? "block" : "none";
+  if (isLaunch) {
+    if (subjEl) subjEl.value = (document.getElementById("timerSubject") && document.getElementById("timerSubject").value) || "Biology";
+    if (topicEl) topicEl.value = (document.getElementById("timerTopic") && document.getElementById("timerTopic").value.trim()) || "";
+  }
+  const showRules = !isLaunch || !hideRulesBody;
+  if (rulesList) rulesList.style.display = showRules ? "grid" : "none";
+  if (skipWrap) skipWrap.style.display = (isLaunch && showRules) ? "flex" : "none";
+  if (titleEl) titleEl.textContent = (isLaunch && !showRules) ? "🎯 Set Focus Arena Subject & Topic" : "📜 Focus Arena Rules";
   if (confirmBtn) {
-    confirmBtn.style.display = _arenaRulesOnConfirm ? "inline-flex" : "none";
+    confirmBtn.style.display = isLaunch ? "inline-flex" : "none";
     confirmBtn.textContent = confirmLabel;
   }
-  if (cancelBtn) cancelBtn.textContent = _arenaRulesOnConfirm ? "Cancel" : "Got It";
+  if (cancelBtn) cancelBtn.textContent = isLaunch ? "Cancel" : "Got It";
   const m = document.getElementById("arenaRulesModal");
   if (m) m.classList.add("open");
 };
 window.confirmArenaRulesAction = () => {
+  const subjEl = document.getElementById("arenaLaunchSubject");
+  const topicEl = document.getElementById("arenaLaunchTopic");
+  if (subjEl && document.getElementById("timerSubject")) document.getElementById("timerSubject").value = subjEl.value;
+  if (topicEl && document.getElementById("timerTopic")) document.getElementById("timerTopic").value = topicEl.value.trim();
   const chk = document.getElementById("arenaRulesDontShowAgain");
   if (chk && chk.checked && data && data.settings) {
     data.settings.hideArenaRulesPrompt = true;
@@ -12041,21 +12320,186 @@ window.computeChallengeVerdict = (c) => {
   }
 };
 
-// Section 7: "⬇ Download Result" Challenge Card (Native HTML5 Canvas PNG Export)
-window.shareLastChallengeResultPNG = async () => {
-  if (!window._lastChalPngBlob) return;
+// Section 7: Unified Reliable PNG Export Helper (Challenge Result + Daily Leaderboard)
+function dataURLtoPngBlob(dataUrl) {
   try {
-    const file = new File([window._lastChalPngBlob], window._lastChalPngFname, { type: "image/png" });
-    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-      await navigator.share({ files: [file], title: "NEET Challenge Result" });
-      return;
-    }
-  } catch (e) {}
-  const url = URL.createObjectURL(window._lastChalPngBlob);
-  const a = document.createElement("a");
-  a.href = url; a.download = window._lastChalPngFname; a.style.display = "none";
-  document.body.appendChild(a); a.click();
-  setTimeout(() => { try { document.body.removeChild(a); URL.revokeObjectURL(url); } catch (e) {} }, 2500);
+    const parts = dataUrl.split(",");
+    const mime = (parts[0].match(/:(.*?);/) || [])[1] || "image/png";
+    const bin = atob(parts[1]);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  } catch (e) { return null; }
+}
+window.downloadLastExportedPNG = () => {
+  const blob = window._lastChalPngBlob || (window._lastChalPngDataUrl ? dataURLtoPngBlob(window._lastChalPngDataUrl) : null);
+  const fname = window._lastChalPngFname || "neet-card.png";
+  let blobUrl = "";
+  const href = blob ? (blobUrl = URL.createObjectURL(blob)) : (window._lastChalPngDataUrl || "");
+  if (!href) return notify("No PNG ready yet.");
+  try {
+    const a = document.createElement("a");
+    a.href = href; a.download = fname; a.rel = "noopener"; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(() => {
+      try { document.body.removeChild(a); } catch (e) {}
+      if (blobUrl) { try { URL.revokeObjectURL(blobUrl); } catch (e) {} }
+    }, 3000);
+    notify("PNG download started!");
+  } catch (e) {
+    notify("Tap Share/Save or long-press image to save.");
+  }
+};
+window.shareLastChallengeResultPNG = async () => {
+  const blob = window._lastChalPngBlob || (window._lastChalPngDataUrl ? dataURLtoPngBlob(window._lastChalPngDataUrl) : null);
+  const fname = window._lastChalPngFname || "neet-card.png";
+  const title = window._lastChalPngTitle || "NEET Command Centre Card";
+  if (blob) {
+    try {
+      const file = new File([blob], fname, { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+        await navigator.share({ files: [file], title });
+        return;
+      }
+    } catch (e) {}
+  }
+  window.downloadLastExportedPNG();
+};
+window.exportCanvasAsPNG = (canvas, fname, shareTitle = "NEET Command Centre", modalTitle = "🏆 Scorecard Ready") => {
+  const dataUrl = canvas.toDataURL("image/png");
+  const blob = dataURLtoPngBlob(dataUrl);
+  window._lastChalPngDataUrl = dataUrl;
+  window._lastChalPngBlob = blob;
+  window._lastChalPngFname = fname;
+  window._lastChalPngTitle = shareTitle;
+  const img = document.getElementById("chalResultPreviewImg");
+  if (img) img.src = dataUrl;
+  const m = document.getElementById("chalResultPreviewModal");
+  if (m) {
+    const h = m.querySelector(".modal-title");
+    if (h) h.textContent = modalTitle;
+    m.classList.add("open");
+  }
+  if (!window.Capacitor) {
+    try {
+      let blobUrl = "";
+      const dlHref = blob ? (blobUrl = URL.createObjectURL(blob)) : dataUrl;
+      const a = document.createElement("a");
+      a.href = dlHref; a.download = fname; a.rel = "noopener"; a.style.display = "none";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => {
+        try { document.body.removeChild(a); } catch (e) {}
+        if (blobUrl) { try { URL.revokeObjectURL(blobUrl); } catch (e) {} }
+      }, 3000);
+    } catch (e) {}
+  }
+  notify("PNG card ready!");
+};
+
+window.downloadLeaderboardPNG = async () => {
+  if ((!window._lastGlobalLbSnapshot || !Array.isArray(window._lastGlobalLbSnapshot.rows) || !window._lastGlobalLbSnapshot.rows.length) && typeof window.refreshWeeklyLeaderboard === "function") {
+    try { await window.refreshWeeklyLeaderboard(); } catch (e) {}
+  }
+  const snap = window._lastGlobalLbSnapshot;
+  if (!snap || !Array.isArray(snap.rows) || !snap.rows.length) {
+    return notify("No leaderboard entries available yet — tap Refresh after logging study time.");
+  }
+  try {
+    const isDaily = snap.mode !== "weekly";
+    const rows = snap.rows.slice(0, 12);
+    const dpr = 2;
+    const W = 900;
+    const H = Math.max(540, 250 + rows.length * 54);
+    const canvas = document.createElement("canvas");
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = "#080e1b"; ctx.fillRect(0, 0, W, H);
+    const g1 = ctx.createRadialGradient(W * 0.84, 40, 10, W * 0.84, 40, 380);
+    g1.addColorStop(0, "rgba(97,217,245,0.20)"); g1.addColorStop(1, "rgba(8,14,27,0)");
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+    const g2 = ctx.createRadialGradient(80, H - 60, 10, 80, H - 60, 340);
+    g2.addColorStop(0, "rgba(196,243,107,0.14)"); g2.addColorStop(1, "rgba(8,14,27,0)");
+    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+
+    const rrect = (x, y, w, h, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+    };
+
+    rrect(28, 28, W - 56, H - 56, 22);
+    ctx.fillStyle = "#101a2c"; ctx.fill();
+    ctx.strokeStyle = "rgba(160,190,230,0.22)"; ctx.lineWidth = 1.5; ctx.stroke();
+
+    const bg720 = ctx.createLinearGradient(56, 54, 118, 106);
+    bg720.addColorStop(0, "#c4f36b"); bg720.addColorStop(1, "#61d9f5");
+    rrect(56, 54, 62, 50, 14);
+    ctx.fillStyle = bg720; ctx.fill();
+    ctx.fillStyle = "#080e1b"; ctx.font = "800 22px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("720", 87, 87); ctx.textAlign = "left";
+
+    ctx.fillStyle = "#edf4ff"; ctx.font = "800 21px sans-serif";
+    ctx.fillText("NEET COMMAND CENTRE 2027", 134, 75);
+    ctx.fillStyle = "#61d9f5"; ctx.font = "700 13px monospace";
+    ctx.fillText(isDaily ? "🏆 TOP DAILY STUDY LEADERBOARD" : "🏆 TOP WEEKLY STUDY LEADERBOARD", 134, 98);
+
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#c4f36b"; ctx.font = "700 13px monospace";
+    ctx.fillText(String(snap.dateLabel || "").toUpperCase(), W - 56, 75);
+    ctx.fillStyle = "#94a3b8"; ctx.font = "600 12px monospace";
+    ctx.fillText(`${rows.length} ASPIRANTS RANKED`, W - 56, 98);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "#8292ad"; ctx.font = "700 11px monospace";
+    ctx.fillText("RANK", 68, 146);
+    ctx.fillText("ASPIRANT", 142, 146);
+    ctx.fillText("STUDY TIME", W - 165, 146);
+
+    const maxMins = Math.max(1, ...rows.map(r => Number(r.minutes) || 0));
+    const myUid = (document.getElementById("settingsUidField") && document.getElementById("settingsUidField").value) || "";
+    rows.forEach((r, idx) => {
+      const y = 160 + idx * 50;
+      const isMe = myUid && r.id === myUid;
+      rrect(56, y, W - 112, 42, 10);
+      ctx.fillStyle = isMe ? "rgba(97,217,245,0.12)" : (idx < 3 ? "rgba(196,243,107,0.06)" : "rgba(255,255,255,0.03)");
+      ctx.fill();
+      ctx.strokeStyle = isMe ? "rgba(97,217,245,0.55)" : "rgba(160,190,230,0.12)";
+      ctx.lineWidth = isMe ? 1.5 : 1; ctx.stroke();
+
+      ctx.fillStyle = idx < 3 ? "#c4f36b" : "#94a3b8"; ctx.font = "800 15px monospace";
+      ctx.fillText("#" + (idx + 1), 70, y + 26);
+
+      const labelName = (r.name || "NEET Aspirant").slice(0, 26) + (isMe ? " (You)" : "") + (r.isLive ? "  ● Live" : "");
+      ctx.fillStyle = "#edf4ff"; ctx.font = "700 14.5px sans-serif";
+      ctx.fillText(labelName, 142, y + 26);
+
+      const barW = 190;
+      const pct = Math.max(0.04, Math.min(1, (Number(r.minutes) || 0) / maxMins));
+      rrect(510, y + 15, barW, 11, 5.5);
+      ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.fill();
+      rrect(510, y + 15, Math.round(barW * pct), 11, 5.5);
+      ctx.fillStyle = idx < 3 ? "#c4f36b" : "#61d9f5"; ctx.fill();
+
+      ctx.textAlign = "right";
+      ctx.fillStyle = idx < 3 ? "#c4f36b" : "#61d9f5"; ctx.font = "800 15px monospace";
+      ctx.fillText(formatStudyTime(Number(r.minutes) || 0), W - 70, y + 26);
+      ctx.textAlign = "left";
+    });
+
+    ctx.fillStyle = "#64748b"; ctx.font = "600 11.5px monospace"; ctx.textAlign = "center";
+    ctx.fillText("NEET Command Centre 2027 · Mission 720/720", W / 2, H - 46);
+    ctx.textAlign = "left";
+
+    const ymd = today();
+    const fname = `neet-${isDaily ? "daily" : "weekly"}-leaderboard-${ymd}.png`;
+    window.exportCanvasAsPNG(canvas, fname, isDaily ? "NEET Daily Leaderboard" : "NEET Weekly Leaderboard", isDaily ? "🏆 Daily Leaderboard PNG" : "🏆 Weekly Leaderboard PNG");
+  } catch (e) {
+    notify("Could not generate leaderboard PNG.");
+  }
 };
 
 window.downloadChallengeResultPNG = (challengeId) => {
@@ -12181,44 +12625,7 @@ window.downloadChallengeResultPNG = (challengeId) => {
 
     const ymd = dtObj.toISOString().slice(0, 10);
     const fname = `neet-challenge-result-${ymd}.png`;
-    window._lastChalPngFname = fname;
-    const dataUrl = canvas.toDataURL("image/png");
-
-    const showPreviewModal = () => {
-      const img = document.getElementById("chalResultPreviewImg");
-      if (img) img.src = dataUrl;
-      const m = document.getElementById("chalResultPreviewModal");
-      if (m) m.classList.add("open");
-    };
-
-    if (canvas.toBlob) {
-      canvas.toBlob(async (blob) => {
-        window._lastChalPngBlob = blob;
-        if (blob && window.Capacitor) {
-          try {
-            const file = new File([blob], fname, { type: "image/png" });
-            if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-              await navigator.share({ files: [file], title: "NEET Challenge Result" });
-              notify("Challenge result PNG saved!");
-              return;
-            }
-          } catch (e) {}
-          showPreviewModal();
-          notify("Challenge result PNG ready!");
-          return;
-        }
-        const url = blob ? URL.createObjectURL(blob) : dataUrl;
-        const a = document.createElement("a");
-        a.href = url; a.download = fname; a.style.display = "none";
-        document.body.appendChild(a); a.click();
-        setTimeout(() => { try { document.body.removeChild(a); if (blob) URL.revokeObjectURL(url); } catch (e) {} }, 2500);
-        showPreviewModal();
-        notify("Challenge result PNG saved!");
-      }, "image/png");
-    } else {
-      showPreviewModal();
-      notify("Challenge result PNG saved!");
-    }
+    window.exportCanvasAsPNG(canvas, fname, "NEET Challenge Result", "🏆 Challenge Scorecard Ready");
   } catch (e) {
     notify("Could not generate challenge result PNG.");
   }
@@ -12436,11 +12843,16 @@ function setCloudStatus(msg) {
     }
   };
 
-  window.setGlobalSession = async (running, remainingSec = 3000, activityLabel = "") => {
+  let _globalSessionSeq = 0;
+  let _activeGlobalStartedAt = 0;
+  window.setGlobalSession = async (running, remainingSec = 3000, activityLabel = "", preserveStart = false) => {
     if (!currentUser) return;
+    const seq = ++_globalSessionSeq;
     try {
       const now = Date.now();
-      const ttlMs = Math.max(60, Math.min(18000, Number(remainingSec) || 3000)) * 1000;
+      const rawRem = Number(remainingSec);
+      const ttlSec = (rawRem === 0) ? 14400 : Math.max(60, Math.min(18000, rawRem || 3000));
+      const ttlMs = ttlSec * 1000;
       const d = window.appDataRef ? window.appDataRef() : null;
       const dispName = (d && d.settings && d.settings.name && d.settings.name.trim()) ? d.settings.name.trim() : (currentUser.displayName || "NEET Aspirant");
       const subjEl = document.getElementById("timerSubject");
@@ -12451,13 +12863,19 @@ function setCloudStatus(msg) {
       const todayMins = window.getValidatedTodayMinutes
         ? window.getValidatedTodayMinutes()
         : (d ? (d.sessions || []).filter(s => s.date === tStr).reduce((a, b) => a + (Number(b.minutes) || 0), 0) : 0);
+      if (running) {
+        if (!preserveStart || !_activeGlobalStartedAt) _activeGlobalStartedAt = now;
+      } else {
+        _activeGlobalStartedAt = 0;
+      }
+      if (seq !== _globalSessionSeq) return;
       await setDoc(doc(db, "global_sessions", currentUser.uid), {
         uid: currentUser.uid,
         displayName: dispName,
         subject: running ? (activityLabel || subj) : "",
         topic: running ? (activityLabel ? "Digital OMR Sheet" : topic) : "",
         activity: running ? (activityLabel || "Studying") : "",
-        startedAt: running ? now : 0,
+        startedAt: running ? _activeGlobalStartedAt : 0,
         todayMinutes: todayMins,
         todayDate: tStr,
         running: !!running,
@@ -13008,8 +13426,13 @@ function setCloudStatus(msg) {
         }
       });
 
-      if (!byId.size) { host.innerHTML = '<div class="empty">' + (isDaily ? 'No daily study records yet for today.' : 'No weekly study records yet for this week.') + '</div>'; return; }
+      if (!byId.size) { window._lastGlobalLbSnapshot = { mode: isDaily ? "daily" : "weekly", dateLabel: todayStr, rows: [] }; host.innerHTML = '<div class="empty">' + (isDaily ? 'No daily study records yet for today.' : 'No weekly study records yet for this week.') + '</div>'; return; }
       const validatedDocs = Array.from(byId.values()).sort((a, b) => b.minutes - a.minutes).slice(0, 20);
+      window._lastGlobalLbSnapshot = {
+        mode: isDaily ? "daily" : "weekly",
+        dateLabel: isDaily ? new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : `Week ${weekKey}`,
+        rows: validatedDocs
+      };
 
       host.innerHTML = validatedDocs.map((u, i) => {
         const idx = i + 1;
@@ -13176,27 +13599,36 @@ function setCloudStatus(msg) {
       }, { merge: true });
     } catch (e) {}
   };
-  window.endOrLeaveChallenge = async (cid, isHost) => {
+  window.endOrLeaveChallenge = async (cid) => {
     if (!currentUser || !navigator.onLine) return notify("You are offline.");
+    const c = window._lastChallengesMap && window._lastChallengesMap[cid];
+    const myP = c && c.scores && c.scores[currentUser.uid];
+    const mySt = myP && (myP.status || myP.state);
+    const isFocusing = mySt === "focusing";
     openModal({
-      title: isHost ? "End / Delete Challenge?" : "Leave This Challenge?",
-      message: isHost
-        ? "This will permanently end and remove this challenge for all participants."
-        : "Mark your entry as ended so you are no longer stuck in this challenge?",
-      confirmText: isHost ? "End Duel" : "Leave",
+      title: isFocusing ? "🏳 Give Up This Duel?" : "🚪 Leave This Challenge?",
+      message: isFocusing
+        ? "This will mark only your entry as given up and stop your duel timer. Other participants can continue."
+        : "Leave this challenge? Other participants will not be affected.",
+      confirmText: isFocusing ? "Give Up" : "Leave",
       onConfirm: async () => {
         const ar = window.getActiveArena && window.getActiveArena();
-        if (ar && ar.challengeId === cid) window.setActiveArena(null);
-        try {
-          if (isHost && typeof fsMod !== "undefined" && typeof fsMod.deleteDoc === "function") {
-            await fsMod.deleteDoc(doc(db, "friend_challenges", cid));
-            notify("Challenge ended & removed.");
-          } else {
-            await window.updateArenaParticipantStatus(cid, {
-              status: "eliminated", state: "eliminated", endedAt: Date.now(), survivedMins: 0, reason: "Ended / left challenge"
-            });
-            notify(isHost ? "Challenge ended." : "Left challenge.");
+        let survived = 0;
+        if (ar && ar.challengeId === cid) {
+          survived = Math.max(0, Math.floor((Date.now() - (Number(ar.startedAt) || Date.now())) / 60000));
+          window.setActiveArena(null);
+          if (typeof pauseTimer === "function" && typeof timerRunning !== "undefined" && timerRunning) {
+            window._arenaBypassGuard = true;
+            try { pauseTimer(); } finally { window._arenaBypassGuard = false; }
           }
+        } else if (isFocusing && myP && myP.startedAt) {
+          survived = Math.max(0, Math.floor((Date.now() - Number(myP.startedAt)) / 60000));
+        }
+        try {
+          await window.updateArenaParticipantStatus(cid, {
+            status: "eliminated", state: "eliminated", endedAt: Date.now(), survivedMins: survived, reason: isFocusing ? "Gave up" : "Left challenge"
+          });
+          notify(isFocusing ? `Gave up duel at ${survived}m.` : "Left challenge.");
           window.refreshChallenges();
         } catch (e) { notify("Could not update challenge."); }
       }
@@ -13210,8 +13642,9 @@ function setCloudStatus(msg) {
   window.createFriendChallenge = async (bypassRules = false) => {
     const _t = (document.getElementById("chalTypeSelect") && document.getElementById("chalTypeSelect").value) || "focus_arena";
     const _appD = window.appDataRef ? window.appDataRef() : null;
-    if (!bypassRules && _t === "focus_arena" && !(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt) && typeof window.openArenaRulesModal === "function") {
-      window.openArenaRulesModal(() => window.createFriendChallenge(true), "⚔️ Confirm & Start Duel");
+    if (!bypassRules && _t === "focus_arena" && typeof window.openArenaRulesModal === "function") {
+      const hideBody = Boolean(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt);
+      window.openArenaRulesModal(() => window.createFriendChallenge(true), "⚔️ Confirm & Start Duel", hideBody);
       return;
     }
     if (!navigator.onLine || !currentUser) return notify("You are offline — sign in online to send a challenge.");
@@ -13271,8 +13704,9 @@ function setCloudStatus(msg) {
     const _c = window._lastChallengesMap && window._lastChallengesMap[cid];
     const _isAr = !_c || _c.type === "focus_arena";
     const _appD = window.appDataRef ? window.appDataRef() : null;
-    if (!bypassRules && _isAr && !(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt) && typeof window.openArenaRulesModal === "function") {
-      window.openArenaRulesModal(() => window.joinFriendChallenge(cid, true), "⚔️ Accept & Start Timer");
+    if (!bypassRules && _isAr && typeof window.openArenaRulesModal === "function") {
+      const hideBody = Boolean(_appD && _appD.settings && _appD.settings.hideArenaRulesPrompt);
+      window.openArenaRulesModal(() => window.joinFriendChallenge(cid, true), "⚔️ Accept & Start Timer", hideBody);
       return;
     }
     if (!navigator.onLine || !currentUser) return notify("You are offline.");
@@ -13417,7 +13851,7 @@ function setCloudStatus(msg) {
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               ${isPendingMe ? `<button type="button" class="btn btn-small btn-lime" onclick="joinFriendChallenge('${esc(c.id)}')">${isArena ? "⚔️ Accept & Start Timer" : "Accept Duel"}</button>` : ""}
               ${canDownload ? `<button type="button" class="btn btn-small" onclick="downloadChallengeResultPNG('${esc(c.id)}')">${dlLabel}</button>` : ""}
-              ${!v.resolved ? `<button type="button" class="btn btn-small btn-danger" onclick="endOrLeaveChallenge('${esc(c.id)}', ${c.creatorUid === currentUser.uid})" title="${c.creatorUid === currentUser.uid ? 'End / delete this challenge' : 'Leave this challenge'}">${c.creatorUid === currentUser.uid ? "🗑 End" : "🚪 Leave"}</button>` : ""}
+              ${(!v.resolved && !["completed","finished","eliminated"].includes(mySt)) ? `<button type="button" class="btn btn-small btn-danger" onclick="endOrLeaveChallenge('${esc(c.id)}')" title="${mySt === "focusing" ? "Give up this duel" : "Leave this challenge"}">${mySt === "focusing" ? "🏳 Give Up" : "🚪 Leave"}</button>` : ""}
             </div>
           </div>
           <div class="chal-verdict-bar" style="border:1px solid ${v.color};background:rgba(255,255,255,.03);color:${v.color}">
@@ -13502,7 +13936,24 @@ function setCloudStatus(msg) {
       await window.refreshFriendRequests();
       window.refreshFriendsLeaderboard();
       window.refreshWeeklyLeaderboard();
-      if (typeof window.checkUnreadFriendChats === "function") window.checkUnreadFriendChats();
+      if (typeof window.checkUnreadFriendChats === "function") {
+        window.checkUnreadFriendChats();
+        if (!window._mutedChatPollInt) {
+          window._lastChatPollAt = Date.now();
+          window._mutedChatPollInt = setInterval(() => {
+            if (currentUser && navigator.onLine && !document.hidden) {
+              window._lastChatPollAt = Date.now();
+              window.checkUnreadFriendChats();
+            }
+          }, 180000);
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && currentUser && navigator.onLine && (Date.now() - (window._lastChatPollAt || 0) > 60000)) {
+              window._lastChatPollAt = Date.now();
+              window.checkUnreadFriendChats();
+            }
+          });
+        }
+      }
       if (typeof window.refreshChallenges === "function") window.refreshChallenges();
     } else {
       if (window.isOfflineGuestMode && window.isOfflineGuestMode()) {
@@ -13586,11 +14037,29 @@ function setCloudStatus(msg) {
     <div class="modal-header-row">
       <div>
         <div class="eyebrow">FAIR PLAY · ZERO FORMALITY</div>
-        <h3 class="modal-title" style="margin:2px 0 0">📜 Focus Arena Rules</h3>
+        <h3 class="modal-title" id="arenaRulesModalTitle" style="margin:2px 0 0">📜 Focus Arena Rules</h3>
       </div>
       <button type="button" class="modal-close-x" onclick="closeArenaRulesModal()" aria-label="Close">✕</button>
     </div>
-    <ul style="margin:10px 0 0;padding-left:18px;display:grid;gap:8px">
+    <div id="arenaLaunchPickerWrap" style="display:none;margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(97,217,245,.07);border:1px solid rgba(97,217,245,.28)">
+      <div class="eyebrow" style="margin-bottom:6px;color:var(--cyan)">WHAT WILL YOU STUDY IN THIS DUEL?</div>
+      <div class="form-row">
+        <div>
+          <label class="field-label" for="arenaLaunchSubject" style="margin-top:0">SUBJECT</label>
+          <select class="field" id="arenaLaunchSubject">
+            <option>Biology</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Revision</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="arenaLaunchTopic" style="margin-top:0">TOPIC / CHAPTER (OPTIONAL)</label>
+          <input class="field" id="arenaLaunchTopic" placeholder="e.g. Units & Dimensions">
+        </div>
+      </div>
+    </div>
+    <ul id="arenaRulesListBody" style="margin:10px 0 0;padding-left:18px;display:grid;gap:8px">
       <li><strong>Instant Timer Lock-In:</strong> Creating or tapping <em>⚔️ Accept &amp; Start Timer</em> immediately starts your Study Timer for the duel's exact duration (or ∞ Flowmodoro). Nobody can appear as "Focusing" with a stopped timer.</li>
       <li><strong>No Double-Entry:</strong> You can only run one Focus Arena duel at a time, and any existing study session must be finished first.</li>
       <li><strong>Locked Timer Controls:</strong> Switching between Countdown/Flowmodoro or changing session duration is locked while an Arena duel is live.</li>
@@ -13634,7 +14103,36 @@ function setCloudStatus(msg) {
     <img id="chalResultPreviewImg" alt="Challenge Result Card" draggable="false" style="max-width:100%;border-radius:12px;border:1px solid var(--border);margin:6px 0">
     <div class="modal-actions" style="justify-content:center;flex-wrap:wrap">
       <button type="button" class="btn btn-primary" id="chalResultShareBtn" onclick="shareLastChallengeResultPNG()">📤 Share / Save Image</button>
+      <button type="button" class="btn btn-lime" id="chalResultDownloadBtn" onclick="downloadLastExportedPNG()">⬇ Download PNG</button>
       <button type="button" class="btn" onclick="closeChalResultPreview()">Close</button>
+    </div>
+    <div class="small muted" style="margin-top:6px;font-size:11px">Tip: On mobile WebView, tap Share/Save or long-press the image above to save to gallery.</div>
+  </div>
+</div>
+
+<!-- Mid-Session Switch Subject / Topic Modal -->
+<div class="modal-overlay" id="switchSubjectModal" role="dialog" aria-modal="true" style="z-index:320" onclick="if(event.target===this)closeSwitchSubjectModal()">
+  <div class="modal-card" style="max-width:440px">
+    <div class="modal-header-row">
+      <div>
+        <div class="eyebrow">LIVE SESSION · ZERO INTERRUPTIONS</div>
+        <h3 class="modal-title" style="margin:2px 0 0">↻ Switch Subject / Topic</h3>
+      </div>
+      <button type="button" class="modal-close-x" onclick="closeSwitchSubjectModal()" aria-label="Close">✕</button>
+    </div>
+    <p class="small muted" style="margin:6px 0 10px">Your timer keeps running uninterrupted. When you finish, Study History will log each subject's exact minutes separately.</p>
+    <label class="field-label" for="switchSubjSelect">NEW SUBJECT</label>
+    <select class="field" id="switchSubjSelect">
+      <option>Biology</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Revision</option>
+    </select>
+    <label class="field-label" for="switchTopicInput" style="margin-top:10px">NEW TOPIC / CHAPTER</label>
+    <input class="field" id="switchTopicInput" placeholder="e.g. Genetics, Thermodynamics..." onkeydown="if(event.key==='Enter')applyMidSessionSubjectSwitch()">
+    <div class="modal-actions" style="justify-content:flex-end;gap:8px;margin-top:14px">
+      <button type="button" class="btn" onclick="closeSwitchSubjectModal()">Cancel</button>
+      <button type="button" class="btn btn-lime" onclick="applyMidSessionSubjectSwitch()">✓ Switch Now</button>
     </div>
   </div>
 </div>
@@ -13678,14 +14176,25 @@ function setCloudStatus(msg) {
     <div class="panel-head" style="margin-bottom:10px">
       <div>
         <div class="eyebrow">RELEASE NOTES</div>
-        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.7</h2>
+        <h2 id="changelogModalTitle" style="margin:4px 0 0;font-size:20px">What's New in v2.7.2</h2>
       </div>
       <button type="button" class="icon-btn" onclick="closeChangelogModal()" aria-label="Close">✕</button>
     </div>
     <div id="changelogModalBody" style="max-height:60vh;overflow-y:auto;line-height:1.55;font-size:13.5px">
       <div id="liveGitHubReleaseBox" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.12);border:1px solid var(--lime)"></div>
       <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(196,243,107,.08);border:1px solid var(--line)">
-        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.7</strong>
+        <strong style="color:var(--lime);display:block;margin-bottom:6px">✨ New in Version 2.7.2</strong>
+        <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
+          <li><strong>Real Timer-Enforced Focus Arena:</strong> Duels now start and lock your Study Timer automatically, ask for your Subject &amp; Topic before starting, show a Rules confirmation popup (with a <em>Don't show again</em> option), use clean Leave / Give Up controls instead of ending duels for everyone, and export downloadable PNG Result Scorecards.</li>
+          <li><strong>Mid-Session Subject &amp; Topic Switching:</strong> Switch Subject or Topic anytime while your timer is running without stopping — Study History automatically splits and logs each subject's exact minutes separately.</li>
+          <li><strong>Circadian Bio-Clock 2.0 (2:00 – 5:00 PM):</strong> Fair 14-day NEET exam-window readiness score combining afternoon coverage (50%), daily consistency (30%), and longest unbroken block (20%) with <em>Locked In / Adapting / Off-Peak</em> tiers — studying extra morning or night hours never lowers your score.</li>
+          <li><strong>Live Leaderboards &amp; PNG Export:</strong> Active study sessions now appear across Focusing Right Now, Daily &amp; Weekly Leaderboards, and Friends Leaderboard with live minutes, live minutes fill your Daily Reading Target circle in real time, and a new <strong>⬇ PNG</strong> button downloads the leaderboard card.</li>
+          <li><strong>Smarter Reminders &amp; Muted Chat Bell:</strong> Silent red Inbox bell badge updates for new friend messages during sessions, Streak Rescue triggers 90 mins before Day Reset only if you haven't studied yet today, and default Parent Report time automatically matches 30 mins before your Day Reset everywhere.</li>
+          <li><strong>Major Fixes &amp; Cloud Sync:</strong> Fixed Splash Screen flashing Classic before your selected animation, synced Quick Setup, NEET Target, and cleared chat alerts across devices, upgraded Subject/Part-Syllabus Mock Analytics to fair percentage comparisons, and added Cancel &amp; Dismiss actions in Revision Intelligence.</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(97,217,245,.08);border:1px solid var(--line)">
+        <strong style="color:var(--cyan);display:block;margin-bottom:6px">Version 2.7</strong>
         <ul style="margin:0;padding-left:18px;display:grid;gap:6px">
           <li><strong>Cleaner UI &amp; Unified Inbox (🔔):</strong> Decluttered top bar, moved Focusing Now and Ambient Music right into Study Timer, added a 1-tap <em>Minimal vs. Full</em> Overview preset, organized Community into 3 clean tabs (Leaderboard, Friends &amp; Chat, Challenges), and added a 🔔 Inbox for full-text Alerts, Friend Requests, and Challenges.</li>
           <li><strong>5 Selectable Splash Screen Animations:</strong> Choose from Classic, Command Lock-In, 720 Score Surge, Aurora Pulse, and Radar Scanner in Settings with a live Preview button.</li>
@@ -13773,7 +14282,7 @@ window.closeChangelogModal = () => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") window.closeChangelogModal();
 });
-const APP_VERSION = "2.7.1";
+const APP_VERSION = "2.7.2";
 const APP_GITHUB_REPO = "Pokemasterim/neet-command-centre-2027";
 function parseVerParts(v) {
   return String(v || "").replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
